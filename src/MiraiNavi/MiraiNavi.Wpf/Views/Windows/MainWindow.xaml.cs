@@ -22,6 +22,14 @@ public partial class MainWindow : UiWindow, IHasViewModel<MainWindowViewModel>
     {
         InitializeComponent();
         ViewModel = viewModel;
+        Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark, Wpf.Ui.Appearance.BackgroundType.Acrylic, true, true);
+        SetPages();
+    }
+
+    void SetPages()
+    {
+        SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
+        NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }

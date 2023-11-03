@@ -2,8 +2,9 @@
 
 public enum SatelliteSystemType
 {
-    Gps,
-    Bds,
-    Glonass,
-    Galileo
+    GPS,
+    BDS,
+    GLONASS,
+    Galileo,
+    Others
 }

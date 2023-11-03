@@ -9,10 +9,10 @@
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="MainWindow"
-    Width="800"
-    Height="450"
-    MinWidth="800"
-    MinHeight="450"
+    Width="{Binding MinWidth, Mode=OneTime}"
+    Height="{Binding MinHeight, Mode=OneTime}"
+    MinWidth="1250"
+    MinHeight="700"
     DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Acrylic"
@@ -34,7 +34,7 @@
         <Grid>
             <ui:TitleBar Grid.Column="1" Background="{ui:ThemeResource}">
                 <ui:TitleBar.Header>
-                    <Menu HorizontalAlignment="Left">
+                    <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
                         <ui:MenuItem Header="文件(_F)" SymbolIcon="Document24">
                             <ui:MenuItem Header="导入(_I)" />
                             <ui:MenuItem Header="导出(_O)" />
@@ -42,11 +42,11 @@
                         <ui:MenuItem Header="视图(_V)" SymbolIcon="ViewDesktop24">
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="开始页(_C)"
+                                Header="开始窗口(_C)"
                                 Tag="{Binding ElementName=StartView}" />
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="地图页(_M)"
+                                Header="地图窗口(_M)"
                                 Tag="{Binding ElementName=MapView}" />
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
@@ -106,26 +106,40 @@
                     WindowClosing="OnDockingManagerControlWindowClosing">
                     <ContentControl
                         x:Name="MapView"
-                        syncfusion:DockingManager.Header="地图页"
+                        syncfusion:DockingManager.Header="地图窗口"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="StartView"
-                        syncfusion:DockingManager.Header="开始页"
+                        syncfusion:DockingManager.Header="开始窗口"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="OutputView"
+                        x:Name="PropertyView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.Header="属性"
+                        syncfusion:DockingManager.SideInDockedMode="Right"
+                        syncfusion:DockingManager.State="Dock"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="SkyMapView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinHeightInDockedMode="200"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.Header="卫星星空图"
+                        syncfusion:DockingManager.SideInDockedMode="Top"
+                        syncfusion:DockingManager.TargetNameInDockedMode="PropertyView"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="OutputView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="输出"
                         syncfusion:DockingManager.SideInDockedMode="Bottom"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="SatelliteTrackingView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="90"
-                        syncfusion:DockingManager.DesiredMinHeightInDockedMode="200"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="卫星跟踪列表"
                         syncfusion:DockingManager.SideInDockedMode="Tabbed"
@@ -136,46 +150,27 @@
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="仪表盘"
-                        syncfusion:DockingManager.SideInDockedMode="Right"
-                        syncfusion:DockingManager.TargetNameInDockedMode="OutputView"
+                        syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                        syncfusion:DockingManager.TargetNameInDockedMode="NavigationParameterView"
                         Style="{StaticResource DefaultContentControlStyle}" />
-                    <ContentControl
-                        x:Name="SkyMapView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinWidthInDockedMode="200"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="卫星星空图"
-                        Style="{StaticResource DefaultContentControlStyle}" />
+
                     <ContentControl
                         x:Name="NavigationParameterView"
-                        syncfusion:DockingManager.CanClose="False"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinWidthInDockedMode="200"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="导航参数"
-                        syncfusion:DockingManager.SideInDockedMode="Bottom"
-                        syncfusion:DockingManager.TargetNameInDockedMode="SkyMapView"
+                        syncfusion:DockingManager.SideInDockedMode="Right"
+                        syncfusion:DockingManager.TargetNameInDockedMode="OutputView"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="ChartToolView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="图表工具"
-                        syncfusion:DockingManager.SideInDockedMode="Right"
+                        syncfusion:DockingManager.SideInDockedMode="Left"
                         syncfusion:DockingManager.State="AutoHidden"
                         Style="{StaticResource DefaultContentControlStyle}" />
-                    <ContentControl
-                        x:Name="PropertyView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredMinWidthInDockedMode="200"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="属性"
-                        syncfusion:DockingManager.SideInDockedMode="Right"
-                        syncfusion:DockingManager.State="Dock"
-                        Style="{StaticResource DefaultContentControlStyle}" />
+
                 </syncfusion:DockingManager>
                 <Grid Grid.Row="2" Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>
