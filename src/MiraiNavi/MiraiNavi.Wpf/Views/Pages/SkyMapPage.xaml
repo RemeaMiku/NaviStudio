@@ -1,0 +1,57 @@
+﻿<ui:UiPage
+    x:Class="MiraiNavi.WpfApp.Views.Pages.SkyMapPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MiraiNavi.WpfApp.Models"
+    xmlns:sfcharts="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="SatelliteTrackingPage"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    mc:Ignorable="d">
+    <Border Padding="10" d:Background="White">
+        <sfcharts:SfChart>
+            <sfcharts:SfChart.PrimaryAxis>
+                <sfcharts:NumericalAxis
+                    Interval="30"
+                    Maximum="360"
+                    Minimum="0" />
+            </sfcharts:SfChart.PrimaryAxis>
+            <sfcharts:SfChart.SecondaryAxis>
+                <sfcharts:NumericalAxis
+                    Interval="30"
+                    IsInversed="True"
+                    Maximum="90"
+                    Minimum="0" />
+            </sfcharts:SfChart.SecondaryAxis>
+            <sfcharts:SfChart.Behaviors>
+                <sfcharts:ChartTooltipBehavior Position="Pointer" />
+            </sfcharts:SfChart.Behaviors>
+            <sfcharts:SfChart.Series>
+                <sfcharts:PolarSeries
+                    DrawType="Line"
+                    Interior="Transparent"
+                    ItemsSource="{Binding ViewModel.Infos}"
+                    ShowTooltip="True"
+                    XBindingPath="Azimuth"
+                    YBindingPath="Elevation">
+                    <sfcharts:PolarSeries.TooltipTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="White" Text="{Binding Item.SatelliteInfo.PrnCode}" />
+                        </DataTemplate>
+                    </sfcharts:PolarSeries.TooltipTemplate>
+                    <sfcharts:PolarSeries.AdornmentsInfo>
+                        <sfcharts:ChartAdornmentInfo
+                            ShowMarker="True"
+                            Symbol="Plus"
+                            SymbolInterior="White" />
+                    </sfcharts:PolarSeries.AdornmentsInfo>
+                </sfcharts:PolarSeries>
+            </sfcharts:SfChart.Series>
+        </sfcharts:SfChart>
+    </Border>
+</ui:UiPage>

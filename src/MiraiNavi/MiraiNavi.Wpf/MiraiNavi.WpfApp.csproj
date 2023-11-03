@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Syncfusion.Licensing" Version="23.1.43" />
+    <PackageReference Include="Syncfusion.SfChart.WPF" Version="23.1.43" />
+    <PackageReference Include="Syncfusion.Themes.FluentDark.WPF" Version="23.1.43" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="23.1.43" />
+    <PackageReference Include="WPF-UI" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NaviSharp\NaviSharp.csproj" />
+  </ItemGroup>
+
+</Project>
