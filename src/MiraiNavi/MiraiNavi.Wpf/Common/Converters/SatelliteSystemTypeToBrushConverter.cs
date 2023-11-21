@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
+﻿using System.Collections.Frozen;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 using MiraiNavi.WpfApp.Models;

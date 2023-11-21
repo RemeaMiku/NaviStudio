@@ -16,7 +16,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <cv:SatelliteSystemTypeToBrushConverter x:Key="SatelliteSystemTypeToBrushConverter" />
-        <sys:Double x:Key="SymbolSize">20</sys:Double>
+        <sys:Double x:Key="SymbolSize">25</sys:Double>
     </UserControl.Resources>
     <Border Padding="10" d:Background="White">
         <sfcharts:SfChart>

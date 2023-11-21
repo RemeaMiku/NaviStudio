@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notification="clr-namespace:Syncfusion.Windows.Controls.Notification;assembly=Syncfusion.SfBusyIndicator.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -19,6 +20,13 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ui:UiWindow.Resources>
+        <Style
+            x:Key="ToolUiButtonStyle"
+            BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
+            TargetType="ui:Button">
+            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
         <Style x:Key="DefaultContentControlStyle" TargetType="ContentControl">
             <Setter Property="syncfusion:DockingManager.CanClose" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanMaximize" Value="True" />
@@ -93,8 +101,19 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <StackPanel>
-                    <ui:Button />
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Icon="ChevronCircleLeft24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="ChevronCircleRight24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="FolderOpen24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="PlaySettings20" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button
+                        Content="项目名称"
+                        FontSize="{StaticResource SmallFontSize}"
+                        Icon="Play24"
+                        IconFilled="True"
+                        Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+                    <notification:SfBusyIndicator AnimationType="ArrowTrack" Foreground="White" ViewboxHeight="30"/>
                 </StackPanel>
                 <syncfusion:DockingManager
                     x:Name="DockingManagerControl"
@@ -126,8 +145,8 @@
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="SkyMapView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="300"
                         syncfusion:DockingManager.Header="卫星星空图"
                         syncfusion:DockingManager.SideInDockedMode="Top"
                         syncfusion:DockingManager.TargetNameInDockedMode="PropertyView"
@@ -135,7 +154,7 @@
                     <ContentControl
                         x:Name="OutputView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="250"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="150"
                         syncfusion:DockingManager.Header="输出"
                         syncfusion:DockingManager.SideInDockedMode="Bottom"
                         Style="{StaticResource DefaultContentControlStyle}" />
@@ -159,7 +178,7 @@
                     <ContentControl
                         x:Name="NavigationParameterView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="150"
                         syncfusion:DockingManager.Header="导航参数"
                         syncfusion:DockingManager.SideInDockedMode="Right"
                         syncfusion:DockingManager.TargetNameInDockedMode="OutputView"

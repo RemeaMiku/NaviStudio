@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DataContext="{d:DesignInstance local:NavigationParameterPage}"
     d:DesignHeight="200"
     d:DesignWidth="500"
-    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Thickness x:Key="SmallSpacing">0,3,0,0</Thickness>
@@ -19,7 +19,7 @@
             <StackPanel>
                 <TextBlock
                     d:Foreground="White"
-                    FontSize="{StaticResource MediumFontSize}"
+                    FontSize="{StaticResource SmallFontSize}"
                     Text="坐标（纬度，经度，大地高）" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
@@ -29,7 +29,7 @@
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
-                    FontSize="{StaticResource MediumFontSize}"
+                    FontSize="{StaticResource SmallFontSize}"
                     Text="速度" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
@@ -39,7 +39,7 @@
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
-                    FontSize="{StaticResource MediumFontSize}"
+                    FontSize="{StaticResource SmallFontSize}"
                     Text="姿态（航向角，俯仰角，横滚角）" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"

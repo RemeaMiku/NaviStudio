@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
-using Syncfusion.SfSkinManager;
-using Syncfusion.Themes.FluentDark.WPF;
-using Syncfusion.Windows.Shared;
 using Syncfusion.Windows.Tools.Controls;
 using Wpf.Ui.Controls;
 
@@ -14,9 +10,9 @@ namespace MiraiNavi.WpfApp.Views.Windows;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : UiWindow, IHasViewModel<MainWindowViewModel>
+public partial class MainWindow : UiWindow
 {
-    readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = new();
+    readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
 
     public MainWindow(MainWindowViewModel viewModel)
     {

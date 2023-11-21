@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.Services.DesignTime;
@@ -26,7 +25,6 @@ public partial class App : Application
             Palette = FluentPalette.Cyan,
             FontFamily = new("Microsoft Yahei UI")
         });
-
     }
 
     public static new App Current => (App)Application.Current;
