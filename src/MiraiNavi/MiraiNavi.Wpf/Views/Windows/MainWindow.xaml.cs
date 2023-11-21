@@ -18,12 +18,13 @@ public partial class MainWindow : UiWindow
     {
         InitializeComponent();
         ViewModel = viewModel;
-        Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark, Wpf.Ui.Appearance.BackgroundType.Acrylic, true, true);
+        App.ApplyTheme();
         SetPages();
     }
 
     void SetPages()
     {
+        MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
         SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
         NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
     }

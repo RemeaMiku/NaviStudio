@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Media;
+using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.Services.DesignTime;
@@ -8,6 +10,7 @@ using MiraiNavi.WpfApp.Views.Pages;
 using MiraiNavi.WpfApp.Views.Windows;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
+using Wpf.Ui.Appearance;
 
 namespace MiraiNavi.WpfApp;
 
@@ -18,13 +21,29 @@ public partial class App : Application
 {
     public App()
     {
-        //Register Syncfusion license
-        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=");
+        RegisterKeys();
+        ApplyTheme();
+    }
+
+    public static void ApplyTheme()
+    {
+        Accent.Apply((Color)ColorConverter.ConvertFromString("#FF39c5bb"));
+        Wpf.Ui.Appearance.Theme.Apply(ThemeType.Dark, BackgroundType.Acrylic, false, true);
         SfSkinManager.RegisterThemeSettings("FluentDark", new FluentDarkThemeSettings()
         {
-            Palette = FluentPalette.Cyan,
-            FontFamily = new("Microsoft Yahei UI")
+            PrimaryBackground = Accent.PrimaryAccentBrush,
+            FontFamily = new("Microsoft YaHei UI")
         });
+    }
+
+    static void RegisterKeys()
+    {
+        //注册 Syncfusion 控件
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=");
+        //注册 GMap.NET Bing Map Key
+        BingMapProvider.Instance.ClientKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
+        BingHybridMapProvider.Instance.ClientKey = BingMapProvider.Instance.ClientKey;
+        BingSatelliteMapProvider.Instance.ClientKey = BingMapProvider.Instance.ClientKey;
     }
 
     public static new App Current => (App)Application.Current;
@@ -34,10 +53,14 @@ public partial class App : Application
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<NavigationParameterPageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddSingleton<MapPage>()
         .AddSingleton<SkyMapPage>()
         .AddSingleton<NavigationParameterPage>()
         .AddSingleton<MainWindow>()
         .BuildServiceProvider();
 
-    protected override void OnStartup(StartupEventArgs e) => ServiceProvider.GetRequiredService<MainWindow>().Show();
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        ServiceProvider.GetRequiredService<MainWindow>().Show();
+    }
 }

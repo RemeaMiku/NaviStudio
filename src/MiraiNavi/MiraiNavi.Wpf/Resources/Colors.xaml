@@ -1,4 +1,21 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="MikuGreen">#39c5bb</Color>
+    <Color x:Key="MikuRed">#e74892</Color>
+    <Color x:Key="MeaBlue">#7bcddf</Color>
+    <Color x:Key="MikuGreenAlpha">#5539c5bb</Color>
+    <Color x:Key="MikuRedAlpha">#55e74892</Color>
+    <Color x:Key="MeaBlueAlpha">#557bcddf</Color>
+
+    <SolidColorBrush x:Key="MikuGreenBrush" Color="{StaticResource MikuGreen}" />
+    <SolidColorBrush x:Key="MikuRedBrush" Color="{StaticResource MikuRed}" />
+    <SolidColorBrush x:Key="MeaBlueBrush" Color="{StaticResource MeaBlue}" />
+    <SolidColorBrush x:Key="MikuGreenBrushAlpha" Color="{StaticResource MikuGreenAlpha}" />
+    <SolidColorBrush x:Key="MikuRedBrushAlpha" Color="{StaticResource MikuRedAlpha}" />
+    <SolidColorBrush x:Key="MeaBlueBrushAlpha" Color="{StaticResource MeaBlueAlpha}" />
+
+    <LinearGradientBrush x:Key="MikuMeaRedBlueGreenHorizontalBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="{StaticResource MikuRed}" />
+        <GradientStop Offset="0.5" Color="{StaticResource MeaBlue}" />
+        <GradientStop Offset="1" Color="{StaticResource MikuGreen}" />
+    </LinearGradientBrush>
 </ResourceDictionary>

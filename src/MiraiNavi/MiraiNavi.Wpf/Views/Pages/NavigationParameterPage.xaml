@@ -14,7 +14,7 @@
         <Thickness x:Key="SmallSpacing">0,3,0,0</Thickness>
         <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
     </UserControl.Resources>
-    <Border Padding="10" d:Background="{ui:ThemeResource}">
+    <Border Padding="10" d:Background="Black">
         <ScrollViewer>
             <StackPanel>
                 <TextBlock

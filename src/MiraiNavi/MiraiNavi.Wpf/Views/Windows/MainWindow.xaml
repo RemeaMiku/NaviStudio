@@ -29,11 +29,11 @@
         </Style>
         <Style x:Key="DefaultContentControlStyle" TargetType="ContentControl">
             <Setter Property="syncfusion:DockingManager.CanClose" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanFloatMaximize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanMaximize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanMinimize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanFloat" Value="True" />
             <Setter Property="syncfusion:DockingManager.AllowsTransparencyForFloatWindow" Value="True" />
-            <Setter Property="Background" Value="#AA000000" />
         </Style>
     </ui:UiWindow.Resources>
     <Grid>
@@ -41,89 +41,95 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid>
-            <ui:TitleBar Grid.Column="1" Background="{ui:ThemeResource}">
-                <ui:TitleBar.Header>
-                    <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
-                        <ui:MenuItem Header="文件(_F)" SymbolIcon="Document24">
-                            <ui:MenuItem Header="导入(_I)" />
-                            <ui:MenuItem Header="导出(_O)" />
-                        </ui:MenuItem>
-                        <ui:MenuItem Header="视图(_V)" SymbolIcon="ViewDesktop24">
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="开始窗口(_C)"
-                                Tag="{Binding ElementName=StartView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="地图窗口(_M)"
-                                Tag="{Binding ElementName=MapView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="导航参数(_N)"
-                                Tag="{Binding ElementName=NavigationParameterView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="卫星星空图(_S)"
-                                Tag="{Binding ElementName=SkyMapView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="卫星跟踪列表(_T)"
-                                Tag="{Binding ElementName=SatelliteTrackingView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="图表工具(_C)"
-                                Tag="{Binding ElementName=ChartToolView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="属性(_P)"
-                                Tag="{Binding ElementName=PropertyView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="仪表盘(_D)"
-                                Tag="{Binding ElementName=DashBoardView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
-                                Header="输出(_O)"
-                                Tag="{Binding ElementName=OutputView}" />
-                        </ui:MenuItem>
-                    </Menu>
-                </ui:TitleBar.Header>
-            </ui:TitleBar>
-        </Grid>
+
+        <ui:TitleBar Background="{ui:ThemeResource}">
+            <ui:TitleBar.Header>
+                <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
+                    <ui:MenuItem Header="文件(_F)" SymbolIcon="Document24">
+                        <ui:MenuItem Header="导入(_I)" />
+                        <ui:MenuItem Header="导出(_O)" />
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="视图(_V)" SymbolIcon="ViewDesktop24">
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="开始窗口(_C)"
+                            Tag="{Binding ElementName=StartView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="地图窗口(_M)"
+                            Tag="{Binding ElementName=MapView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="导航参数(_N)"
+                            Tag="{Binding ElementName=NavigationParameterView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="卫星星空图(_S)"
+                            Tag="{Binding ElementName=SkyMapView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="卫星跟踪列表(_T)"
+                            Tag="{Binding ElementName=SatelliteTrackingView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="图表工具(_C)"
+                            Tag="{Binding ElementName=ChartToolView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="属性(_P)"
+                            Tag="{Binding ElementName=PropertyView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="仪表盘(_D)"
+                            Tag="{Binding ElementName=DashBoardView}" />
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="输出(_O)"
+                            Tag="{Binding ElementName=OutputView}" />
+                    </ui:MenuItem>
+                </Menu>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
         <Border
             Grid.Row="1"
-            Padding="5"
-            d:Background="Gray">
+            Padding="0,5"
+            d:Background="{ui:ThemeResource}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <ui:Button Icon="ChevronCircleLeft24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="ChevronCircleRight24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="FolderOpen24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="PlaySettings20" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button
-                        Content="项目名称"
-                        FontSize="{StaticResource SmallFontSize}"
-                        Icon="Play24"
-                        IconFilled="True"
-                        Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
-                    <notification:SfBusyIndicator AnimationType="ArrowTrack" Foreground="White" ViewboxHeight="30"/>
-                </StackPanel>
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Icon="ChevronCircleLeft24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="ChevronCircleRight24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="FolderOpen24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="PlaySettings20" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Content="MiraiNavi"
+                            Icon="Play24"
+                            IconFilled="True"
+                            Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+                    </StackPanel>
+                    <notification:SfBusyIndicator
+                        HorizontalAlignment="Right"
+                        AnimationType="ArrowTrack"
+                        Foreground="White"
+                        ViewboxHeight="30" />
+                </Grid>
                 <syncfusion:DockingManager
                     x:Name="DockingManagerControl"
                     Grid.Row="1"
                     Margin="0,5,0,0"
-                    d:Background="Gray"
+                    d:Background="Black"
                     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                     CloseButtonClick="OnDockingManagerControlCloseButtonClicked"
                     MaximizeButtonEnabled="True"
+                    ShowFloatWindowInTaskbar="True"
+                    UseNativeFloatWindow="True"
                     WindowClosing="OnDockingManagerControlWindowClosing">
                     <ContentControl
                         x:Name="MapView"
