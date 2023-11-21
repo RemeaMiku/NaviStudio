@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MiraiNavi.WpfApp.Models;
 
-namespace MiraiNavi.WpfApp.Services;
+namespace MiraiNavi.WpfApp.Services.Contracts;
 
 public interface ISatelliteServcie
 {

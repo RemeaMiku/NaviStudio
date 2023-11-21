@@ -1,20 +1,19 @@
 ﻿namespace MiraiNavi.WpfApp.Models;
 
-public readonly record struct SatelliteInfo
+public readonly record struct Satellite
 {
-    public SatelliteInfo(string prnCode)
+    public Satellite(string prnCode)
     {
         PrnCode = prnCode;
-        SystemType = GetSatelliteSystemType(prnCode);
     }
 
     public string PrnCode { get; init; }
 
-    public SatelliteSystemType SystemType { get; }
+    public SatelliteSystemType SystemType => GetSatelliteSystemType(PrnCode);
 
-    public static SatelliteInfo Empty { get; } = new(string.Empty);
+    public int PrnNumber => int.Parse(PrnCode[1..]);
 
-    public static implicit operator SatelliteInfo(string prnCode) => new(prnCode);
+    public static implicit operator Satellite(string prnCode) => new(prnCode);
 
     public static SatelliteSystemType GetSatelliteSystemType(string prnCode)
     {
@@ -28,6 +27,8 @@ public readonly record struct SatelliteInfo
             _ => SatelliteSystemType.Others,
         };
     }
+
+    public override string ToString() => PrnCode;
 
     //public static char GetSatelliteSystemCode(SatelliteSystemType satelliteSystemType)
     //{

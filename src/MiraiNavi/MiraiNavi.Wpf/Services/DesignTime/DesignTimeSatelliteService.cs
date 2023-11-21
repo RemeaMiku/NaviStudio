@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services.DesignTime;
 

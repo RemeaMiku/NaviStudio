@@ -24,6 +24,8 @@
             <Setter Property="syncfusion:DockingManager.CanMaximize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanMinimize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanFloat" Value="True" />
+            <Setter Property="syncfusion:DockingManager.AllowsTransparencyForFloatWindow" Value="True" />
+            <Setter Property="Background" Value="#AA000000" />
         </Style>
     </ui:UiWindow.Resources>
     <Grid>

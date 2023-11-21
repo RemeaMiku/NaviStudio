@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using MiraiNavi.WpfApp.Services;
+using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.Services.DesignTime;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using MiraiNavi.WpfApp.ViewModels.Windows;
