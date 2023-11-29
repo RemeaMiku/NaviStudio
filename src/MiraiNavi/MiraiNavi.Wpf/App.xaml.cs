@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.Services.DesignTime;
 using MiraiNavi.WpfApp.ViewModels.Pages;
@@ -38,18 +39,22 @@ public partial class App : Application
 
     static void RegisterKeys()
     {
-        //注册 Syncfusion 控件
-        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=");
+        //注册 Syncfusion 控件       
+        var syncKey = "Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=";
         //注册 GMap.NET Bing Map Key
-        BingMapProvider.Instance.ClientKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
-        BingHybridMapProvider.Instance.ClientKey = BingMapProvider.Instance.ClientKey;
-        BingSatelliteMapProvider.Instance.ClientKey = BingMapProvider.Instance.ClientKey;
+        var bingKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncKey);
+        BingMapProvider.Instance.ClientKey = bingKey;
+        BingHybridMapProvider.Instance.ClientKey = bingKey;
+        BingSatelliteMapProvider.Instance.ClientKey = bingKey;
     }
 
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
+        .AddSingleton<IGMapRouteReplayService, GMapRouteReplayService>()
         .AddSingleton<ISatelliteServcie, DesignTimeSatelliteService>()
+        .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<NavigationParameterPageViewModel>()
         .AddSingleton<MainWindowViewModel>()

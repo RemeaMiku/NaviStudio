@@ -29,7 +29,10 @@
         </Style>
         <Style x:Key="DefaultContentControlStyle" TargetType="ContentControl">
             <Setter Property="syncfusion:DockingManager.CanClose" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanMinimizeFloat" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanFloatMaximize" Value="True" />
+            <Setter Property="syncfusion:DockingManager.MinimizeButtonEnabled" Value="True" />
+            <Setter Property="syncfusion:DockingManager.MaximizeMode" Value="FullScreen" />
             <Setter Property="syncfusion:DockingManager.CanMaximize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanMinimize" Value="True" />
             <Setter Property="syncfusion:DockingManager.CanFloat" Value="True" />
@@ -41,7 +44,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <ui:TitleBar Background="{ui:ThemeResource}">
             <ui:TitleBar.Header>
                 <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
@@ -87,6 +89,7 @@
                             Header="输出(_O)"
                             Tag="{Binding ElementName=OutputView}" />
                     </ui:MenuItem>
+                    <ui:MenuItem Header="选项(_O)" SymbolIcon="Settings24" />
                 </Menu>
             </ui:TitleBar.Header>
         </ui:TitleBar>
@@ -100,7 +103,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid>
+                <Grid Margin="5,0">
                     <StackPanel Orientation="Horizontal">
                         <ui:Button Icon="ChevronCircleLeft24" Style="{StaticResource ToolUiButtonStyle}" />
                         <ui:Button Icon="ChevronCircleRight24" Style="{StaticResource ToolUiButtonStyle}" />
@@ -128,17 +131,18 @@
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                     CloseButtonClick="OnDockingManagerControlCloseButtonClicked"
                     MaximizeButtonEnabled="True"
+                    MinimizeButtonEnabled="True"
                     ShowFloatWindowInTaskbar="True"
                     UseNativeFloatWindow="True"
                     WindowClosing="OnDockingManagerControlWindowClosing">
                     <ContentControl
                         x:Name="MapView"
-                        syncfusion:DockingManager.Header="地图窗口"
+                        syncfusion:DockingManager.Header="地图"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="StartView"
-                        syncfusion:DockingManager.Header="开始窗口"
+                        syncfusion:DockingManager.Header="开始"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
@@ -197,7 +201,6 @@
                         syncfusion:DockingManager.SideInDockedMode="Left"
                         syncfusion:DockingManager.State="AutoHidden"
                         Style="{StaticResource DefaultContentControlStyle}" />
-
                 </syncfusion:DockingManager>
                 <Grid Grid.Row="2" Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>

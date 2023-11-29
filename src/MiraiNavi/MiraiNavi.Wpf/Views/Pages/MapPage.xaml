@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DataContext="{d:DesignInstance local:MapPage}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -18,7 +19,6 @@
             MaxZoom="20"
             MinZoom="3"
             MouseWheelZoomType="MousePositionWithoutCenter"
-            OnPositionChanged="OnGMapPositionChanged"
             Zoom="3" />
         <ComboBox
             x:Name="MapTypeBox"
@@ -32,5 +32,12 @@
             <ComboBoxItem Content="街道" Style="{StaticResource DefaultComboBoxItemStyle}" />
             <ComboBoxItem Content="卫星" Style="{StaticResource DefaultComboBoxItemStyle}" />
         </ComboBox>
+        <ui:Button
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Appearance="Primary"
+            Command="{Binding ViewModel.ReplayCommand, Mode=OneTime}"
+            Content="开始"
+            Icon="Play24" />
     </Grid>
 </UserControl>

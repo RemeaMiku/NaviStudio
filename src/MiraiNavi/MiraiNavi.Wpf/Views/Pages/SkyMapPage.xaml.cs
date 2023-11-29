@@ -11,6 +11,7 @@ public partial class SkyMapPage : UserControl
     public SkyMapPage(SkyMapPageViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = this;
         ViewModel = viewModel;
     }
 

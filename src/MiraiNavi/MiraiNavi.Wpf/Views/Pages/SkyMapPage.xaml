@@ -10,9 +10,9 @@
     xmlns:sfcharts="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DataContext="{d:DesignInstance local:SkyMapPage}"
     d:DesignHeight="300"
     d:DesignWidth="300"
-    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <cv:SatelliteSystemTypeToBrushConverter x:Key="SatelliteSystemTypeToBrushConverter" />
