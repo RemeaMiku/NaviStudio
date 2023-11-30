@@ -48,25 +48,8 @@ public partial class MapPage : UserControl
 
     private void OnGMapLoaded(object sender, RoutedEventArgs e)
     {
-        GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
-        GMapProvider.WebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
-        GMaps.Instance.Mode = AccessMode.ServerAndCache;
-        // choose your provider here        
-        GMapProvider.Language = LanguageType.ChineseSimplified;
-        //GMap.MapProvider = BingHybridMapProvider.Instance;
         GMap.ShowCenter = false;
-        // lets the user drag the map with the left mouse button
         GMap.DragButton = MouseButton.Right;
     }
 
-    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        GMap.MapProvider = ((ComboBoxItem)MapTypeBox.SelectedItem).Content.ToString() switch
-        {
-            "混合" => BingHybridMapProvider.Instance,
-            "卫星" => BingSatelliteMapProvider.Instance,
-            "街道" => BingMapProvider.Instance,
-            _ => throw new NotImplementedException(),
-        };
-    }
 }

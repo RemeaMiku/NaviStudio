@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Net;
+using System.Windows;
 using System.Windows.Media;
+using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services;
@@ -22,6 +24,11 @@ public partial class App : Application
 {
     public App()
     {
+        GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
+        GMapProvider.WebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+        GMaps.Instance.Mode = AccessMode.ServerOnly;
+        // choose your provider here        
+        GMapProvider.Language = LanguageType.ChineseSimplified;
         RegisterKeys();
         ApplyTheme();
     }
@@ -39,13 +46,11 @@ public partial class App : Application
 
     static void RegisterKeys()
     {
-        //注册 Syncfusion 控件       
+        //注册 Syncfusion 控件
         var syncKey = "Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=";
         //注册 GMap.NET Bing Map Key
         var bingKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncKey);
-        BingMapProvider.Instance.ClientKey = bingKey;
-        BingHybridMapProvider.Instance.ClientKey = bingKey;
         BingSatelliteMapProvider.Instance.ClientKey = bingKey;
     }
 
