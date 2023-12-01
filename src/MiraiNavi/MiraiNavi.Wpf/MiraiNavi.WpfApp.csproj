@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Services\RealTime\" />
+    <Folder Include="Services\File\" />
   </ItemGroup>
 
   <ItemGroup>

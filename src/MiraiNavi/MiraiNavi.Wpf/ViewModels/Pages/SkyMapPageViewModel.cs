@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Navigation;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
