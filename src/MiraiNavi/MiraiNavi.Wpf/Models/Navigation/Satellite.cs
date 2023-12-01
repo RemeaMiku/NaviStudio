@@ -1,8 +1,13 @@
 ﻿namespace MiraiNavi.WpfApp.Models.Navigation;
 
-public readonly record struct Satellite(string PrnCode)
+public record class Satellite
 {
-    public string PrnCode { get; init; } = PrnCode;
+    public Satellite(string prnCode)
+    {
+        PrnCode = prnCode;
+    }
+
+    public string PrnCode { get; init; }
 
     public SatelliteSystem SystemType => GetSatelliteSystemType(PrnCode);
 

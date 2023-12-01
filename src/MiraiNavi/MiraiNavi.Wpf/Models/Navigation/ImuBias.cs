@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MiraiNavi.WpfApp.Models.Navigation;
 
-public class ImuBias
+public record class ImuBias
 {
     public UtcTime? TimeStamp { get; init; }
 

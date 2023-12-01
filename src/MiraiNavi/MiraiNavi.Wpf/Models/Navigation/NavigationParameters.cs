@@ -11,7 +11,7 @@ using NaviSharp.Time;
 
 namespace MiraiNavi.WpfApp.Models.Navigation;
 
-public class NavigationParameters
+public record class NavigationParameters
 {
     public UtcTime? TimeStamp { get; init; }
 

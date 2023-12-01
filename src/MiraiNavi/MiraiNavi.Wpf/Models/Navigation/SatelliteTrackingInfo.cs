@@ -1,7 +1,12 @@
 ﻿namespace MiraiNavi.WpfApp.Models.Navigation;
 
-public class SatelliteTrackingInfo
+public record class SatelliteTrackingInfo
 {
+    public SatelliteTrackingInfo(Satellite satellite)
+    {
+        Satellite = satellite;
+    }
+
     public UtcTime? TimeStamp { get; init; }
 
     public Satellite Satellite { get; init; }
