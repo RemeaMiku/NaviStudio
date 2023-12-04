@@ -27,6 +27,7 @@ public partial class MainWindow : UiWindow
         MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
         SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
         NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
+        DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }

@@ -15,37 +15,45 @@
         <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
     </UserControl.Resources>
     <Border Padding="10" d:Background="Black">
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="坐标（纬度，经度，大地高）" />
+                    Text="UTC：(yyyy/MM/dd HH:mm:ss.fff)" />
+                <TextBlock
+                    d:Foreground="White"
+                    FontSize="{StaticResource LargeFontSize}"
+                    Text="2023/08/31 11:45:14.831" />
+                <TextBlock
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="位置：B(°), L(°), H(m)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="39.114514°, 114.514831°, 39.831m" />
+                    Text="39.114514, 114.514831, 39.831" />
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="速度" />
+                    Text="速度：(m/s)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="11.4m/s" />
+                    Text="11.4" />
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="姿态（航向角，俯仰角，横滚角）" />
+                    Text="姿态：Yaw(°), Pitch(°)，Roll(°)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="39.114514°, 39.114514°, 39.114514°" />
+                    Text="39.114514, 39.114514, 39.114514" />
             </StackPanel>
         </ScrollViewer>
     </Border>

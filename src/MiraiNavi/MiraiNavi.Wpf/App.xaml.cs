@@ -63,6 +63,7 @@ public partial class App : Application
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<NavigationParameterPageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddSingleton<DashBoardPage>()
         .AddSingleton<MapPage>()
         .AddSingleton<SkyMapPage>()
         .AddSingleton<NavigationParameterPage>()
