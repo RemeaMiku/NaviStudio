@@ -7,79 +7,261 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="200"
+    d:DesignWidth="600"
     mc:Ignorable="d">
-    <Grid d:Background="Black">
-        <gauge:SfCircularGauge
-            x:Name="circularGauge"
-            Width="300"
-            Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
-            Padding="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            HeaderAlignment="Center"
-            SpacingMargin="0.7">
-            <gauge:SfCircularGauge.GaugeHeader>
-                <TextBlock
-                    d:Foreground="White"
-                    FontSize="42"
-                    Text="39°" />
-            </gauge:SfCircularGauge.GaugeHeader>
-            <gauge:SfCircularGauge.Scales>
-                <gauge:CircularScale
-                    CanRotateLabels="True"
-                    EndValue="360"
-                    FontSize="{StaticResource SmallFontSize}"
-                    Interval="30"
-                    LabelCreated="OnCompassLabelCreated"
-                    LabelOffset="0.75"
-                    LabelPosition="Custom"
-                    LabelStroke="White"
-                    MinorTicksPerInterval="1"
-                    RimStroke="Gray"
-                    RimStrokeThickness="3"
-                    ShowLastLabel="False"
-                    ShowRim="True"
-                    StartAngle="270"
-                    StartValue="0"
-                    SweepAngle="360">
-                    <gauge:CircularScale.RenderTransform>
-                        <RotateTransform Angle="-39" CenterX="150" CenterY="150" />
-                    </gauge:CircularScale.RenderTransform>
-                    <gauge:CircularScale.MinorTickSettings>
-                        <gauge:MinorTickSetting
-                            EndOffset="0.4"
-                            StartOffset="0.35"
-                            StrokeThickness="1" />
-                    </gauge:CircularScale.MinorTickSettings>
-                    <gauge:CircularScale.MajorTickSettings>
-                        <gauge:MajorTickSetting
-                            Stroke="White"
-                            StrokeThickness="2"
-                            Offset="0.9" />
-                    </gauge:CircularScale.MajorTickSettings>
-                    <gauge:CircularScale.Ranges>
-                        <gauge:CircularRange
-                            EndValue="39"
-                            StartValue="0"
-                            Stroke="{StaticResource MikuRedBrush}" />
-                    </gauge:CircularScale.Ranges>
-                    <gauge:CircularScale.Pointers>
-                        <gauge:CircularPointerCollection>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <WrapPanel
+            d:Background="Black"
+            ItemHeight="200"
+            ItemWidth="200"
+            Orientation="Horizontal">
+            <gauge:SfCircularGauge
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                GaugeHeaderPosition="0.5,0.65"
+                HeaderAlignment="Custom">
+                <gauge:SfCircularGauge.GaugeHeader>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            d:Foreground="White"
+                            FontSize="{StaticResource LargeFontSize}"
+                            Text="90" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            d:Foreground="White"
+                            Text="km/h" />
+                    </StackPanel>
+                </gauge:SfCircularGauge.GaugeHeader>
+                <gauge:SfCircularGauge.Scales>
+                    <gauge:CircularScale
+                        EndValue="200"
+                        FontSize="{StaticResource SmallFontSize}"
+                        LabelOffset="0.85"
+                        LabelPosition="Custom"
+                        LabelStroke="White"
+                        MinorTicksPerInterval="9"
+                        ShowRim="False"
+                        StartAngle="135"
+                        SweepAngle="270"
+                        TickPosition="Outside">
+                        <gauge:CircularScale.MinorTickSettings>
+                            <gauge:MinorTickSetting
+                                EndOffset="0.4"
+                                StartOffset="0.35"
+                                StrokeThickness="1" />
+                        </gauge:CircularScale.MinorTickSettings>
+                        <gauge:CircularScale.MajorTickSettings>
+                            <gauge:MajorTickSetting
+                                EndOffset="0.4"
+                                StartOffset="0.3"
+                                Stroke="White"
+                                StrokeThickness="2" />
+                        </gauge:CircularScale.MajorTickSettings>
+                        <gauge:CircularScale.Pointers>
                             <gauge:CircularPointer
                                 EnableAnimation="False"
+                                NeedlePointerStroke="{StaticResource MikuGreenBrush}"
+                                NeedlePointerType="Triangle"
+                                PointerType="NeedlePointer"
+                                Value="90" />
+                        </gauge:CircularScale.Pointers>
+                    </gauge:CircularScale>
+                </gauge:SfCircularGauge.Scales>
+            </gauge:SfCircularGauge>
+            <gauge:SfCircularGauge
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                HeaderAlignment="Center">
+                <gauge:SfCircularGauge.GaugeHeader>
+                    <TextBlock
+                        d:Foreground="White"
+                        FontSize="{StaticResource LargeFontSize}"
+                        Text="39°" />
+                </gauge:SfCircularGauge.GaugeHeader>
+                <gauge:SfCircularGauge.Scales>
+                    <gauge:CircularScale
+                        CanRotateLabels="True"
+                        EndValue="360"
+                        FontSize="{StaticResource SmallFontSize}"
+                        Interval="30"
+                        LabelCreated="OnCompassLabelCreated"
+                        LabelOffset="0.8"
+                        LabelPosition="Custom"
+                        LabelStroke="White"
+                        MinorTicksPerInterval="1"
+                        RimStroke="Gray"
+                        RimStrokeThickness="3"
+                        ShowLastLabel="False"
+                        ShowRim="True"
+                        StartAngle="270"
+                        StartValue="0"
+                        SweepAngle="360">
+                        <gauge:CircularScale.RenderTransform>
+                            <RotateTransform Angle="-39" CenterX="90" CenterY="90" />
+                        </gauge:CircularScale.RenderTransform>
+                        <gauge:CircularScale.MinorTickSettings>
+                            <gauge:MinorTickSetting
+                                EndOffset="0.4"
+                                StartOffset="0.3"
+                                StrokeThickness="1" />
+                        </gauge:CircularScale.MinorTickSettings>
+                        <gauge:CircularScale.MajorTickSettings>
+                            <gauge:MajorTickSetting
+                                EndOffset="0.4"
+                                StartOffset="0.25"
+                                Stroke="White"
+                                StrokeThickness="2" />
+                        </gauge:CircularScale.MajorTickSettings>
+                        <gauge:CircularScale.Ranges>
+                            <gauge:CircularRange
+                                EndValue="39"
+                                StartValue="0"
+                                Stroke="{StaticResource MikuRedBrush}" />
+                        </gauge:CircularScale.Ranges>
+                        <gauge:CircularScale.Pointers>
+                            <gauge:CircularPointer
                                 PointerType="SymbolPointer"
                                 Symbol="Triangle"
-                                SymbolPointerHeight="15"
+                                SymbolPointerHeight="10"
                                 SymbolPointerStroke="{StaticResource MikuRedBrush}"
-                                SymbolPointerWidth="20"
+                                SymbolPointerWidth="15"
                                 Offset="1.1"
                                 Value="0" />
-                        </gauge:CircularPointerCollection>
-                    </gauge:CircularScale.Pointers>
-                </gauge:CircularScale>
-            </gauge:SfCircularGauge.Scales>
-        </gauge:SfCircularGauge>
-    </Grid>
+                        </gauge:CircularScale.Pointers>
+                    </gauge:CircularScale>
+                </gauge:SfCircularGauge.Scales>
+            </gauge:SfCircularGauge>
+            <Grid Margin="10">
+                <Ellipse>
+                    <Ellipse.RenderTransform>
+                        <RotateTransform Angle="39" CenterX="90" CenterY="90" />
+                    </Ellipse.RenderTransform>
+                    <Ellipse.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="DeepSkyBlue" />
+                            <GradientStop Offset="0.612" Color="SkyBlue" />
+                            <GradientStop Offset="0.612" Color="LightGreen" />
+                            <GradientStop Offset="1" Color="Green" />
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <gauge:SfLinearGauge
+                    Height="1200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <gauge:SfLinearGauge.MainScale>
+                        <gauge:LinearScale
+                            Margin="17,0,0,0"
+                            Interval="10"
+                            LabelSize="{StaticResource SmallFontSize}"
+                            LabelStroke="White"
+                            MajorTickSize="40"
+                            MajorTickStroke="White"
+                            MajorTickStrokeThickness="2"
+                            Maximum="90"
+                            Minimum="-90"
+                            MinorTickSize="20"
+                            MinorTickStroke="White"
+                            MinorTickStrokeThickness="1"
+                            MinorTicksPerInterval="1"
+                            ScaleBarSize="0"
+                            ScaleBarStroke="Gray"
+                            ScaleDirection="Backward"
+                            TickPosition="Cross">
+                            <gauge:LinearScale.RenderTransform>
+                                <TranslateTransform Y="20" />
+                            </gauge:LinearScale.RenderTransform>
+                        </gauge:LinearScale>
+                    </gauge:SfLinearGauge.MainScale>
+                </gauge:SfLinearGauge>
+                <gauge:SfCircularGauge HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <gauge:SfCircularGauge.Scales>
+                        <gauge:CircularScale
+                            CanRotateLabels="True"
+                            EndValue="180"
+                            FontSize="{StaticResource SmallFontSize}"
+                            Interval="30"
+                            LabelOffset="0.85"
+                            LabelPosition="Custom"
+                            LabelStroke="White"
+                            ShowFirstLabel="False"
+                            ShowRim="False"
+                            StartAngle="90"
+                            StartValue="-180"
+                            SweepAngle="360"
+                            TickPosition="Custom">
+                            <gauge:CircularScale.RenderTransform>
+                                <RotateTransform Angle="39" CenterX="90" CenterY="90" />
+                            </gauge:CircularScale.RenderTransform>
+                            <gauge:CircularScale.MajorTickSettings>
+                                <gauge:MajorTickSetting
+                                    Length="15"
+                                    Stroke="White"
+                                    StrokeThickness="2" />
+                            </gauge:CircularScale.MajorTickSettings>
+                            <gauge:CircularScale.MinorTickSettings>
+                                <gauge:MinorTickSetting
+                                    Length="5"
+                                    Stroke="White"
+                                    StrokeThickness="1"
+                                    Offset="0.925" />
+                            </gauge:CircularScale.MinorTickSettings>
+                            <gauge:CircularScale.Pointers>
+                                <gauge:CircularPointer
+                                    PointerType="SymbolPointer"
+                                    Symbol="Triangle"
+                                    SymbolPointerHeight="15"
+                                    SymbolPointerStroke="{StaticResource MikuRedBrush}"
+                                    SymbolPointerWidth="10"
+                                    Offset="0.85"
+                                    Value="-39" />
+                            </gauge:CircularScale.Pointers>
+                        </gauge:CircularScale>
+                    </gauge:SfCircularGauge.Scales>
+                </gauge:SfCircularGauge>
+                <Image
+                    Width="80"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <DrawingGroup ClipGeometry="M0,0 V19.81 H453.49 V0 H0 Z">
+                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                                        <GeometryDrawing.Geometry>
+                                            <RectangleGeometry
+                                                RadiusX="0"
+                                                RadiusY="0"
+                                                Rect="0,0,175.92,19.81" />
+                                        </GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                                        <GeometryDrawing.Geometry>
+                                            <RectangleGeometry
+                                                RadiusX="0"
+                                                RadiusY="0"
+                                                Rect="277.57,0,175.92,19.81" />
+                                        </GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                                        <GeometryDrawing.Geometry>
+                                            <EllipseGeometry
+                                                Center="226.74,9.9"
+                                                RadiusX="9.9"
+                                                RadiusY="9.9" />
+                                        </GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                </DrawingGroup>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
+            </Grid>
+        </WrapPanel>
+    </ScrollViewer>
 </UserControl>
