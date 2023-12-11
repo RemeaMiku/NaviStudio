@@ -2,6 +2,7 @@
 
 public record class SatelliteTrackingInfo
 {
+
     public SatelliteTrackingInfo(Satellite satellite)
     {
         Satellite = satellite;

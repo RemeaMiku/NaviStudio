@@ -17,8 +17,7 @@
     DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Acrylic"
-    WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
+    mc:Ignorable="d" WindowStartupLocation="CenterScreen">
     <ui:UiWindow.Resources>
         <Style
             x:Key="ToolUiButtonStyle"

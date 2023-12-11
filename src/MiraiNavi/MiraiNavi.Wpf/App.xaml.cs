@@ -72,6 +72,9 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        ServiceProvider.GetRequiredService<MainWindow>().Show();
+        new SplashScreen("Assets/splash-screen.png").Show(true);
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        mainWindow.Show();
+        mainWindow.WindowState = WindowState.Maximized;
     }
 }

@@ -5,7 +5,16 @@
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>navi-studio-logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\splash-screen.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="navi-studio-logo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
@@ -21,13 +30,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
     <Folder Include="Services\RealTime\" />
     <Folder Include="Services\File\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NaviSharp\NaviSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\splash-screen.png" />
   </ItemGroup>
 
 </Project>
