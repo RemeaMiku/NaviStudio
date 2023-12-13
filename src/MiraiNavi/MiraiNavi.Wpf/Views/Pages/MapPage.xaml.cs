@@ -55,13 +55,18 @@ public partial class MapPage : UserControl
     private void OnGMapMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         //TODO:测试点击Marker：VisualTreeHelper.HitTest
-        //var mousePosition = e.GetPosition(GMap);
+        var mousePosition = e.GetPosition(GMap);
         //var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
-        //MessageBox.Show(location.ToString());
-        //var hitTestResult = VisualTreeHelper.HitTest(GMap, null, () =>
-        //{
-
-        //}, new(mousePosition));
+        VisualTreeHelper.HitTest(GMap, null, (r) =>
+        {
+            if (r.VisualHit is Ellipse e && e.Tag is not null)
+            {
+                (var location, var timeStamp) = ((PointLatLng, UtcTime))e.Tag;
+                MessageBox.Show($"{timeStamp:yyyy/MM/dd HH:mm:ss.fff}{Environment.NewLine}纬度：{location.Lat}, 经度：{location.Lng}");
+                return HitTestResultBehavior.Stop;
+            }
+            return HitTestResultBehavior.Continue;
+        }, new PointHitTestParameters(mousePosition));
 
     }
 }

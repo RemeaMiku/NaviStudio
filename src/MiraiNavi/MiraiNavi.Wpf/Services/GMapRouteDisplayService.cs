@@ -24,7 +24,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
     readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
     CancellationTokenSource? _cancellationTokenSource;
 
-    static GMapMarker CreateEllipseMarker(Brush fill, PointLatLng point)
+    static GMapMarker CreateEllipseMarker(Brush fill, PointLatLng point, UtcTime timeStamp)
     {
         var shape = new Ellipse
         {
@@ -32,7 +32,8 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             Width = 5,
             Height = 5,
             HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            Tag = (point, timeStamp)
         };
         return new GMapMarker(point)
         {
@@ -54,7 +55,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_positionMarker);
         if (_routeMarkers.Count == 0)
             _positionMarker.Position = point;
-        var marker = CreateEllipseMarker(_afterFill, point);
+        var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
         _routeMarkers.Add(marker);
         _timeStamps.Add(timeStamp);
         _gMapControl.Markers.Add(marker);
@@ -98,9 +99,11 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         return this;
     }
 
-    static void SetEllipseMarkerShape(GMapMarker marker, Brush fill)
-        => ((Ellipse)marker.Shape).Fill = fill;
-
+    static void SetEllipseMarkerFill(GMapMarker marker, Brush fill)
+    {
+        var e = (Ellipse)marker.Shape;
+        e.Fill = fill;
+    }
 
     public void MoveTo(int newIndex)
     {
@@ -115,12 +118,12 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         if (_positionIndex > newIndex)
         {
             for (int i = newIndex + 1; i <= _positionIndex; i++)
-                SetEllipseMarkerShape(_routeMarkers[i], _afterFill);
+                SetEllipseMarkerFill(_routeMarkers[i], _afterFill);
         }
         else
         {
             for (int i = _positionIndex; i < newIndex; i++)
-                SetEllipseMarkerShape(_routeMarkers[i], _beforeFill);
+                SetEllipseMarkerFill(_routeMarkers[i], _beforeFill);
         }
         _positionIndex = newIndex;
     }
@@ -145,7 +148,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
-                        SetEllipseMarkerShape(_routeMarkers[_positionIndex], _beforeFill);
+                        SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
                     });
                     _positionIndex++;
                 }
