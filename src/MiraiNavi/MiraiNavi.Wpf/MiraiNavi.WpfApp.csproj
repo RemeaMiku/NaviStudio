@@ -5,7 +5,8 @@
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>navi-studio-logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\mirainavi-logo.ico</ApplicationIcon>
+    <AssemblyName>MiraiNavi</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,14 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="navi-studio-logo.ico" />
+    <Content Include="Assets\mirainavi-logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="GMap.NET.WinPresentation" Version="2.1.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Syncfusion.Licensing" Version="23.2.6" />
+    <PackageReference Include="Syncfusion.Licensing" Version="23.2.7" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="23.2.6" />
     <PackageReference Include="Syncfusion.SfChart.WPF" Version="23.2.6" />
     <PackageReference Include="Syncfusion.SfGauge.WPF" Version="23.2.6" />
@@ -30,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Messages\" />
     <Folder Include="Services\RealTime\" />
-    <Folder Include="Services\File\" />
   </ItemGroup>
 
   <ItemGroup>

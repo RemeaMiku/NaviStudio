@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance local:NavigationParameterPage}"
-    d:DesignHeight="200"
+    d:DesignHeight="300"
     d:DesignWidth="500"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -23,8 +23,9 @@
                     Text="UTC：(yyyy/MM/dd HH:mm:ss.fff)" />
                 <TextBlock
                     d:Foreground="White"
+                    d:Text="2023/08/31 11:45:14.831"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="2023/08/31 11:45:14.831" />
+                    Text="{Binding ViewModel.NavigationParameters.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', FallbackValue='N/A'}" />
                 <TextBlock
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
@@ -32,8 +33,13 @@
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
-                    FontSize="{StaticResource LargeFontSize}"
-                    Text="39.114514, 114.514831, 39.831" />
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run d:Text="39.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.B, StringFormat='{}{0:F6}', FallbackValue='N/A'}" />
+                    <Run Text="," />
+                    <Run d:Text="114.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.L, StringFormat='{}{0:F6}', FallbackValue='N/A'}" />
+                    <Run Text="," />
+                    <Run d:Text="39.114" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.H, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                </TextBlock>
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
@@ -42,8 +48,9 @@
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
+                    d:Text="11.4"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="11.4" />
+                    Text="{Binding ViewModel.NavigationParameters.Velocity, StringFormat='{}{0:F1}', FallbackValue='N/A'}" />
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
@@ -52,8 +59,13 @@
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
-                    FontSize="{StaticResource LargeFontSize}"
-                    Text="39.114514, 39.114514, 39.114514" />
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Yaw, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run Text="," />
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Pitch, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run Text="," />
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Roll, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                </TextBlock>
             </StackPanel>
         </ScrollViewer>
     </Border>

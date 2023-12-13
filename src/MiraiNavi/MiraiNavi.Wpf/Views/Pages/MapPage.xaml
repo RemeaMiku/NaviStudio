@@ -13,16 +13,17 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <cv:StringToGMapProvider x:Key="StringToGMapProvider" />
+        <cv:StringToGMapProviderConverter x:Key="StringToGMapProviderConverter" />
     </UserControl.Resources>
     <Grid d:Background="White">
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
             Loaded="OnGMapLoaded"
-            MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProvider}}"
+            MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
             MaxZoom="20"
             MinZoom="3"
+            MouseLeftButtonDown="OnGMapMouseLeftButtonDown"
             MouseWheelZoomType="MousePositionWithoutCenter"
             Zoom="3" />
         <Border Padding="5">
@@ -98,6 +99,7 @@
                                 Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
                                 Margin="10,0,0,0"
                                 Padding="0"
+                                Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
                                 FontSize="14"
                                 Icon="Stop24"
                                 IconFilled="True"

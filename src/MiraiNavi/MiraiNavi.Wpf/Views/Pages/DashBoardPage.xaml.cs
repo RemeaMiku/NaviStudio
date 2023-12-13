@@ -12,29 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MiraiNavi.WpfApp.ViewModels.Pages;
 
-namespace MiraiNavi.WpfApp.Views.Pages
+namespace MiraiNavi.WpfApp.Views.Pages;
+
+/// <summary>
+/// DashBoardPage.xaml 的交互逻辑
+/// </summary>
+public partial class DashBoardPage : UserControl
 {
-    /// <summary>
-    /// DashBoardPage.xaml 的交互逻辑
-    /// </summary>
-    public partial class DashBoardPage : UserControl
+    public DashBoardPage(DashBoardPageViewModel viewModel)
     {
-        public DashBoardPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        DataContext = this;
+        ViewModel = viewModel;
+    }
 
-        private void OnCompassLabelCreated(object sender, Syncfusion.UI.Xaml.Gauges.LabelCreatedEventArgs e)
+    public DashBoardPageViewModel ViewModel { get; }
+
+    private void OnCompassLabelCreated(object sender, Syncfusion.UI.Xaml.Gauges.LabelCreatedEventArgs e)
+    {
+        e.LabelText = e.LabelText switch
         {
-            e.LabelText = e.LabelText switch
-            {
-                "0" => "N",
-                "90" => "E",
-                "180" => "S",
-                "270" => "W",
-                _ => e.LabelText
-            };
-        }
+            "0" => "N",
+            "90" => "E",
+            "180" => "S",
+            "270" => "W",
+            _ => e.LabelText
+        };
     }
 }

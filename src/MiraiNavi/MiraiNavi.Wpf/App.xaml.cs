@@ -1,12 +1,14 @@
 ﻿using System.Net;
 using System.Windows;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.Services.DesignTime;
+using MiraiNavi.WpfApp.Services.File;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
@@ -26,8 +28,7 @@ public partial class App : Application
     {
         GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
         GMapProvider.WebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
-        GMaps.Instance.Mode = AccessMode.ServerOnly;
-        // choose your provider here        
+        GMaps.Instance.Mode = AccessMode.ServerAndCache;
         GMapProvider.Language = LanguageType.ChineseSimplified;
         RegisterKeys();
         ApplyTheme();
@@ -57,7 +58,7 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
-        .AddSingleton<IGMapRouteReplayService, GMapRouteReplayService>()
+        .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
         .AddSingleton<ISatelliteServcie, DesignTimeSatelliteService>()
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
@@ -75,6 +76,5 @@ public partial class App : Application
         new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
-        mainWindow.WindowState = WindowState.Maximized;
     }
 }

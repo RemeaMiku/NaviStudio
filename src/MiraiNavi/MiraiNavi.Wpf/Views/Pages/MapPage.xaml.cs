@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
@@ -27,21 +28,20 @@ public partial class MapPage : UserControl
         DataContext = this;
         var shape = new Ellipse
         {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
             Stroke = Brushes.White,
             StrokeThickness = 3,
             Width = 15,
             Height = 15,
-            Fill = (Brush)App.Current.Resources["MikuGreenBrush"],
+            Fill = (Brush)App.Current.Resources["MikuMeaRedBlueGreenHorizontalBrush"],
         };
         var marker = new GMapMarker(new PointLatLng(0, 0))
         {
             Shape = shape,
             Offset = new(-shape.Width / 2, -shape.Height / 2)
         };
-        App.Current.ServiceProvider.GetRequiredService<IGMapRouteReplayService>()
-            .Initiliaze(GMap, marker, Brushes.Gray, (Brush)App.Current.Resources["MikuRedBrush"]);
+        App.Current.ServiceProvider.GetRequiredService<IGMapRouteDisplayService>()
+            .RegisterGMapControl(GMap)
+            .RegisterPositionMarker(marker);
     }
 
     public MapPageViewModel ViewModel { get; }
@@ -52,4 +52,16 @@ public partial class MapPage : UserControl
         GMap.DragButton = MouseButton.Right;
     }
 
+    private void OnGMapMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        //TODO:测试点击Marker：VisualTreeHelper.HitTest
+        //var mousePosition = e.GetPosition(GMap);
+        //var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
+        //MessageBox.Show(location.ToString());
+        //var hitTestResult = VisualTreeHelper.HitTest(GMap, null, () =>
+        //{
+
+        //}, new(mousePosition));
+
+    }
 }

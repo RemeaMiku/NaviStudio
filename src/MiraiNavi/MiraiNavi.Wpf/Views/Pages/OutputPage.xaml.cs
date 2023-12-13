@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MiraiNavi.WpfApp.Views.Pages
+namespace MiraiNavi.WpfApp.Views.Pages;
+
+/// <summary>
+/// OuputPage.xaml 的交互逻辑
+/// </summary>
+public partial class OutputPage : UserControl
 {
-    /// <summary>
-    /// OuputPage.xaml 的交互逻辑
-    /// </summary>
-    public partial class OuputPage : UserControl
+    public OutputPage()
     {
-        public OuputPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
