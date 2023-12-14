@@ -19,6 +19,8 @@
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
+            OnPositionChanged="OnGMapOnPositionChanged"
+            CenterPosition="{Binding ViewModel.MapCenter}"
             Loaded="OnGMapLoaded"
             MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
             MaxZoom="20"
@@ -37,18 +39,15 @@
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                     SelectedIndex="0"
                     Style="{StaticResource DefaultComboBoxStyle}">
-                    <ComboBoxItem
-                        Padding="5"
-                        Content="交通"
-                        Style="{StaticResource DefaultComboBoxItemStyle}" />
-                    <ComboBoxItem
-                        Padding="5"
-                        Content="地形"
-                        Style="{StaticResource DefaultComboBoxItemStyle}" />
-                    <ComboBoxItem
-                        Padding="5"
-                        Content="卫星"
-                        Style="{StaticResource DefaultComboBoxItemStyle}" />
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Padding" Value="5" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                    <ComboBoxItem Content="交通" />
+                    <ComboBoxItem Content="地形" />
+                    <ComboBoxItem Content="卫星" />
+                    <ComboBoxItem Content="无" />
                 </ComboBox>
                 <StackPanel
                     HorizontalAlignment="Right"
@@ -56,16 +55,18 @@
                     Orientation="Vertical">
                     <ui:Button
                         Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                        Margin="0,5,0,0"
                         Padding="5"
-                        HorizontalContentAlignment="Right"
+                        HorizontalAlignment="Center"
                         Appearance="Primary"
+                        Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                        BorderThickness="0"
                         Icon="MyLocation24" />
                     <Slider
                         Height="150"
                         HorizontalAlignment="Center"
                         AutoToolTipPlacement="TopLeft"
                         AutoToolTipPrecision="0"
+                        IsMoveToPointEnabled="True"
                         IsSnapToTickEnabled="True"
                         Maximum="{Binding MaxZoom, ElementName=GMap, Mode=OneTime}"
                         Minimum="{Binding MinZoom, ElementName=GMap, Mode=OneTime}"
@@ -74,7 +75,7 @@
                         TickPlacement="Both"
                         Value="{Binding Zoom, ElementName=GMap}" />
                 </StackPanel>
-                <Border
+                <!--<Border
                     x:Name="ReplayPanel"
                     Padding="10,3"
                     HorizontalAlignment="Right"
@@ -140,7 +141,7 @@
                             Minimum="0"
                             TickFrequency="1" />
                     </Grid>
-                </Border>
+                </Border>-->
             </Grid>
         </Border>
     </Grid>

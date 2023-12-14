@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MiraiNavi.WpfApp.Models.Navigation;
+using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 
@@ -14,5 +14,5 @@ public interface IEpochDatasService
 
     public void Clear();
 
-    public void Update(EpochData epochData);
+    public void Update(EpochData epochData, bool notifyAfterUpdate = true);
 }

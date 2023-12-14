@@ -9,4 +9,11 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
     </Style>
+
+    <Style
+        x:Key="DynamicForegroundTextBlock"
+        BasedOn="{StaticResource {x:Type TextBlock}}"
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+    </Style>
 </ResourceDictionary>

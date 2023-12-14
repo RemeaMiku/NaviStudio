@@ -2,8 +2,9 @@
     x:Class="MiraiNavi.WpfApp.Views.Windows.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:MiraiNavi.WpfApp.Common.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MiraiNavi.WpfApp"
+    xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notification="clr-namespace:Syncfusion.Windows.Controls.Notification;assembly=Syncfusion.SfBusyIndicator.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -14,12 +15,13 @@
     Height="{Binding MinHeight, Mode=OneTime}"
     MinWidth="1250"
     MinHeight="700"
-    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    d:DataContext="{d:DesignInstance local:MainWindow}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Acrylic"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ui:UiWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style
             x:Key="ToolUiButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
@@ -105,22 +107,50 @@
                 </Grid.RowDefinitions>
                 <Grid Margin="5,0">
                     <StackPanel Orientation="Horizontal">
-                        <ui:Button Icon="ChevronCircleLeft24" Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button Icon="ChevronCircleRight24" Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button Icon="FolderOpen24" Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button Icon="PlaySettings20" Style="{StaticResource ToolUiButtonStyle}" />
                         <ui:Button
-                            Content="MiraiNavi"
+                            Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
+                            Icon="Pause24"
+                            IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay}"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ui:Button
+                            Command="{Binding ViewModel.StopCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MikuRedBrush}"
+                            Icon="Stop24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="ChevronCircleLeft24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="ChevronCircleRight24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaYellowBrush}"
+                            Icon="FolderOpen24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Icon="PlaySettings20"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Command="{Binding ViewModel.StartOrResumeCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MikuGreenBrush}"
                             Icon="Play24"
                             IconFilled="True"
-                            Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+                            Style="{StaticResource BorderlessTransparentUiButtonStyle}">
+                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="文件模拟" />
+                        </ui:Button>
                     </StackPanel>
                     <notification:SfBusyIndicator
                         HorizontalAlignment="Right"
                         AnimationType="ArrowTrack"
                         Foreground="White"
-                        ViewboxHeight="30" />
+                        ViewboxHeight="30"
+                        Visibility="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
                 <syncfusion:DockingManager
                     x:Name="DockingManagerControl"
@@ -129,10 +159,17 @@
                     d:Background="Black"
                     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                    ChildrenCollectionChanged="OnDockingManagerChildrenCollectionChanged"
                     CloseButtonClick="OnDockingManagerControlCloseButtonClicked"
+                    ContainerMode="TDI"
+                    DocumentCloseButtonType="Individual"
+                    Loaded="DockingManagerControl_Loaded"
                     MaximizeButtonEnabled="True"
                     MinimizeButtonEnabled="True"
+                    PersistState="True"
                     ShowFloatWindowInTaskbar="True"
+                    SwitchMode="QuickTabs"
+                    UseDocumentContainer="True"
                     UseNativeFloatWindow="True"
                     WindowClosing="OnDockingManagerControlWindowClosing">
                     <ContentControl

@@ -1,5 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Frozen;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Syncfusion.Windows.Tools.Controls;
@@ -18,6 +22,7 @@ public partial class MainWindow : UiWindow
     {
         InitializeComponent();
         ViewModel = viewModel;
+        DataContext = this;
         App.ApplyTheme();
         SetPages();
     }
@@ -26,8 +31,8 @@ public partial class MainWindow : UiWindow
     {
         MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
         //SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
-        //NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
-        //DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
+        NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
+        DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }
@@ -41,9 +46,31 @@ public partial class MainWindow : UiWindow
             DockingManagerControl.ActiveWindow = contentControl;
     }
 
-    void SaveDockState(ContentControl contentControl) => _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
+    void SaveDockState(ContentControl contentControl)
+        => _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
 
-    void OnDockingManagerControlWindowClosing(object sender, WindowClosingEventArgs e) => SaveDockState((ContentControl)e.TargetItem);
+    void OnDockingManagerControlWindowClosing(object sender, WindowClosingEventArgs e)
+    {
+        SaveDockState((ContentControl)e.TargetItem);
+    }
 
-    void OnDockingManagerControlCloseButtonClicked(object sender, CloseButtonEventArgs e) => SaveDockState((ContentControl)e.TargetItem);
+
+    void OnDockingManagerControlCloseButtonClicked(object sender, CloseButtonEventArgs e)
+        => SaveDockState((ContentControl)e.TargetItem);
+
+    void OnDockingManagerChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            if (e.NewItems is null)
+                return;
+            foreach (ContentControl item in e.NewItems)
+                DockingWindowHandler.SetViewModelIsActive(item, true);
+        }
+    }
+
+    private void DockingManagerControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+    {
+
+    }
 }

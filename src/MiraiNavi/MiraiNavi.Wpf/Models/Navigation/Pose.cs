@@ -11,7 +11,7 @@ using NaviSharp.Time;
 
 namespace MiraiNavi.WpfApp.Models.Navigation;
 
-public record class NavigationParameters
+public record class Pose
 {
     public UtcTime? TimeStamp { get; init; }
 
@@ -19,15 +19,19 @@ public record class NavigationParameters
 
     public GeodeticCoord GeodeticCoord { get; init; }
 
-    public float EastVelocity { get; init; }
+    public double EastVelocity { get; init; }
 
-    public float NorthVelocity { get; init; }
+    public double NorthVelocity { get; init; }
 
-    public float UpVelocity { get; init; }
+    public double UpVelocity { get; init; }
 
-    public Vector3 EcefVelocity { get; init; }
+    public double XVelocity { get; init; }
 
-    public float Velocity => EcefVelocity.LengthSquared();
+    public double YVelocity { get; init; }
+
+    public double ZVelocity { get; init; }
+
+    public double Velocity => Math.Sqrt(Math.Pow(XVelocity, 2) + Math.Pow(YVelocity, 2) + Math.Pow(ZVelocity, 2));
 
     public EulerAngles EulerAngles { get; init; }
 

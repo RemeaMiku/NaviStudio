@@ -25,7 +25,7 @@
                     d:Foreground="White"
                     d:Text="2023/08/31 11:45:14.831"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="{Binding ViewModel.NavigationParameters.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', FallbackValue='N/A'}" />
+                    Text="{Binding ViewModel.NavigationParameters.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', FallbackValue='N/A', Mode=OneWay}" />
                 <TextBlock
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
@@ -34,11 +34,11 @@
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource LargeFontSize}">
-                    <Run d:Text="39.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.B, StringFormat='{}{0:F6}', FallbackValue='N/A'}" />
+                    <Run d:Text="39.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.Latitude.Degrees, StringFormat='{}{0:F6}', FallbackValue='N/A', Mode=OneWay}" />
                     <Run Text="," />
-                    <Run d:Text="114.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.L, StringFormat='{}{0:F6}', FallbackValue='N/A'}" />
+                    <Run d:Text="114.114514" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.Longitude.Degrees, StringFormat='{}{0:F6}', FallbackValue='N/A', Mode=OneWay}" />
                     <Run Text="," />
-                    <Run d:Text="39.114" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.H, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run d:Text="39.114" Text="{Binding ViewModel.NavigationParameters.GeodeticCoord.H, StringFormat='{}{0:F3}', FallbackValue='N/A', Mode=OneWay}" />
                 </TextBlock>
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
@@ -50,7 +50,7 @@
                     d:Foreground="White"
                     d:Text="11.4"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="{Binding ViewModel.NavigationParameters.Velocity, StringFormat='{}{0:F1}', FallbackValue='N/A'}" />
+                    Text="{Binding ViewModel.NavigationParameters.Velocity, StringFormat='{}{0:F1}', FallbackValue='N/A', Mode=OneWay}" />
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
@@ -60,11 +60,11 @@
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource LargeFontSize}">
-                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Yaw, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Yaw, StringFormat='{}{0:F3}', FallbackValue='N/A', Mode=OneWay}" />
                     <Run Text="," />
-                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Pitch, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Pitch, StringFormat='{}{0:F3}', FallbackValue='N/A', Mode=OneWay}" />
                     <Run Text="," />
-                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Roll, StringFormat='{}{0:F3}', FallbackValue='N/A'}" />
+                    <Run Text="{Binding ViewModel.NavigationParameters.EulerAngles.Roll, StringFormat='{}{0:F3}', FallbackValue='N/A', Mode=OneWay}" />
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Models.Navigation;
 using MiraiNavi.WpfApp.Services.Contracts;
 
@@ -11,7 +12,7 @@ public partial class NavigationParameterPageViewModel(IMessenger messenger, IEpo
     readonly IEpochDatasService _epochDatasService = epochDatasService;
 
     [ObservableProperty]
-    NavigationParameters? _navigationParameters;
+    Pose? _navigationParameters;
 
     protected override void OnActivated()
     {
@@ -31,6 +32,6 @@ public partial class NavigationParameterPageViewModel(IMessenger messenger, IEpo
 
     public void Receive(EpochData message)
     {
-        NavigationParameters = message.NavigationParameters;
+        NavigationParameters = message.Pose;
     }
 }

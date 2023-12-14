@@ -15,7 +15,11 @@ public interface IGMapRouteDisplayService
 
     public IGMapRouteDisplayService RegisterPositionMarker(GMapMarker positionMarker);
 
-    public void AddPoint(PointLatLng point, UtcTime timeStamp);
+    public PointLatLng Position { get; }
+
+    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool updatePositionMarker = false);
+
+    public void AddPoints(IEnumerable<(PointLatLng point, UtcTime timeStamp)> points, bool updatePositionMarker = false);
 
     public void ClearPoints();
 

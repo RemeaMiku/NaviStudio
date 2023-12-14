@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using MiraiNavi.WpfApp.Models.Navigation;
+using MiraiNavi.WpfApp.Models.Satellite;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 

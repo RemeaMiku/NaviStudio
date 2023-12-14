@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiraiNavi.WpfApp.Models.Navigation;
+namespace MiraiNavi.WpfApp.Models.Navigation.Precision;
 
 public record class BaseLinePrecision
 {
+    public UtcTime? TimeStamp { get; init; }
+
     public float StdEast { get; init; }
 
     public float StdNorth { get; init; }

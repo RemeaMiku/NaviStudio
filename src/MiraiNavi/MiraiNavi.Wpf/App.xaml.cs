@@ -7,8 +7,7 @@ using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
-using MiraiNavi.WpfApp.Services.DesignTime;
-using MiraiNavi.WpfApp.Services.File;
+using MiraiNavi.WpfApp.Services.Test;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
@@ -58,10 +57,14 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
+        .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
+        .AddSingleton<IRealTimeControlService, FileRealTimeControlService>()
+        .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
         .AddSingleton<ISatelliteServcie, DesignTimeSatelliteService>()
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
+        .AddSingleton<DashBoardPageViewModel>()
         .AddSingleton<NavigationParameterPageViewModel>()
         .AddSingleton<MainWindowViewModel>()
         .AddSingleton<DashBoardPage>()

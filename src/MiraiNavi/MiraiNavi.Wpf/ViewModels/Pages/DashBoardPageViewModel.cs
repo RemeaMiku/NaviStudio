@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Models.Navigation;
+using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
@@ -59,9 +59,10 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
 
     public void Receive(EpochData message)
     {
-        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(message.NavigationParameters.Velocity);
-        Yaw = message.NavigationParameters.EulerAngles.Yaw.Degrees;
-        Pitch = message.NavigationParameters.EulerAngles.Pitch.Degrees;
-        Roll = message.NavigationParameters.EulerAngles.Roll.Degrees;
+        ArgumentNullException.ThrowIfNull(message.Pose);
+        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(message.Pose.Velocity);
+        Yaw = message.Pose.EulerAngles.Yaw.Degrees;
+        Pitch = message.Pose.EulerAngles.Pitch.Degrees;
+        Roll = message.Pose.EulerAngles.Roll.Degrees;
     }
 }

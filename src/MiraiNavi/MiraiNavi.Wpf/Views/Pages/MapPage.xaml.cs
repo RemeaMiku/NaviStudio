@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,7 @@ public partial class MapPage : UserControl
     {
         InitializeComponent();
         ViewModel = viewModel;
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         DataContext = this;
         var shape = new Ellipse
         {
@@ -42,6 +44,14 @@ public partial class MapPage : UserControl
         App.Current.ServiceProvider.GetRequiredService<IGMapRouteDisplayService>()
             .RegisterGMapControl(GMap)
             .RegisterPositionMarker(marker);
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ViewModel.MapCenter))
+        {
+            App.Current.Dispatcher.Invoke(() => GMap.CenterPosition = ViewModel.MapCenter);
+        }
     }
 
     public MapPageViewModel ViewModel { get; }
@@ -68,5 +78,10 @@ public partial class MapPage : UserControl
             return HitTestResultBehavior.Continue;
         }, new PointHitTestParameters(mousePosition));
 
+    }
+
+    private void OnGMapOnPositionChanged(PointLatLng point)
+    {
+        ViewModel.MapCenter = point;
     }
 }

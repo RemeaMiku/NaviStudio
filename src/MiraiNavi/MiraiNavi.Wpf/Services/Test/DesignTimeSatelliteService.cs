@@ -1,7 +1,7 @@
-﻿using MiraiNavi.WpfApp.Models.Navigation;
+﻿using MiraiNavi.WpfApp.Models.Satellite;
 using MiraiNavi.WpfApp.Services.Contracts;
 
-namespace MiraiNavi.WpfApp.Services.DesignTime;
+namespace MiraiNavi.WpfApp.Services.Test;
 
 public class DesignTimeSatelliteService : ISatelliteServcie
 {

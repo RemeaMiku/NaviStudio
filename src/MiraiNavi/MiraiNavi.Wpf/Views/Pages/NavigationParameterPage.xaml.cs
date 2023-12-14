@@ -12,6 +12,7 @@ public partial class NavigationParameterPage : UserControl
     {
         InitializeComponent();
         ViewModel = viewModel;
+        DataContext = this;
     }
 
     public NavigationParameterPageViewModel ViewModel { get; }

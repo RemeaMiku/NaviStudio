@@ -17,12 +17,14 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
 {
     GMapControl? _gMapControl;
     GMapMarker? _positionMarker;
-    int _positionIndex;
+    int _positionIndex = -1;
     readonly List<GMapMarker> _routeMarkers = [];
     readonly List<UtcTime> _timeStamps = [];
     readonly static Brush _beforeFill = (Brush)App.Current.Resources["MikuRedBrush"];
     readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
     CancellationTokenSource? _cancellationTokenSource;
+
+    public PointLatLng Position => _positionIndex == -1 ? PointLatLng.Empty : _routeMarkers[_positionIndex].Position;
 
     static GMapMarker CreateEllipseMarker(Brush fill, PointLatLng point, UtcTime timeStamp)
     {
@@ -48,19 +50,26 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             throw new InvalidOperationException("The display is running.");
     }
 
-    public void AddPoint(PointLatLng point, UtcTime timeStamp)
+    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool updatePositionMarker = false)
     {
         ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
-        if (_routeMarkers.Count == 0)
-            _positionMarker.Position = point;
-        var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
-        _routeMarkers.Add(marker);
-        _timeStamps.Add(timeStamp);
-        _gMapControl.Markers.Add(marker);
-        _gMapControl.Markers.Remove(_positionMarker);
-        _gMapControl.Markers.Add(_positionMarker);
+        App.Current.Dispatcher.Invoke(() =>
+        {
+            _gMapControl.Markers.Remove(_positionMarker);
+            var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
+            _routeMarkers.Add(marker);
+            _timeStamps.Add(timeStamp);
+            _gMapControl.Markers.Add(marker);
+            if (updatePositionMarker)
+            {
+                _positionMarker.Position = point;
+                _positionIndex = _routeMarkers.Count - 1;
+            }
+            _positionMarker.Shape.Visibility = Visibility.Visible;
+            _gMapControl.Markers.Add(_positionMarker);
+        });
     }
 
     public void ClearPoints()
@@ -73,7 +82,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _timeStamps.Clear();
-        _positionIndex = default;
+        _positionIndex = -1;
     }
 
     public void Pause()
@@ -113,7 +122,6 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             return;
         ArgumentNullException.ThrowIfNull(_positionMarker);
         ThrowIfIsRunnning();
-        _positionMarker.Shape.Visibility = Visibility.Visible;
         _positionMarker.Position = _routeMarkers[newIndex].Position;
         if (_positionIndex > newIndex)
         {
@@ -144,7 +152,6 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
                 {
                     var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
                     await Task.Delay(duration, _cancellationTokenSource.Token);
-                    //Thread.Sleep();
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
@@ -173,4 +180,27 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
 
     public void MoveToOffset(int offset) => MoveTo(_positionIndex + offset);
 
+    public void AddPoints(IEnumerable<(PointLatLng, UtcTime)> points, bool updatePositionMarker = false)
+    {
+        ThrowIfIsRunnning();
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        ArgumentNullException.ThrowIfNull(_positionMarker);
+        if (!points.Any())
+            return;
+        _gMapControl.Markers.Remove(_positionMarker);
+        foreach ((var point, var timeStamp) in points)
+        {
+            var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
+            _routeMarkers.Add(marker);
+            _timeStamps.Add(timeStamp);
+            _gMapControl.Markers.Add(marker);
+        }
+        if (updatePositionMarker)
+        {
+            _positionMarker.Position = _routeMarkers[^1].Position;
+            _positionIndex = _routeMarkers.Count - 1;
+        }
+        _positionMarker.Shape.Visibility = Visibility.Visible;
+        _gMapControl.Markers.Add(_positionMarker);
+    }
 }

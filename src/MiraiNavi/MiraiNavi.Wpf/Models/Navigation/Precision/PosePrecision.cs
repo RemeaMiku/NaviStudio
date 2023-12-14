@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using NaviSharp;
 
-namespace MiraiNavi.WpfApp.Models.Navigation;
+namespace MiraiNavi.WpfApp.Models.Navigation.Precision;
 
-public record class NavigationParametersPrecision
+public record class PosePrecision
 {
     public UtcTime? TimeStamp { get; init; }
+
+    public float Ratio { get; init; }
+
+    public float Hdop { get; init; }
+
+    public float Vdop { get; init; }
 
     public float StdEastVelocity { get; init; }
 

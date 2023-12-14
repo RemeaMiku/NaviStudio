@@ -34,7 +34,7 @@
                             d:Foreground="White"
                             d:Text="90"
                             FontSize="{StaticResource LargeFontSize}"
-                            Text="{Binding ViewModel.Speed, StringFormat='{}{0:F0}'}" />
+                            Text="{Binding ViewModel.Speed, StringFormat='{}{0:F0}', Mode=OneWay}" />
                         <TextBlock
                             HorizontalAlignment="Center"
                             d:Foreground="White"
@@ -72,7 +72,7 @@
                                 NeedlePointerStroke="{StaticResource MikuGreenBrush}"
                                 NeedlePointerType="Triangle"
                                 PointerType="NeedlePointer"
-                                Value="90" />
+                                Value="{Binding ViewModel.Speed, Mode=OneWay}" />
                         </gauge:CircularScale.Pointers>
                     </gauge:CircularScale>
                 </gauge:SfCircularGauge.Scales>
@@ -87,7 +87,7 @@
                         d:Foreground="White"
                         d:Text="39°"
                         FontSize="{StaticResource LargeFontSize}"
-                        Text="{Binding ViewModel.Yaw, StringFormat='{}{0:F0}°'}" />
+                        Text="{Binding ViewModel.Yaw, StringFormat='{}{0:F0}°', Mode=OneWay}" />
                 </gauge:SfCircularGauge.GaugeHeader>
                 <gauge:SfCircularGauge.Scales>
                     <gauge:CircularScale
@@ -108,7 +108,7 @@
                         StartValue="0"
                         SweepAngle="360">
                         <gauge:CircularScale.RenderTransform>
-                            <RotateTransform d:Angle="-39" Angle="{Binding ViewModel.Yaw, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
+                            <RotateTransform d:Angle="-39" Angle="{Binding ViewModel.Yaw, Converter={StaticResource OppositeNumberConverter}, Mode=OneWay}" CenterX="90" CenterY="90" />
                         </gauge:CircularScale.RenderTransform>
                         <gauge:CircularScale.MinorTickSettings>
                             <gauge:MinorTickSetting
@@ -126,7 +126,7 @@
                         <gauge:CircularScale.Ranges>
                             <gauge:CircularRange
                                 d:EndValue="39"
-                                EndValue="{Binding ViewModel.Yaw}"
+                                EndValue="{Binding ViewModel.Yaw, Mode=OneWay}"
                                 StartValue="0"
                                 Stroke="{StaticResource MikuRedBrush}" />
                         </gauge:CircularScale.Ranges>
@@ -146,13 +146,13 @@
             <Grid Margin="10">
                 <Ellipse>
                     <Ellipse.RenderTransform>
-                        <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll}" CenterX="90" CenterY="90" />
+                        <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
                     </Ellipse.RenderTransform>
                     <Ellipse.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop Offset="0" Color="DeepSkyBlue" />
-                            <GradientStop d:Offset="0.612" Offset="{Binding ViewModel.HorizonOffset}" Color="SkyBlue" />
-                            <GradientStop d:Offset="0.612" Offset="{Binding ViewModel.HorizonOffset}" Color="LightGreen" />
+                            <GradientStop d:Offset="0.612" Offset="{Binding ViewModel.HorizonOffset, Mode=OneWay}" Color="SkyBlue" />
+                            <GradientStop d:Offset="0.612" Offset="{Binding ViewModel.HorizonOffset, Mode=OneWay}" Color="LightGreen" />
                             <GradientStop Offset="1" Color="Green" />
                         </LinearGradientBrush>
                     </Ellipse.Fill>
@@ -182,7 +182,7 @@
                             ScaleDirection="Backward"
                             TickPosition="Cross">
                             <gauge:LinearScale.RenderTransform>
-                                <TranslateTransform d:Y="20" Y="{Binding ViewModel.PitchTranslateY}" />
+                                <TranslateTransform d:Y="20" Y="{Binding ViewModel.PitchTranslateY, Mode=OneWay}" />
                             </gauge:LinearScale.RenderTransform>
                         </gauge:LinearScale>
                     </gauge:SfLinearGauge.MainScale>
@@ -202,10 +202,9 @@
                             StartAngle="90"
                             StartValue="-180"
                             SweepAngle="360"
-                            SweepDirection="Counterclockwise"
                             TickPosition="Custom">
                             <gauge:CircularScale.RenderTransform>
-                                <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll}" CenterX="90" CenterY="90" />
+                                <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
                             </gauge:CircularScale.RenderTransform>
                             <gauge:CircularScale.MajorTickSettings>
                                 <gauge:MajorTickSetting
@@ -229,7 +228,7 @@
                                     SymbolPointerStroke="{StaticResource MikuRedBrush}"
                                     SymbolPointerWidth="10"
                                     Offset="0.85"
-                                    Value="{Binding ViewModel.Roll}" />
+                                    Value="{Binding ViewModel.Roll, Mode=OneWay}" />
                             </gauge:CircularScale.Pointers>
                         </gauge:CircularScale>
                     </gauge:SfCircularGauge.Scales>

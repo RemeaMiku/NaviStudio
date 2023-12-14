@@ -1,4 +1,4 @@
-﻿using MiraiNavi.WpfApp.Models.Navigation;
+﻿using MiraiNavi.WpfApp.Models.Satellite;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 

@@ -32,11 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Messages\" />
-    <Folder Include="Services\RealTime\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\splash-screen.png" />
   </ItemGroup>
 
