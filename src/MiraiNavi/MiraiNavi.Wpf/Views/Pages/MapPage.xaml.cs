@@ -28,6 +28,19 @@ public partial class MapPage : UserControl
         ViewModel = viewModel;
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         DataContext = this;
+        InitializeGMap();
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ViewModel.MapCenter))
+            App.Current.Dispatcher.Invoke(() => GMap.CenterPosition = ViewModel.MapCenter);
+    }
+
+    public MapPageViewModel ViewModel { get; }
+
+    private void InitializeGMap()
+    {
         var shape = new Ellipse
         {
             Stroke = Brushes.White,
@@ -44,20 +57,6 @@ public partial class MapPage : UserControl
         App.Current.ServiceProvider.GetRequiredService<IGMapRouteDisplayService>()
             .RegisterGMapControl(GMap)
             .RegisterPositionMarker(marker);
-    }
-
-    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ViewModel.MapCenter))
-        {
-            App.Current.Dispatcher.Invoke(() => GMap.CenterPosition = ViewModel.MapCenter);
-        }
-    }
-
-    public MapPageViewModel ViewModel { get; }
-
-    private void OnGMapLoaded(object sender, RoutedEventArgs e)
-    {
         GMap.ShowCenter = false;
         GMap.DragButton = MouseButton.Right;
     }
@@ -83,5 +82,10 @@ public partial class MapPage : UserControl
     private void OnGMapOnPositionChanged(PointLatLng point)
     {
         ViewModel.MapCenter = point;
+    }
+
+    private void OnGMapDrag()
+    {
+        ViewModel.KeepCenter = false;
     }
 }

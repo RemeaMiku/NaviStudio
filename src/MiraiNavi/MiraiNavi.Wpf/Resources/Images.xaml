@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DrawingImage x:Key="NaviStudioLogoDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V438 H439.44 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="#FF40B9B0" Geometry="F1 M439.44,438z M0,0z M231.49,372.76L231.49,372.76 191.21,248.94 67.38,208.65 355.88,84.27 231.49,372.76z" />
+                </DrawingGroup>
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Brush="#FFF7F8F8" Geometry="F1 M439.44,438z M0,0z M283.2,146.39L278.48,150.48C245.12,119.02 210.05,101.72 193.54,108.11 191.64,108.84 189.99,109.88 188.61,111.26 188.45,111.42 188.29,111.58 188.15,111.75 181.43,119.19 183.44,133.95 192.16,151.73 191.97,151.81 191.79,151.89 191.61,151.98 181.52,132.72 178.34,116.27 184.1,107.07 184.69,106.12 185.39,105.24 186.18,104.45 186.69,103.94 187.23,103.48 187.8,103.06 203.71,91.21 244.71,109.91 283.2,146.39z" />
+                    <GeometryDrawing Brush="#FFF7F8F8" Geometry="F1 M439.44,438z M0,0z M336.89,253.5C336.65,253.8 336.38,254.09 336.1,254.37 335.13,255.34 334.03,256.17 332.81,256.84 323.46,262.08 307.25,258.77 288.36,248.83 288.48,248.68 288.59,248.51 288.68,248.33 306.12,256.91 320.65,259.05 328.27,252.85 328.63,252.57 328.97,252.26 329.29,251.94 330.44,250.79 331.36,249.44 332.07,247.92 339.54,231.68 321.8,195.41 289.22,161.16L293.33,156.49C330.96,195.84,350.04,238.05,336.89,253.5z" />
+                    <GeometryDrawing Brush="#FFF7F8F8" Geometry="F1 M439.44,438z M0,0z M293.33,156.49L289.22,161.16C287.64,159.5 286.02,157.84 284.37,156.19 282.42,154.24 280.45,152.33 278.48,150.48L283.2,146.39C285.06,148.16 286.91,149.96 288.75,151.8 290.31,153.36 291.83,154.92 293.33,156.49z" />
+                    <GeometryDrawing Brush="#FF3693CF" Geometry="F1 M439.44,438z M0,0z M336.89,253.5L362,282.51 332.81,256.84 328.27,252.85 260.05,192.86 76.63,361.4 246.63,179.33 188.15,111.75 184.1,107.07 157.79,76.67 187.8,103.06 193.54,108.11 259.95,166.51 278.48,150.48C280.45,152.33 282.42,154.24 284.37,156.19 286.02,157.84 287.64,159.5 289.22,161.16L272.97,179.64 332.07,247.92 336.89,253.5z" />
+                    <GeometryDrawing Brush="#FF3693CF" Geometry="F1 M439.44,438z M0,0z M288.75,151.8C286.91,149.96,285.06,148.16,283.2,146.39L362.81,77.5 293.33,156.49C291.83,154.92,290.31,153.36,288.75,151.8z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="AttitudeIndicator">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V19.81 H453.49 V0 H0 Z">
+                <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry
+                            RadiusX="0"
+                            RadiusY="0"
+                            Rect="0,0,175.92,19.81" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry
+                            RadiusX="0"
+                            RadiusY="0"
+                            Rect="277.57,0,175.92,19.81" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry
+                            Center="226.74,9.9"
+                            RadiusX="9.9"
+                            RadiusY="9.9" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

@@ -15,7 +15,7 @@ public interface IGMapRouteDisplayService
 
     public IGMapRouteDisplayService RegisterPositionMarker(GMapMarker positionMarker);
 
-    public PointLatLng Position { get; }
+    public PointLatLng? Position { get; }
 
     public void AddPoint(PointLatLng point, UtcTime timeStamp, bool updatePositionMarker = false);
 
@@ -27,7 +27,7 @@ public interface IGMapRouteDisplayService
 
     public void MoveToOffset(int offset);
 
-    public Task StartAsync(double timeScale = 1);
+    public void Start(double timeScale = 1);
 
     public void Pause();
 

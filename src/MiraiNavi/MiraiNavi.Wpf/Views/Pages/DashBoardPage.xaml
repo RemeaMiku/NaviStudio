@@ -146,7 +146,7 @@
             <Grid Margin="10">
                 <Ellipse>
                     <Ellipse.RenderTransform>
-                        <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
+                        <RotateTransform d:Angle="-39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
                     </Ellipse.RenderTransform>
                     <Ellipse.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -204,7 +204,7 @@
                             SweepAngle="360"
                             TickPosition="Custom">
                             <gauge:CircularScale.RenderTransform>
-                                <RotateTransform d:Angle="39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
+                                <RotateTransform d:Angle="-39" Angle="{Binding ViewModel.Roll, Mode=OneWay, Converter={StaticResource OppositeNumberConverter}}" CenterX="90" CenterY="90" />
                             </gauge:CircularScale.RenderTransform>
                             <gauge:CircularScale.MajorTickSettings>
                                 <gauge:MajorTickSetting
@@ -236,40 +236,8 @@
                 <Image
                     Width="80"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-                    <Image.Source>
-                        <DrawingImage>
-                            <DrawingImage.Drawing>
-                                <DrawingGroup ClipGeometry="M0,0 V19.81 H453.49 V0 H0 Z">
-                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
-                                        <GeometryDrawing.Geometry>
-                                            <RectangleGeometry
-                                                RadiusX="0"
-                                                RadiusY="0"
-                                                Rect="0,0,175.92,19.81" />
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
-                                        <GeometryDrawing.Geometry>
-                                            <RectangleGeometry
-                                                RadiusX="0"
-                                                RadiusY="0"
-                                                Rect="277.57,0,175.92,19.81" />
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                    <GeometryDrawing Brush="{StaticResource MikuRedBrush}">
-                                        <GeometryDrawing.Geometry>
-                                            <EllipseGeometry
-                                                Center="226.74,9.9"
-                                                RadiusX="9.9"
-                                                RadiusY="9.9" />
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                </DrawingGroup>
-                            </DrawingImage.Drawing>
-                        </DrawingImage>
-                    </Image.Source>
-                </Image>
+                    VerticalAlignment="Center"
+                    Source="{StaticResource AttitudeIndicator}" />
             </Grid>
         </WrapPanel>
     </ScrollViewer>

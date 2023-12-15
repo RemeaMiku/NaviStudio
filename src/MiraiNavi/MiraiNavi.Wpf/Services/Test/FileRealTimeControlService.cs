@@ -8,16 +8,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Media3D;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common;
+using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 using NaviSharp;
 
 namespace MiraiNavi.WpfApp.Services.Test;
 
-public class FileRealTimeControlService(IEpochDatasService epochDatasService) : IRealTimeControlService
+public class FileRealTimeControlService(IMessenger messenger, IEpochDatasService epochDatasService) : IRealTimeControlService
 {
+    readonly IMessenger _messenger = messenger;
     readonly IEpochDatasService _epochDatasService = epochDatasService;
     const string _testFilePath = "D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts";
     bool _isPaused;
@@ -34,12 +37,12 @@ public class FileRealTimeControlService(IEpochDatasService epochDatasService) : 
         if (_isPaused)
             throw new InvalidOperationException("It's already paused.");
         _isPaused = true;
+        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Pause));
     }
 
     public static EpochData ParseLine(string line)
     {
         ArgumentNullException.ThrowIfNull(line);
-        //var values = line.Split("  ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var timeStamp = UtcTime.ParseExact(line[..23], "yyyy/MM/dd HH:mm:ss.fff", null);
         var ecef_x = double.Parse(line[44..58]);
         var ecef_y = double.Parse(line[59..73]);
@@ -155,17 +158,20 @@ public class FileRealTimeControlService(IEpochDatasService epochDatasService) : 
         };
     }
 
-    public async Task StartAsync(RealTimeControlOptions options)
+    public void Start(RealTimeControlOptions options)
     {
         if (IsStarted)
             throw new InvalidOperationException("It's already started.");
-        using var stream = new FileStream(_testFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        using var reader = new StreamReader(stream);
         _tokenSource = new();
-        reader.ReadLine();
-        reader.ReadLine();
-        await Task.Run(() =>
+        _isPaused = false;
+        _epochDatasService.Clear();
+        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Start));
+        Task.Run(() =>
         {
+            using var stream = new FileStream(_testFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var reader = new StreamReader(stream);
+            reader.ReadLine();
+            reader.ReadLine();
             while (!_tokenSource.IsCancellationRequested && !reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -173,9 +179,10 @@ public class FileRealTimeControlService(IEpochDatasService epochDatasService) : 
                 _epochDatasService.Update(epochData, !_isPaused);
                 Thread.Sleep(500);
             }
-        });
-        _tokenSource.Dispose();
-        _tokenSource = default;
+            _tokenSource.Dispose();
+            _tokenSource = default;
+            _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Complete));
+        }, _tokenSource.Token);
     }
 
     public void Stop()
@@ -183,6 +190,7 @@ public class FileRealTimeControlService(IEpochDatasService epochDatasService) : 
         if (!IsStarted)
             throw new InvalidOperationException("It's not started.");
         _tokenSource!.Cancel();
+        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Stop));
     }
 
     public void Resume()
@@ -192,5 +200,6 @@ public class FileRealTimeControlService(IEpochDatasService epochDatasService) : 
         if (!_isPaused)
             throw new InvalidOperationException("It's not paused.");
         _isPaused = false;
+        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Resume));
     }
 }

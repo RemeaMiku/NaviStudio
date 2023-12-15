@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Helpers;
+using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<EpochData>
+public partial class DashBoardPageViewModel(IMessenger messenger) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<RealTimeControlMessage>
 {
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
-
     [ObservableProperty]
     double _speed;
 
@@ -36,11 +36,11 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
     protected override void OnActivated()
     {
         base.OnActivated();
-        var newestData = _epochDatasService.Datas.LastOrDefault();
-        if (newestData is null)
-            Reset();
+        var message = Messenger.Send(new RequestMessage<EpochData>());
+        if (message.HasReceivedResponse)
+            Receive(message);
         else
-            Receive(newestData);
+            Reset();
     }
 
     public void Reset()
@@ -51,12 +51,6 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Roll = default;
     }
 
-    protected override void OnDeactivated()
-    {
-        base.OnDeactivated();
-        Reset();
-    }
-
     public void Receive(EpochData message)
     {
         ArgumentNullException.ThrowIfNull(message.Pose);
@@ -64,5 +58,11 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Yaw = message.Pose.EulerAngles.Yaw.Degrees;
         Pitch = message.Pose.EulerAngles.Pitch.Degrees;
         Roll = message.Pose.EulerAngles.Roll.Degrees;
+    }
+
+    public void Receive(RealTimeControlMessage message)
+    {
+        if (message.Mode == RealTimeControlMode.Start)
+            Reset();
     }
 }

@@ -65,12 +65,12 @@ public partial class App : Application
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<DashBoardPageViewModel>()
-        .AddSingleton<NavigationParameterPageViewModel>()
+        .AddSingleton<PosePageViewModel>()
         .AddSingleton<MainWindowViewModel>()
         .AddSingleton<DashBoardPage>()
         .AddSingleton<MapPage>()
         .AddSingleton<SkyMapPage>()
-        .AddSingleton<NavigationParameterPage>()
+        .AddSingleton<PosePage>()
         .AddSingleton<MainWindow>()
         .BuildServiceProvider();
 

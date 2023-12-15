@@ -19,14 +19,13 @@
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
-            OnPositionChanged="OnGMapOnPositionChanged"
-            CenterPosition="{Binding ViewModel.MapCenter}"
-            Loaded="OnGMapLoaded"
             MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
             MaxZoom="20"
             MinZoom="3"
             MouseLeftButtonDown="OnGMapMouseLeftButtonDown"
             MouseWheelZoomType="MousePositionWithoutCenter"
+            OnMapDrag="OnGMapDrag"
+            OnPositionChanged="OnGMapOnPositionChanged"
             Zoom="3" />
         <Border Padding="5">
             <Grid>
@@ -60,6 +59,7 @@
                         Appearance="Primary"
                         Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                         BorderThickness="0"
+                        Command="{Binding ViewModel.ReturnPositionCommand, Mode=OneTime}"
                         Icon="MyLocation24" />
                     <Slider
                         Height="150"

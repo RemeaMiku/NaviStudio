@@ -6,14 +6,14 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// <summary>
 /// NavigationParameterPage.xaml 的交互逻辑
 /// </summary>
-public partial class NavigationParameterPage : UserControl
+public partial class PosePage : UserControl
 {
-    public NavigationParameterPage(NavigationParameterPageViewModel viewModel)
+    public PosePage(PosePageViewModel viewModel)
     {
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
     }
 
-    public NavigationParameterPageViewModel ViewModel { get; }
+    public PosePageViewModel ViewModel { get; }
 }

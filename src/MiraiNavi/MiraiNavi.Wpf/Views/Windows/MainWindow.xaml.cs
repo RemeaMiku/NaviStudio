@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
@@ -11,52 +12,60 @@ using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Windows;
 
+//TODO 关闭子窗口时，不激活子窗口ViewModel；关闭时保存子窗口布局
+
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow : UiWindow
 {
-    readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
-
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
+        Loaded += OnMainWindowLoaded;
+    }
+
+    private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
+    {
         App.ApplyTheme();
         SetPages();
+        ViewModel.IsActive = true;
     }
 
     void SetPages()
     {
         MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
         //SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
-        NavigationParameterView.Content = App.Current.ServiceProvider.GetRequiredService<NavigationParameterPage>();
+        PoseView.Content = App.Current.ServiceProvider.GetRequiredService<PosePage>();
         DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }
 
-    void OnViewMenuItemClicked(object sender, System.Windows.RoutedEventArgs e)
+    void OnViewMenuItemClicked(object sender, RoutedEventArgs e)
     {
         var contentControl = (ContentControl)((Wpf.Ui.Controls.MenuItem)sender).Tag;
         if (DockingManager.GetState(contentControl) == DockState.Hidden)
-            DockingManager.SetState(contentControl, _dockStatesOnClosed[contentControl!]);
+            DockingWindowHandler.RestoreDockState(contentControl);
         else
             DockingManagerControl.ActiveWindow = contentControl;
     }
 
-    void SaveDockState(ContentControl contentControl)
-        => _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
-
-    void OnDockingManagerControlWindowClosing(object sender, WindowClosingEventArgs e)
+    void OnDockingManagerNotDocumentWindowClosing(object sender, WindowClosingEventArgs e)
     {
-        SaveDockState((ContentControl)e.TargetItem);
+        var contentControl = (ContentControl)e.TargetItem;
+        DockingWindowHandler.SaveDockState(contentControl);
+        DockingWindowHandler.SetViewModelIsActive(contentControl, false);
     }
 
-
-    void OnDockingManagerControlCloseButtonClicked(object sender, CloseButtonEventArgs e)
-        => SaveDockState((ContentControl)e.TargetItem);
+    void OnDockingManagerDocumentWindowClosed(object sender, CloseButtonEventArgs e)
+    {
+        var contentControl = (ContentControl)e.TargetItem;
+        DockingWindowHandler.SaveDockState(contentControl);
+        DockingWindowHandler.SetViewModelIsActive(contentControl, false);
+    }
 
     void OnDockingManagerChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
@@ -69,7 +78,7 @@ public partial class MainWindow : UiWindow
         }
     }
 
-    private void DockingManagerControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+    private void DockingManagerControl_Loaded(object sender, RoutedEventArgs e)
     {
 
     }

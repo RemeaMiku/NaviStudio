@@ -6,11 +6,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiraiNavi.WpfApp.Common;
+namespace MiraiNavi.WpfApp.Models;
 
 public class RealTimeControlOptions(IPEndPoint iPEndPoint)
 {
     public static readonly RealTimeControlOptions Default = new(new IPEndPoint(IPAddress.Loopback, 39831));
+
+    public string Name { get; set; } = "默认配置";
 
     public IPEndPoint IPEndPoint { get; set; } = iPEndPoint;
 

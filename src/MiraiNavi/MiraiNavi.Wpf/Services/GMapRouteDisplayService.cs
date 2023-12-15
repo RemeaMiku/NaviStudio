@@ -24,7 +24,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
     readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
     CancellationTokenSource? _cancellationTokenSource;
 
-    public PointLatLng Position => _positionIndex == -1 ? PointLatLng.Empty : _routeMarkers[_positionIndex].Position;
+    public PointLatLng? Position => _positionIndex == -1 ? null : _routeMarkers[_positionIndex].Position;
 
     static GMapMarker CreateEllipseMarker(Brush fill, PointLatLng point, UtcTime timeStamp)
     {
@@ -136,7 +136,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionIndex = newIndex;
     }
 
-    public async Task StartAsync(double timeScale = 1)
+    public void Start(double timeScale = 1)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
@@ -144,32 +144,23 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             return;
         _cancellationTokenSource = new();
         _positionMarker.Shape.Visibility = Visibility.Visible;
-        try
+        Task.Run(async () =>
         {
-            await Task.Run(async () =>
+            while (!_cancellationTokenSource.IsCancellationRequested && _positionIndex < _routeMarkers.Count - 1)
             {
-                while (!_cancellationTokenSource.IsCancellationRequested && _positionIndex < _routeMarkers.Count - 1)
+                var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
+                await Task.Delay(duration, _cancellationTokenSource.Token);
+                App.Current.Dispatcher.Invoke(() =>
                 {
-                    var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
-                    await Task.Delay(duration, _cancellationTokenSource.Token);
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
-                        SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
-                    });
-                    _positionIndex++;
-                }
-            });
-        }
-        catch (TaskCanceledException)
-        {
-
-        }
-        finally
-        {
+                    _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
+                    SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
+                });
+                _positionIndex++;
+            }
             _cancellationTokenSource.Dispose();
             _cancellationTokenSource = default;
-        }
+
+        });
     }
 
     public void Stop()

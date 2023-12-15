@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -18,14 +19,29 @@ public class EpochDatasService(IMessenger messenger) : IEpochDatasService
 
     private readonly List<EpochData> _epochDatas = [];
 
-    public IEnumerable<EpochData> Datas { get => _epochDatas; }
+    public ReadOnlyCollection<EpochData> Datas => _epochDatas.AsReadOnly();
 
-    public void Clear() => _epochDatas.Clear();
-
-    public void Update(EpochData epochData, bool notifyAfterUpdate = true)
+    public void Clear()
     {
+        if (_epochDatas.Count == 0)
+            return;
+        _epochDatas.Clear();
+        _messenger.Unregister<RequestMessage<EpochData>>(this);
+    }
+
+    public void Receive(RequestMessage<EpochData> message)
+    {
+        if (_epochDatas.Count == 0)
+            return;
+        message.Reply(_epochDatas[^1]);
+    }
+
+    public void Update(EpochData epochData, bool notifyUpdate = true)
+    {
+        if (_epochDatas.Count == 0)
+            _messenger.Register(this);
         _epochDatas.Add(epochData);
-        if (notifyAfterUpdate)
+        if (notifyUpdate)
             _messenger.Send(epochData);
     }
 }

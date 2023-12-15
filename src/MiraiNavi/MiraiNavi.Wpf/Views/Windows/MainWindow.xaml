@@ -21,7 +21,10 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ui:UiWindow.Resources>
+        <cv:ReversedBooleanToVisibilityConverter x:Key="ReversedBooleanToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
+        <cv:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         <Style
             x:Key="ToolUiButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
@@ -48,51 +51,54 @@
         </Grid.RowDefinitions>
         <ui:TitleBar Background="{ui:ThemeResource}">
             <ui:TitleBar.Header>
-                <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
-                    <ui:MenuItem Header="文件(_F)" SymbolIcon="Document24">
-                        <ui:MenuItem Header="导入(_I)" />
-                        <ui:MenuItem Header="导出(_O)" />
-                    </ui:MenuItem>
-                    <ui:MenuItem Header="视图(_V)" SymbolIcon="ViewDesktop24">
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="开始窗口(_C)"
-                            Tag="{Binding ElementName=StartView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="地图窗口(_M)"
-                            Tag="{Binding ElementName=MapView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="导航参数(_N)"
-                            Tag="{Binding ElementName=NavigationParameterView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="卫星星空图(_S)"
-                            Tag="{Binding ElementName=SkyMapView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="卫星跟踪列表(_T)"
-                            Tag="{Binding ElementName=SatelliteTrackingView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="图表工具(_C)"
-                            Tag="{Binding ElementName=ChartToolView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="属性(_P)"
-                            Tag="{Binding ElementName=PropertyView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="仪表盘(_D)"
-                            Tag="{Binding ElementName=DashBoardView}" />
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="输出(_O)"
-                            Tag="{Binding ElementName=OutputView}" />
-                    </ui:MenuItem>
-                    <ui:MenuItem Header="选项(_O)" SymbolIcon="Settings24" />
-                </Menu>
+                <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
+                    <Image Width="30" Source="{StaticResource NaviStudioLogoDrawingImage}" />
+                    <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
+                        <ui:MenuItem Header="文件(_F)">
+                            <ui:MenuItem Header="导入(_I)" />
+                            <ui:MenuItem Header="导出(_O)" />
+                        </ui:MenuItem>
+                        <ui:MenuItem Header="视图(_V)">
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="开始窗口(_C)"
+                                Tag="{Binding ElementName=StartView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="地图窗口(_M)"
+                                Tag="{Binding ElementName=MapView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="导航位姿(_N)"
+                                Tag="{Binding ElementName=PoseView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="卫星星空图(_S)"
+                                Tag="{Binding ElementName=SkyMapView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="卫星跟踪列表(_T)"
+                                Tag="{Binding ElementName=SatelliteTrackingView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="图表工具(_C)"
+                                Tag="{Binding ElementName=ChartToolView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="属性(_P)"
+                                Tag="{Binding ElementName=PropertyView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="仪表盘(_D)"
+                                Tag="{Binding ElementName=DashBoardView}" />
+                            <ui:MenuItem
+                                Click="OnViewMenuItemClicked"
+                                Header="输出(_O)"
+                                Tag="{Binding ElementName=OutputView}" />
+                        </ui:MenuItem>
+                        <ui:MenuItem Header="选项(_O)" />
+                    </Menu>
+                </StackPanel>
             </ui:TitleBar.Header>
         </ui:TitleBar>
         <Border
@@ -141,16 +147,19 @@
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="Play24"
                             IconFilled="True"
-                            Style="{StaticResource BorderlessTransparentUiButtonStyle}">
-                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="文件模拟" />
+                            IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"
+                            Style="{StaticResource BorderlessTransparentUiButtonStyle}"
+                            Visibility="{Binding ViewModel.RealTimeControlOptions, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="{Binding ViewModel.StartOrResumeButtonText, Mode=OneWay}" />
                         </ui:Button>
                     </StackPanel>
                     <notification:SfBusyIndicator
                         HorizontalAlignment="Right"
+                        d:IsBusy="True"
                         AnimationType="ArrowTrack"
                         Foreground="White"
-                        ViewboxHeight="30"
-                        Visibility="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        IsBusy="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay}"
+                        ViewboxHeight="30" />
                 </Grid>
                 <syncfusion:DockingManager
                     x:Name="DockingManagerControl"
@@ -160,7 +169,7 @@
                     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                     ChildrenCollectionChanged="OnDockingManagerChildrenCollectionChanged"
-                    CloseButtonClick="OnDockingManagerControlCloseButtonClicked"
+                    CloseButtonClick="OnDockingManagerDocumentWindowClosed"
                     ContainerMode="TDI"
                     DocumentCloseButtonType="Individual"
                     Loaded="DockingManagerControl_Loaded"
@@ -171,14 +180,16 @@
                     SwitchMode="QuickTabs"
                     UseDocumentContainer="True"
                     UseNativeFloatWindow="True"
-                    WindowClosing="OnDockingManagerControlWindowClosing">
+                    WindowClosing="OnDockingManagerNotDocumentWindowClosing">
                     <ContentControl
                         x:Name="MapView"
+                        syncfusion:DockingManager.CanDock="False"
                         syncfusion:DockingManager.Header="地图"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="StartView"
+                        syncfusion:DockingManager.CanDock="False"
                         syncfusion:DockingManager.Header="开始"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
@@ -219,14 +230,14 @@
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="仪表盘"
                         syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                        syncfusion:DockingManager.TargetNameInDockedMode="NavigationParameterView"
+                        syncfusion:DockingManager.TargetNameInDockedMode="PoseView"
                         Style="{StaticResource DefaultContentControlStyle}" />
 
                     <ContentControl
-                        x:Name="NavigationParameterView"
+                        x:Name="PoseView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="150"
-                        syncfusion:DockingManager.Header="导航参数"
+                        syncfusion:DockingManager.Header="导航位姿"
                         syncfusion:DockingManager.SideInDockedMode="Right"
                         syncfusion:DockingManager.TargetNameInDockedMode="OutputView"
                         Style="{StaticResource DefaultContentControlStyle}" />

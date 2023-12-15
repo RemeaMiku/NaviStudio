@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
-/// <summary>
-/// 反转的布尔值转换为可见性
-/// 如果布尔值为真，则返回 Collapsed，否则返回 Visible
-/// </summary>
 public class ReversedBooleanToVisibilityConverter : IValueConverter
 {
-    #region Public Methods
-
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var booleanValue = (bool)value;
@@ -23,6 +21,4 @@ public class ReversedBooleanToVisibilityConverter : IValueConverter
         var visibilityValue = (System.Windows.Visibility)value;
         return visibilityValue == System.Windows.Visibility.Collapsed;
     }
-
-    #endregion Public Methods
 }
