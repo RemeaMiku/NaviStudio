@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MiraiNavi.WpfApp.Models.Navigation.Precision;
+﻿namespace MiraiNavi.WpfApp.Models.Navigation.Precision;
 
 public record class BaseLinePrecision
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using MiraiNavi.WpfApp.Models;
+﻿using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.Common.Messages;
 

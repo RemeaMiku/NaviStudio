@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using NaviSharp;
-using NaviSharp.Orientation;
+﻿using NaviSharp;
 using NaviSharp.SpatialReference;
-using NaviSharp.Time;
 
 namespace MiraiNavi.WpfApp.Models.Navigation;
 

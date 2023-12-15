@@ -1,15 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Net;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using GMap.NET;
-using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services.Contracts;

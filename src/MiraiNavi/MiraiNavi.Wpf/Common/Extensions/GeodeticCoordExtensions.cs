@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GMap.NET;
+﻿using GMap.NET;
 using NaviSharp.SpatialReference;
 
 namespace MiraiNavi.WpfApp.Common.Extensions;
