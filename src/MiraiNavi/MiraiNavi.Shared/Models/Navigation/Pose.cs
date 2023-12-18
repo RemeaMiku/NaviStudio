@@ -1,7 +1,7 @@
 ﻿using NaviSharp;
 using NaviSharp.SpatialReference;
 
-namespace MiraiNavi.WpfApp.Models.Navigation;
+namespace MiraiNavi.Shared.Models;
 
 public record class Pose
 {

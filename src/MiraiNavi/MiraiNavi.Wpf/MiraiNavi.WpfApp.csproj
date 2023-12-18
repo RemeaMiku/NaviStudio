@@ -1,38 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon>Assets\mirainavi-logo.ico</ApplicationIcon>
-    <AssemblyName>MiraiNavi</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Assets\mirainavi-logo.ico</ApplicationIcon>
+		<AssemblyName>MiraiNavi</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\splash-screen.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Assets\splash-screen.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\mirainavi-logo.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Assets\mirainavi-logo.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="GMap.NET.WinPresentation" Version="2.1.7" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="NaviSharp" Version="1.0.0" />
-    <PackageReference Include="Syncfusion.Licensing" Version="23.2.7" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="23.2.7" />
-    <PackageReference Include="Syncfusion.SfChart.WPF" Version="23.2.7" />
-    <PackageReference Include="Syncfusion.SfGauge.WPF" Version="23.2.7" />
-    <PackageReference Include="Syncfusion.Themes.FluentDark.WPF" Version="23.2.7" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="23.2.7" />
-    <PackageReference Include="WPF-UI" Version="2.1.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" />
+		<PackageReference Include="GMap.NET.WinPresentation" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+		<PackageReference Include="NaviSharp" />
+		<PackageReference Include="Syncfusion.Licensing" />
+		<PackageReference Include="Syncfusion.SfBusyIndicator.WPF" />
+		<PackageReference Include="Syncfusion.SfChart.WPF" />
+		<PackageReference Include="Syncfusion.SfGauge.WPF" />
+		<PackageReference Include="Syncfusion.Themes.FluentDark.WPF" />
+		<PackageReference Include="Syncfusion.Tools.WPF" />
+		<PackageReference Include="WPF-UI" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\splash-screen.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MiraiNavi.Shared\MiraiNavi.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Assets\splash-screen.png" />
+	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace Miraisoft.WpfTools.Helpers;
+namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public class WindowReactivator
 {

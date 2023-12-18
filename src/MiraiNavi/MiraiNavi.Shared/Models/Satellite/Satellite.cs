@@ -1,6 +1,6 @@
-﻿namespace MiraiNavi.WpfApp.Models.Satellite;
+﻿namespace MiraiNavi.Shared.Models;
 
-public record struct Satellite
+public readonly record struct Satellite
 {
     public Satellite(string prnCode)
     {

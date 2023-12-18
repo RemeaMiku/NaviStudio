@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -42,6 +41,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     RealTimeControlOptions? _realTimeControlOptions;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
     bool _isRealTimeStarted;
 
     [ObservableProperty]
@@ -52,6 +52,12 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (value)
             Messenger.Send(new NotificationMessage(NotificationType.Sync));
     }
+
+    public string StartOrResumeCommandText
+        => IsRealTimeStarted ? "继续" : RealTimeControlOptions is null ? string.Empty : RealTimeControlOptions.Name;
+
+    public IRelayCommand StartOrResumeCommand
+        => IsRealTimeStarted ? ResumeCommand : StartCommand;
 
     [RelayCommand]
     async Task StartAsync()

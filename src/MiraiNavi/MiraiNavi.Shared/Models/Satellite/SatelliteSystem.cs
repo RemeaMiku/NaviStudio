@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models.Satellite;
+﻿namespace MiraiNavi.Shared.Models;
 
 public enum SatelliteSystem
 {

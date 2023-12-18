@@ -1,5 +1,4 @@
-﻿using MiraiNavi.WpfApp.Models.Satellite;
-using MiraiNavi.WpfApp.Services.Contracts;
+﻿using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services.Test;
 

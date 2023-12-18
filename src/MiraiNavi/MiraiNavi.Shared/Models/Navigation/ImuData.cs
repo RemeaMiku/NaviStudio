@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace MiraiNavi.WpfApp.Models.Navigation;
+namespace MiraiNavi.Shared.Models;
 
 public record class ImuData
 {

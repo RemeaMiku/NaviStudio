@@ -1,8 +1,7 @@
-﻿namespace MiraiNavi.WpfApp.Models.Satellite;
+﻿namespace MiraiNavi.Shared.Models;
 
 public record class SatelliteTrackingInfo
 {
-
     public SatelliteTrackingInfo(Satellite satellite)
     {
         Satellite = satellite;

@@ -1,7 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 

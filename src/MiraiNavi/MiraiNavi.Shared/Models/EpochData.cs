@@ -1,7 +1,4 @@
-﻿using MiraiNavi.WpfApp.Models.Navigation;
-using MiraiNavi.WpfApp.Models.Navigation.Precision;
-
-namespace MiraiNavi.WpfApp.Models;
+﻿namespace MiraiNavi.Shared.Models;
 
 public record class EpochData
 {

@@ -1,6 +1,4 @@
-﻿using MiraiNavi.WpfApp.Models.Satellite;
-
-namespace MiraiNavi.WpfApp.Services.Contracts;
+﻿namespace MiraiNavi.WpfApp.Services.Contracts;
 
 public interface ISatelliteServcie
 {

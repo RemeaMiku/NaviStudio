@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models.Navigation.Precision;
+﻿namespace MiraiNavi.Shared.Models;
 
 public record class BaseLinePrecision
 {
