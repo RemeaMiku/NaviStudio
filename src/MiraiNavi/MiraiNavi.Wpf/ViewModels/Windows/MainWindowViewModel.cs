@@ -42,6 +42,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
     bool _isRealTimeStarted;
 
     [ObservableProperty]
@@ -53,7 +54,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             Messenger.Send(new NotificationMessage(NotificationType.Sync));
     }
 
-    public string StartOrResumeCommandText
+    public string StartOrResumeText
         => IsRealTimeStarted ? "继续" : RealTimeControlOptions is null ? string.Empty : RealTimeControlOptions.Name;
 
     public IRelayCommand StartOrResumeCommand

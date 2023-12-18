@@ -149,13 +149,13 @@
                             Icon="Play24"
                             IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"
                             Style="{StaticResource BorderlessTransparentUiButtonStyle}"
-                            ToolTip="{Binding ViewModel.RealTimeControlOptions.Name, Mode=OneWay}"
+                            ToolTip="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
                             Visibility="{Binding ViewModel.RealTimeControlOptions, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock
                                 MaxWidth="390"
                                 FontSize="{StaticResource SmallFontSize}"
                                 Style="{StaticResource DynamicForegroundTextBlock}"
-                                Text="{Binding ViewModel.RealTimeControlOptions.Name, Mode=OneWay}"
+                                Text="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
                                 TextTrimming="CharacterEllipsis" />
                         </ui:Button>
                     </StackPanel>
