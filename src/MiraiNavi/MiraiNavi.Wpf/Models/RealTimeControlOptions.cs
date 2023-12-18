@@ -2,17 +2,15 @@
 
 namespace MiraiNavi.WpfApp.Models;
 
-public class RealTimeControlOptions(IPEndPoint iPEndPoint)
+public class RealTimeControlOptions(string name)
 {
-    public static readonly RealTimeControlOptions Default = new(new IPEndPoint(IPAddress.Loopback, 39831));
+    public string Name { get; set; } = name;
 
-    public string Name { get; set; } = "默认配置";
+    public IPEndPoint IPEndPoint { get; set; } = new(IPAddress.Loopback, 39831);
 
-    public IPEndPoint IPEndPoint { get; set; } = iPEndPoint;
+    public int? MaxEpochCount { get; set; }
 
-    public int MaxEpochCount { get; set; }
+    public UtcTime? StartTime { get; set; }
 
-    public UtcTime StartTime { get; set; }
-
-    public TimeSpan Duration { get; set; }
+    public TimeSpan? Duration { get; set; }
 }

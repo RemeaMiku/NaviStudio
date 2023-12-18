@@ -1,18 +1,14 @@
-﻿using MiraiNavi.WpfApp.Models;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 
 public interface IRealTimeControlService
 {
-    public bool IsStarted { get; }
-
     public bool IsRunning { get; }
 
-    public void Start(RealTimeControlOptions options);
+    public event EventHandler<EpochData>? EpochDataReceived;
 
-    public void Resume();
-
-    public void Pause();
-
-    public void Stop();
+    public Task StartListeningAsync(RealTimeControlOptions options, CancellationToken token);
 }

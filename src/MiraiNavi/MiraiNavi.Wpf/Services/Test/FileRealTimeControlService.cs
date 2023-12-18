@@ -9,29 +9,15 @@ using NaviSharp;
 
 namespace MiraiNavi.WpfApp.Services.Test;
 
-public class FileRealTimeControlService(IMessenger messenger, IEpochDatasService epochDatasService) : IRealTimeControlService
+public class FileRealTimeControlService() : IRealTimeControlService
 {
-    readonly IMessenger _messenger = messenger;
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
-    const string _testFilePath = "D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts";
-    bool _isPaused;
-    CancellationTokenSource? _tokenSource;
+    public bool IsRunning => _isRunning;
 
-    public bool IsStarted => _tokenSource is not null && !_tokenSource.IsCancellationRequested;
+    bool _isRunning = false;
 
-    public bool IsRunning => IsStarted && !_isPaused;
+    public event EventHandler<EpochData>? EpochDataReceived;
 
-    public void Pause()
-    {
-        if (!IsStarted)
-            throw new InvalidOperationException("It's not started.");
-        if (_isPaused)
-            throw new InvalidOperationException("It's already paused.");
-        _isPaused = true;
-        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Pause));
-    }
-
-    public static EpochData ParseLine(string line)
+    private static EpochData ParseLine(string line)
     {
         ArgumentNullException.ThrowIfNull(line);
         var timeStamp = UtcTime.ParseExact(line[..23], "yyyy/MM/dd HH:mm:ss.fff", null);
@@ -149,48 +135,25 @@ public class FileRealTimeControlService(IMessenger messenger, IEpochDatasService
         };
     }
 
-    public void Start(RealTimeControlOptions options)
+    public async Task StartListeningAsync(RealTimeControlOptions options, CancellationToken token)
     {
-        if (IsStarted)
+        if (_isRunning)
             throw new InvalidOperationException("It's already started.");
-        _tokenSource = new();
-        _isPaused = false;
-        _epochDatasService.Clear();
-        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Start));
-        Task.Run(() =>
+        _isRunning = true;
+        using var stream = new FileStream(options.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var reader = new StreamReader(stream);
+        reader.ReadLine();
+        reader.ReadLine();
+        await Task.Run(() =>
         {
-            using var stream = new FileStream(_testFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var reader = new StreamReader(stream);
-            reader.ReadLine();
-            reader.ReadLine();
-            while (!_tokenSource.IsCancellationRequested && !reader.EndOfStream)
+            while (!token.IsCancellationRequested && !reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var epochData = ParseLine(line!);
-                _epochDatasService.Update(epochData, !_isPaused);
+                EpochDataReceived?.Invoke(this, epochData);
                 Thread.Sleep(500);
             }
-            _tokenSource.Dispose();
-            _tokenSource = default;
-            _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Complete));
-        }, _tokenSource.Token);
-    }
-
-    public void Stop()
-    {
-        if (!IsStarted)
-            throw new InvalidOperationException("It's not started.");
-        _tokenSource!.Cancel();
-        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Stop));
-    }
-
-    public void Resume()
-    {
-        if (!IsStarted)
-            throw new InvalidOperationException("It's not started.");
-        if (!_isPaused)
-            throw new InvalidOperationException("It's not paused.");
-        _isPaused = false;
-        _messenger.Send(new RealTimeControlMessage(RealTimeControlMode.Resume));
+        }, token);
+        _isRunning = false;
     }
 }

@@ -143,14 +143,35 @@
                             Icon="PlaySettings20"
                             Style="{StaticResource ToolUiButtonStyle}" />
                         <ui:Button
-                            Command="{Binding ViewModel.StartOrResumeCommand, Mode=OneTime}"
+                            Command="{Binding ViewModel.StartCommand, Mode=OneTime}"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Icon="Play24"
+                            IconFilled="True"
+                            IsEnabled="{Binding ViewModel.RealTimeControlOptions, Mode=OneWay, Converter={StaticResource NullableToVisibilityConverter}}"
+                            Style="{StaticResource BorderlessTransparentUiButtonStyle}"
+                            ToolTip="{Binding ViewModel.RealTimeControlOptions.Name, FallbackValue='Unknown', Mode=OneWay}"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Converter={StaticResource ReversedBooleanToVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock
+                                MaxWidth="300"
+                                FontSize="{StaticResource SmallFontSize}"
+                                Style="{StaticResource DynamicForegroundTextBlock}"
+                                Text="{Binding ViewModel.RealTimeControlOptions.Name, FallbackValue='Unknown', Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis" />
+                        </ui:Button>
+                        <ui:Button
+                            Command="{Binding ViewModel.ResumeCommand, Mode=OneTime}"
+                            FontSize="{StaticResource MediumFontSize}"
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="Play24"
                             IconFilled="True"
                             IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"
                             Style="{StaticResource BorderlessTransparentUiButtonStyle}"
-                            Visibility="{Binding ViewModel.RealTimeControlOptions, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
-                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="{Binding ViewModel.StartOrResumeButtonText, Mode=OneWay}" />
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock
+                                FontSize="{StaticResource SmallFontSize}"
+                                Style="{StaticResource DynamicForegroundTextBlock}"
+                                Text="继续" />
                         </ui:Button>
                     </StackPanel>
                     <notification:SfBusyIndicator

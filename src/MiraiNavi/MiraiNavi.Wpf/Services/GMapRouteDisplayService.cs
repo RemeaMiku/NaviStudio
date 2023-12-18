@@ -19,9 +19,9 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
     readonly List<UtcTime> _timeStamps = [];
     readonly static Brush _beforeFill = (Brush)App.Current.Resources["MikuRedBrush"];
     readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
-    CancellationTokenSource? _cancellationTokenSource;
+    bool _isRunning = false;
 
-    public PointLatLng? Position => _positionIndex == -1 ? null : _routeMarkers[_positionIndex].Position;
+    public PointLatLng? CurrentPosition => _positionIndex == -1 ? null : _routeMarkers[_positionIndex].Position;
 
     static GMapMarker CreateEllipseMarker(Brush fill, PointLatLng point, UtcTime timeStamp)
     {
@@ -43,7 +43,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
 
     void ThrowIfIsRunnning()
     {
-        if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+        if (_isRunning)
             throw new InvalidOperationException("The display is running.");
     }
 
@@ -69,7 +69,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         });
     }
 
-    public void ClearPoints()
+    public void Clear()
     {
         ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
@@ -82,13 +82,6 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionIndex = -1;
     }
 
-    public void Pause()
-    {
-        if (_cancellationTokenSource is null)
-            return;
-        if (!_cancellationTokenSource.IsCancellationRequested)
-            _cancellationTokenSource.Cancel();
-    }
 
     public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
     {
@@ -133,37 +126,40 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionIndex = newIndex;
     }
 
-    public void Start(double timeScale = 1)
+    public async Task StartAsync(CancellationToken token, double timeScale = 1)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
-        if (_routeMarkers.Count == 0 || _cancellationTokenSource is not null)
-            return;
-        _cancellationTokenSource = new();
+        if (_routeMarkers.Count == 0)
+            throw new InvalidOperationException("No points.");
+        ThrowIfIsRunnning();
         _positionMarker.Shape.Visibility = Visibility.Visible;
-        Task.Run(async () =>
+        _isRunning = true;
+        try
         {
-            while (!_cancellationTokenSource.IsCancellationRequested && _positionIndex < _routeMarkers.Count - 1)
+            await Task.Run(async () =>
             {
-                var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
-                await Task.Delay(duration, _cancellationTokenSource.Token);
-                App.Current.Dispatcher.Invoke(() =>
+                while (!token.IsCancellationRequested && _positionIndex < _routeMarkers.Count - 1)
                 {
-                    _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
-                    SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
-                });
-                _positionIndex++;
-            }
-            _cancellationTokenSource.Dispose();
-            _cancellationTokenSource = default;
+                    var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
+                    await Task.Delay(duration, token);
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        _positionMarker.Position = _routeMarkers[_positionIndex + 1].Position;
+                        SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
+                    });
+                    _positionIndex++;
+                }
+            }, token);
+        }
+        catch (Exception)
+        {
 
-        });
-    }
-
-    public void Stop()
-    {
-        Pause();
-        MoveTo(0);
+        }
+        finally
+        {
+            _isRunning = false;
+        }
     }
 
     public void MoveToOffset(int offset) => MoveTo(_positionIndex + offset);

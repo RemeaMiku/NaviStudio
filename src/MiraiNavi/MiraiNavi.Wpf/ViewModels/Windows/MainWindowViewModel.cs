@@ -1,4 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.WpfApp.Common.Messages;
@@ -7,36 +11,82 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IRealTimeControlService realTimeControlService) : ObservableRecipient, IRecipient<RealTimeControlMessage>
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeControlService realTimeControlService) : ObservableRecipient
 {
+    CancellationTokenSource? _tokenSource;
+    readonly IEpochDatasService _epochDatasService = epochDatasService;
     readonly IRealTimeControlService _realTimeControlService = realTimeControlService;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StartOrResumeButtonText))]
-    RealTimeControlOptions? _realTimeControlOptions = RealTimeControlOptions.Default;
+    protected override void OnActivated()
+    {
+        base.OnActivated();
+        _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
+    }
 
-    public string StartOrResumeButtonText
-        => IsRealTimeStarted ? "继续" : RealTimeControlOptions?.Name ?? string.Empty;
+    protected override void OnDeactivated()
+    {
+        base.OnDeactivated();
+        _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
+    }
+
+    private void OnEpochDataReceived(object? sender, EpochData e)
+    {
+        _epochDatasService.Add(e);
+        if (IsRealTimeRunning)
+            Messenger.Send(e);
+    }
+
+    public static readonly RealTimeControlOptions DefaultOptions = new("默认");
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StartOrResumeButtonText))]
+    RealTimeControlOptions? _realTimeControlOptions;
+
+    [ObservableProperty]
     bool _isRealTimeStarted;
 
     [ObservableProperty]
     bool _isRealTimeRunning;
 
-    [RelayCommand]
-    void StartOrResume()
+    partial void OnIsRealTimeRunningChanged(bool value)
     {
-        if (IsRealTimeRunning)
-            return;
-        if (IsRealTimeStarted)
-        {
-            _realTimeControlService.Resume();
-            return;
-        }
-        _realTimeControlService.Start(RealTimeControlOptions!);
+        if (value)
+            Messenger.Send(new NotificationMessage(NotificationType.Sync));
+    }
 
+    [RelayCommand]
+    async Task StartAsync()
+    {
+        if (IsRealTimeStarted)
+            return;
+        ArgumentNullException.ThrowIfNull(RealTimeControlOptions);
+        _epochDatasService.Clear();
+        Messenger.Send(new NotificationMessage(NotificationType.Reset));
+        _tokenSource = new();
+        IsRealTimeStarted = true;
+        IsRealTimeRunning = true;
+        try
+        {
+            await _realTimeControlService.StartListeningAsync(RealTimeControlOptions, _tokenSource.Token);
+        }
+        catch (Exception ex)
+        {
+            Trace.TraceError(ex.ToString());
+        }
+        finally
+        {
+            _tokenSource.Dispose();
+            _tokenSource = default;
+            IsRealTimeRunning = false;
+            IsRealTimeStarted = false;
+        }
+    }
+
+    [RelayCommand]
+    void Resume()
+    {
+        if (!IsRealTimeStarted)
+            return;
+        IsRealTimeRunning = true;
     }
 
     [RelayCommand]
@@ -44,7 +94,7 @@ public partial class MainWindowViewModel(IRealTimeControlService realTimeControl
     {
         if (!IsRealTimeRunning)
             return;
-        _realTimeControlService.Pause();
+        IsRealTimeRunning = false;
     }
 
     [RelayCommand]
@@ -52,33 +102,8 @@ public partial class MainWindowViewModel(IRealTimeControlService realTimeControl
     {
         if (!IsRealTimeStarted)
             return;
-        _realTimeControlService.Stop();
-    }
-
-    public void Receive(RealTimeControlMessage message)
-    {
-        switch (message.Mode)
-        {
-            case RealTimeControlMode.Start:
-                IsRealTimeStarted = true;
-                IsRealTimeRunning = true;
-                break;
-            case RealTimeControlMode.Pause:
-                IsRealTimeRunning = false;
-                break;
-            case RealTimeControlMode.Resume:
-                IsRealTimeRunning = true;
-                break;
-            case RealTimeControlMode.Stop:
-                IsRealTimeRunning = false;
-                IsRealTimeStarted = false;
-                break;
-            case RealTimeControlMode.Complete:
-                IsRealTimeRunning = false;
-                IsRealTimeStarted = false;
-                break;
-            default:
-                break;
-        }
+        ArgumentNullException.ThrowIfNull(_tokenSource);
+        _tokenSource.Cancel();
+        IsRealTimeStarted = false;
     }
 }

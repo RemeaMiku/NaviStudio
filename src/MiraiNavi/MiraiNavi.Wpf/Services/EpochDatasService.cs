@@ -6,11 +6,11 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;
 
-public class EpochDatasService(IMessenger messenger) : IEpochDatasService
+public class EpochDatasService() : IEpochDatasService
 {
-    private readonly IMessenger _messenger = messenger;
-
     private readonly List<EpochData> _epochDatas = [];
+
+    private readonly HashSet<UtcTime> _existTimeStamps = [];
 
     public ReadOnlyCollection<EpochData> Datas => _epochDatas.AsReadOnly();
 
@@ -19,22 +19,14 @@ public class EpochDatasService(IMessenger messenger) : IEpochDatasService
         if (_epochDatas.Count == 0)
             return;
         _epochDatas.Clear();
-        _messenger.Unregister<RequestMessage<EpochData>>(this);
+        _existTimeStamps.Clear();
     }
 
-    public void Receive(RequestMessage<EpochData> message)
+    public void Add(EpochData epochData)
     {
-        if (_epochDatas.Count == 0)
-            return;
-        message.Reply(_epochDatas[^1]);
-    }
-
-    public void Update(EpochData epochData, bool notifyUpdate = true)
-    {
-        if (_epochDatas.Count == 0)
-            _messenger.Register(this);
+        if (_existTimeStamps.Contains(epochData.TimeStamp))
+            throw new ArgumentException("Data for this timestamp already exists.");
+        _existTimeStamps.Add(epochData.TimeStamp);
         _epochDatas.Add(epochData);
-        if (notifyUpdate)
-            _messenger.Send(epochData);
     }
 }

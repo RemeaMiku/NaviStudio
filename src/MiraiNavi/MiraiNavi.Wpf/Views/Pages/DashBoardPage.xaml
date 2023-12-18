@@ -17,7 +17,6 @@
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <WrapPanel
-            d:Background="Black"
             ItemHeight="200"
             ItemWidth="200"
             Orientation="Horizontal">
@@ -68,7 +67,6 @@
                         </gauge:CircularScale.MajorTickSettings>
                         <gauge:CircularScale.Pointers>
                             <gauge:CircularPointer
-                                EnableAnimation="False"
                                 NeedlePointerStroke="{StaticResource MikuGreenBrush}"
                                 NeedlePointerType="Triangle"
                                 PointerType="NeedlePointer"

@@ -59,7 +59,7 @@
                         Appearance="Primary"
                         Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                         BorderThickness="0"
-                        Command="{Binding ViewModel.ReturnPositionCommand, Mode=OneTime}"
+                        Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
                         Icon="MyLocation24" />
                     <Slider
                         Height="150"

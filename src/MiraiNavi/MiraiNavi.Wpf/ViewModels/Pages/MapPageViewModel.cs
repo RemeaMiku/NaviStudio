@@ -10,7 +10,7 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableRecipient, IRecipient<EpochData>, IRecipient<RealTimeControlMessage>
+public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableRecipient, IRecipient<EpochData>, IRecipient<NotificationMessage>
 {
     readonly IEpochDatasService _epochDatasService = epochDatasService;
     readonly IGMapRouteDisplayService _gMapRouteDisplayService = gMapRouteReplayService;
@@ -31,11 +31,11 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
     int _routePointsCount = 0;
 
     [RelayCommand]
-    void ReturnPosition()
+    void ReturnToPosition()
     {
         KeepCenter = true;
-        if (_gMapRouteDisplayService.Position.HasValue)
-            MapCenter = _gMapRouteDisplayService.Position.Value;
+        if (_gMapRouteDisplayService.CurrentPosition.HasValue)
+            MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 
     protected override void OnActivated()
@@ -46,26 +46,23 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
         Sync();
     }
 
-    protected override void OnDeactivated()
+    public void Receive(EpochData data)
     {
-        base.OnDeactivated();
-    }
-
-    public void Receive(EpochData message)
-    {
-        ArgumentNullException.ThrowIfNull(message.Pose);
+        if (data.Pose is null)
+            return;
         RoutePointsCount++;
-        var point = message.Pose.GeodeticCoord.ToPointLatLng();
+        var point = data.Pose.GeodeticCoord.ToPointLatLng();
         if (KeepCenter)
             MapCenter = point;
-        _gMapRouteDisplayService.AddPoint(point, message.TimeStamp, true);
+        _gMapRouteDisplayService.AddPoint(point, data.TimeStamp, true);
     }
 
     void Sync()
     {
         _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Pose!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
         RoutePointsCount = _epochDatasService.Datas.Count;
-        MapCenter = _gMapRouteDisplayService.Position!.Value;
+        if (_gMapRouteDisplayService.CurrentPosition.HasValue)
+            MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 
     //[RelayCommand]
@@ -74,15 +71,15 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
     //    _gMapRouteDisplayService.Pause();
     //}
 
-    public void Receive(RealTimeControlMessage message)
+    public void Receive(NotificationMessage message)
     {
-        if (message.Mode == RealTimeControlMode.Start)
+        if (message.Type == NotificationType.Reset)
         {
-            _gMapRouteDisplayService.ClearPoints();
+            _gMapRouteDisplayService.Clear();
             IsRealTime = true;
             KeepCenter = true;
         }
-        else if (message.Mode == RealTimeControlMode.Resume)
+        else if (message.Type == NotificationType.Sync)
         {
             KeepCenter = true;
             Sync();

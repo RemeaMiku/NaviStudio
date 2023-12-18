@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Messaging;
@@ -76,6 +77,15 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+#if DEBUG
+        if (e.Args.Length > 0)
+        {
+            if (Path.Exists(e.Args[0]))
+            {
+                ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new(e.Args[0]);
+            }
+        }
+#endif
         new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();

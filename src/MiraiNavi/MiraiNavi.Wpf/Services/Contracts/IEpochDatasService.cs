@@ -5,11 +5,13 @@ using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 
-public interface IEpochDatasService : IRecipient<RequestMessage<EpochData>>
+public interface IEpochDatasService
 {
     public ReadOnlyCollection<EpochData> Datas { get; }
 
+    public EpochData? LastestData => Datas.Count == 0 ? default : Datas[^1];
+
     public void Clear();
 
-    public void Update(EpochData epochData, bool notifyUpdate = true);
+    public void Add(EpochData epochData);
 }

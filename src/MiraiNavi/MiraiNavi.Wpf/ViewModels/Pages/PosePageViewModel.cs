@@ -4,29 +4,86 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Models.Navigation;
+using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class PosePageViewModel(IMessenger messenger) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<RealTimeControlMessage>
+public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<NotificationMessage>
 {
+    readonly IEpochDatasService _epochDatasService = epochDatasService;
+
     [ObservableProperty]
-    Pose? _pose;
+    UtcTime _timeStamp;
+
+    [ObservableProperty]
+    double _latitude;
+
+    [ObservableProperty]
+    double _longitude;
+
+    [ObservableProperty]
+    double _altitude;
+
+    [ObservableProperty]
+    double _yaw;
+
+    [ObservableProperty]
+    double _pitch;
+
+    [ObservableProperty]
+    double _roll;
+
+    [ObservableProperty]
+    double _velocity;
+
+    void Reset()
+    {
+        TimeStamp = default;
+        Latitude = double.NaN;
+        Longitude = double.NaN;
+        Altitude = double.NaN;
+        Yaw = double.NaN;
+        Pitch = double.NaN;
+        Roll = double.NaN;
+        Velocity = double.NaN;
+    }
 
     protected override void OnActivated()
     {
         base.OnActivated();
-        var message = Messenger.Send(new RequestMessage<EpochData>());
-        if (message.HasReceivedResponse)
-            Receive(message);
-        else
-            Pose = default;
+        Sync();
     }
 
-    public void Receive(EpochData message) => Pose = message.Pose;
-
-    public void Receive(RealTimeControlMessage message)
+    void Sync()
     {
-        if (message.Mode == RealTimeControlMode.Start)
-            Pose = default;
+        if (_epochDatasService.LastestData is not null)
+            Receive(_epochDatasService.LastestData);
+        else
+            Reset();
+    }
+
+    public void Receive(EpochData data)
+    {
+        TimeStamp = data.TimeStamp;
+        if (data.Pose is null)
+        {
+            Reset();
+            return;
+        }
+        Latitude = data.Pose.GeodeticCoord.Latitude.Degrees;
+        Longitude = data.Pose.GeodeticCoord.Longitude.Degrees;
+        Altitude = data.Pose.GeodeticCoord.Altitude;
+        Yaw = data.Pose.EulerAngles.Yaw.Degrees;
+        Pitch = data.Pose.EulerAngles.Pitch.Degrees;
+        Roll = data.Pose.EulerAngles.Roll.Degrees;
+        Velocity = data.Pose.Velocity;
+    }
+
+    public void Receive(NotificationMessage message)
+    {
+        if (message.Type == NotificationType.Reset)
+            Reset();
+        if (message.Type == NotificationType.Sync)
+            Sync();
     }
 }

@@ -4,11 +4,14 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class DashBoardPageViewModel(IMessenger messenger) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<RealTimeControlMessage>
+public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<NotificationMessage>
 {
+    readonly IEpochDatasService _epochDatasService = epochDatasService;
+
     [ObservableProperty]
     double _speed;
 
@@ -30,9 +33,13 @@ public partial class DashBoardPageViewModel(IMessenger messenger) : ObservableRe
     protected override void OnActivated()
     {
         base.OnActivated();
-        var message = Messenger.Send(new RequestMessage<EpochData>());
-        if (message.HasReceivedResponse)
-            Receive(message);
+        Sync();
+    }
+
+    void Sync()
+    {
+        if (_epochDatasService.LastestData is not null)
+            Receive(_epochDatasService.LastestData);
         else
             Reset();
     }
@@ -45,18 +52,24 @@ public partial class DashBoardPageViewModel(IMessenger messenger) : ObservableRe
         Roll = default;
     }
 
-    public void Receive(EpochData message)
+    public void Receive(EpochData data)
     {
-        ArgumentNullException.ThrowIfNull(message.Pose);
-        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(message.Pose.Velocity);
-        Yaw = message.Pose.EulerAngles.Yaw.Degrees;
-        Pitch = message.Pose.EulerAngles.Pitch.Degrees;
-        Roll = message.Pose.EulerAngles.Roll.Degrees;
+        if (data.Pose is null)
+        {
+            Reset();
+            return;
+        }
+        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(data.Pose.Velocity);
+        Yaw = data.Pose.EulerAngles.Yaw.Degrees;
+        Pitch = data.Pose.EulerAngles.Pitch.Degrees;
+        Roll = data.Pose.EulerAngles.Roll.Degrees;
     }
 
-    public void Receive(RealTimeControlMessage message)
+    public void Receive(NotificationMessage message)
     {
-        if (message.Mode == RealTimeControlMode.Start)
+        if (message.Type == NotificationType.Reset)
             Reset();
+        if (message.Type == NotificationType.Sync)
+            Sync();
     }
 }
