@@ -75,6 +75,13 @@
                         TickPlacement="Both"
                         Value="{Binding Zoom, ElementName=GMap}" />
                 </StackPanel>
+                <!--<TextBlock
+                    x:Name="Test"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    d:Text="Test"
+                    FontSize="{StaticResource MediumFontSize}"
+                    Foreground="White" />-->
                 <!--<Border
                     x:Name="ReplayPanel"
                     Padding="10,3"

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using MiraiNavi.WpfApp.Common.Extensions;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
@@ -40,6 +41,8 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
 
     protected override void OnActivated()
     {
+        foreach (var point in RandomDataGenerator.GetPointLatLngs(10000))
+            _gMapRouteDisplayService.AddPoint(point, UtcTime.Now, true);
         base.OnActivated();
         if (!IsRealTime)
             return;

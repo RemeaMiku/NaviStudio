@@ -5,12 +5,14 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNavi.WpfApp", "MiraiNavi.Wpf\MiraiNavi.WpfApp.csproj", "{746238EB-9ADD-4FB5-8B34-6835A2D090F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiraiNavi.Shared", "MiraiNavi.Shared\MiraiNavi.Shared.csproj", "{B91ABAAD-480A-4D72-A20C-9D04FC546C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNavi.Shared", "MiraiNavi.Shared\MiraiNavi.Shared.csproj", "{B91ABAAD-480A-4D72-A20C-9D04FC546C8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{B24C7BD7-EBE6-448A-A44F-00695019A95F}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiraiNavi.Console", "MiraiNavi.Console\MiraiNavi.Console.csproj", "{B3CD947F-1B14-438A-9841-F0840E42124B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{B91ABAAD-480A-4D72-A20C-9D04FC546C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B91ABAAD-480A-4D72-A20C-9D04FC546C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B91ABAAD-480A-4D72-A20C-9D04FC546C8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CD947F-1B14-438A-9841-F0840E42124B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CD947F-1B14-438A-9841-F0840E42124B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CD947F-1B14-438A-9841-F0840E42124B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CD947F-1B14-438A-9841-F0840E42124B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

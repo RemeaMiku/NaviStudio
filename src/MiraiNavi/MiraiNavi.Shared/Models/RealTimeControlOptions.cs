@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MiraiNavi.WpfApp.Models;
+namespace MiraiNavi.Shared.Models;
 
 public class RealTimeControlOptions(string name)
 {

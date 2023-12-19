@@ -17,9 +17,13 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
     int _positionIndex = -1;
     readonly List<GMapMarker> _routeMarkers = [];
     readonly List<UtcTime> _timeStamps = [];
+    readonly HashSet<GMapMarker> _disabledMarkers = [];
     readonly static Brush _beforeFill = (Brush)App.Current.Resources["MikuRedBrush"];
     readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
     bool _isRunning = false;
+    double _groundResolution;
+
+    PureProjection Projection => _gMapControl!.MapProvider.Projection;
 
     public PointLatLng? CurrentPosition => _positionIndex == -1 ? null : _routeMarkers[_positionIndex].Position;
 
@@ -67,6 +71,7 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             _positionMarker.Shape.Visibility = Visibility.Visible;
             _gMapControl.Markers.Add(_positionMarker);
         });
+        TryOptimize();
     }
 
     public void Clear()
@@ -79,14 +84,100 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _timeStamps.Clear();
+        _disabledMarkers.Clear();
         _positionIndex = -1;
     }
 
+    void UpdateGroundResolution()
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        _groundResolution = Projection.GetGroundResolution((int)_gMapControl.Zoom, _gMapControl.Position.Lat);
+    }
 
     public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
     {
         _gMapControl = gMapControl;
+        _gMapControl.OnMapDrag += () => TryOptimize();
+        _gMapControl.OnMapZoomChanged += () =>
+        {
+            UpdateGroundResolution();
+            TryOptimize();
+        };
+        _gMapControl.OnPositionChanged += (p) => TryOptimize();
+        _gMapControl.SizeChanged += (sender, e) => TryOptimize();
+        UpdateGroundResolution();
         return this;
+    }
+
+    const int _maxVisibleMarkers = 1000;
+
+    bool NeedOptimize => _routeMarkers.Count > _maxVisibleMarkers;
+
+    void TryOptimize()
+    {
+        if (!NeedOptimize)
+            return;
+        var visibleMarkers = DisableMarkersOutsideOfViewArea();
+        var clusterLevel = 1;
+        while (clusterLevel <= 10 && visibleMarkers.Count() > _maxVisibleMarkers)
+        {
+            visibleMarkers = ClusterMarkers(visibleMarkers, clusterLevel * 3);
+            clusterLevel++;
+        }
+    }
+
+    void EnableMarker(GMapMarker marker)
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        if (_disabledMarkers.Remove(marker))
+            App.Current.Dispatcher.Invoke(() => _gMapControl.Markers.Add(marker));
+    }
+
+    void DisableMarker(GMapMarker marker)
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        if (_disabledMarkers.Add(marker))
+            App.Current.Dispatcher.Invoke(() => _gMapControl.Markers.Remove(marker));
+    }
+
+    IEnumerable<GMapMarker> DisableMarkersOutsideOfViewArea()
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        var viewArea = _gMapControl.ViewArea;
+        for (int i = 0; i < _routeMarkers.Count; i++)
+        {
+            var marker = _routeMarkers[i];
+            if (!viewArea.Contains(marker.Position))
+            {
+                DisableMarker(marker);
+                continue;
+            }
+            EnableMarker(marker);
+            yield return marker;
+        }
+    }
+
+    IEnumerable<GMapMarker> ClusterMarkers(IEnumerable<GMapMarker> visibleMarkers, double maxDistance)
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        GMapMarker? preMarker = default;
+        var maxDistanceSquare = Math.Pow(maxDistance, 2);
+        foreach (var marker in visibleMarkers)
+        {
+            if (preMarker == null)
+            {
+                preMarker = marker;
+                continue;
+            }
+            var distance = Math.Pow(marker.LocalPositionX - preMarker.LocalPositionX, 2) + Math.Pow(marker.LocalPositionY - preMarker.LocalPositionY, 2);
+            if (distance < maxDistanceSquare)
+            {
+                DisableMarker(marker);
+                continue;
+            }
+            preMarker = marker;
+            yield return marker;
+        }
     }
 
     public IGMapRouteDisplayService RegisterPositionMarker(GMapMarker positionMarker)
@@ -186,5 +277,6 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         }
         _positionMarker.Shape.Visibility = Visibility.Visible;
         _gMapControl.Markers.Add(_positionMarker);
+        TryOptimize();
     }
 }
