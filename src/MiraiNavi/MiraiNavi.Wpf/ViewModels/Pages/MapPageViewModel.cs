@@ -11,9 +11,8 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableRecipient, IRecipient<EpochData>, IRecipient<NotificationMessage>
+public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
     readonly IGMapRouteDisplayService _gMapRouteDisplayService = gMapRouteReplayService;
 
     [ObservableProperty]
@@ -41,15 +40,13 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
 
     protected override void OnActivated()
     {
-        foreach (var point in RandomDataGenerator.GetPointLatLngs(10000))
-            _gMapRouteDisplayService.AddPoint(point, UtcTime.Now, true);
         base.OnActivated();
         if (!IsRealTime)
             return;
         Sync();
     }
 
-    public void Receive(EpochData data)
+    public override void Receive(EpochData data)
     {
         if (data.Pose is null)
             return;
@@ -60,8 +57,9 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
         _gMapRouteDisplayService.AddPoint(point, data.TimeStamp, true);
     }
 
-    void Sync()
+    protected override void Sync()
     {
+        KeepCenter = true;
         _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Pose!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
         RoutePointsCount = _epochDatasService.Datas.Count;
         if (_gMapRouteDisplayService.CurrentPosition.HasValue)
@@ -74,18 +72,10 @@ public partial class MapPageViewModel(IEpochDatasService epochDatasService, IGMa
     //    _gMapRouteDisplayService.Pause();
     //}
 
-    public void Receive(NotificationMessage message)
+    protected override void Reset()
     {
-        if (message.Type == NotificationType.Reset)
-        {
-            _gMapRouteDisplayService.Clear();
-            IsRealTime = true;
-            KeepCenter = true;
-        }
-        else if (message.Type == NotificationType.Sync)
-        {
-            KeepCenter = true;
-            Sync();
-        }
+        _gMapRouteDisplayService.Clear();
+        IsRealTime = true;
+        KeepCenter = true;
     }
 }

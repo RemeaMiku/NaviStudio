@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeControlService realTimeControlService) : ObservableRecipient
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeControlService realTimeControlService) : ObservableRecipient, IRecipient<RequestMessage<EpochData>>, IRecipient<RequestMessage<IEnumerable<EpochData>>>
 {
     CancellationTokenSource? _tokenSource;
     readonly IEpochDatasService _epochDatasService = epochDatasService;
@@ -112,5 +113,17 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         ArgumentNullException.ThrowIfNull(_tokenSource);
         _tokenSource.Cancel();
         IsRealTimeStarted = false;
+    }
+
+    public void Receive(RequestMessage<EpochData> message)
+    {
+        if (_epochDatasService.Datas.Count > 0)
+            message.Reply(_epochDatasService.Datas[^1]);
+    }
+
+    public void Receive(RequestMessage<IEnumerable<EpochData>> message)
+    {
+        if (_epochDatasService.Datas.Count > 0)
+            message.Reply(_epochDatasService.Datas);
     }
 }

@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiraiNavi.Console", "MiraiNavi.Console\MiraiNavi.Console.csproj", "{B3CD947F-1B14-438A-9841-F0840E42124B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNavi.Client", "MiraiNavi.Client\MiraiNavi.Client.csproj", "{B3CD947F-1B14-438A-9841-F0840E42124B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNavi.Listener", "MiraiNavi.Listener\MiraiNavi.Listener.csproj", "{7A64CE57-9DC6-4192-8962-4D437025A917}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NaviSharp", "..\..\..\..\dotnet\NaviSharp\NaviSharp\NaviSharp.csproj", "{7EE71F43-785F-4A65-A36D-B6EB975C7C36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +36,14 @@ Global
 		{B3CD947F-1B14-438A-9841-F0840E42124B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3CD947F-1B14-438A-9841-F0840E42124B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3CD947F-1B14-438A-9841-F0840E42124B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A64CE57-9DC6-4192-8962-4D437025A917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A64CE57-9DC6-4192-8962-4D437025A917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A64CE57-9DC6-4192-8962-4D437025A917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A64CE57-9DC6-4192-8962-4D437025A917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE71F43-785F-4A65-A36D-B6EB975C7C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE71F43-785F-4A65-A36D-B6EB975C7C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE71F43-785F-4A65-A36D-B6EB975C7C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE71F43-785F-4A65-A36D-B6EB975C7C36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

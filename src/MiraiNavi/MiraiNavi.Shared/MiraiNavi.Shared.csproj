@@ -7,6 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NaviSharp" />
+	  <ProjectReference Include="..\..\..\..\..\dotnet\NaviSharp\NaviSharp\NaviSharp.csproj" />
 	</ItemGroup>
 </Project>

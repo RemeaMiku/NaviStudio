@@ -1,30 +1,23 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class SkyMapPageViewModel(ISatelliteServcie satelliteServcie) : BaseViewModel
+//TODO 高度角和系统筛选器
+public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    readonly ISatelliteServcie _satelliteServcie = satelliteServcie;
+    public CollectionViewSource ViewSource { get; } = new();
 
-    public ObservableCollection<SatelliteTrackingInfo> SatelliteTrackingInfos { get; private set; } =
-    [
-        new("G01") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("G02") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("G03") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("G04") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("G05") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("C01") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("C02") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("C03") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("R01") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("R02") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("R03") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("R04") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("R05") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("E01") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("E02") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("E03") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-        new("E04") { Azimuth = Random.Shared.Next(0, 360), Elevation = Random.Shared.Next(0, 90) },
-    ];
+    public override void Receive(EpochData message)
+    {
+        ViewSource.Source = message.SatelliteSkyPositions;
+    }
+
+    protected override void Reset()
+    {
+        ViewSource.Source = default;
+    }
 }

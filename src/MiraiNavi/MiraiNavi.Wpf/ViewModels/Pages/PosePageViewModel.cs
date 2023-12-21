@@ -1,14 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<NotificationMessage>
+public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
 
     [ObservableProperty]
     UtcTime _timeStamp;
@@ -34,7 +34,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     [ObservableProperty]
     double _velocity;
 
-    void Reset()
+    protected override void Reset()
     {
         TimeStamp = default;
         Latitude = double.NaN;
@@ -52,15 +52,17 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         Sync();
     }
 
-    void Sync()
+    protected override void Sync()
     {
-        if (_epochDatasService.LastestData is not null)
-            Receive(_epochDatasService.LastestData);
+        var message = new RequestMessage<EpochData>();
+        Messenger.Send(message);
+        if (message.HasReceivedResponse)
+            Receive(message);
         else
             Reset();
     }
 
-    public void Receive(EpochData data)
+    public override void Receive(EpochData data)
     {
         TimeStamp = data.TimeStamp;
         if (data.Pose is null)
@@ -75,13 +77,5 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         Pitch = data.Pose.EulerAngles.Pitch.Degrees;
         Roll = data.Pose.EulerAngles.Roll.Degrees;
         Velocity = data.Pose.Velocity;
-    }
-
-    public void Receive(NotificationMessage message)
-    {
-        if (message.Type == NotificationType.Reset)
-            Reset();
-        if (message.Type == NotificationType.Sync)
-            Sync();
     }
 }

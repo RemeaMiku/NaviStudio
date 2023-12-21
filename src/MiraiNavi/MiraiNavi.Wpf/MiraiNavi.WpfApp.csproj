@@ -21,7 +21,6 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="GMap.NET.WinPresentation" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-		<PackageReference Include="NaviSharp" />
 		<PackageReference Include="Syncfusion.Licensing" />
 		<PackageReference Include="Syncfusion.SfBusyIndicator.WPF" />
 		<PackageReference Include="Syncfusion.SfChart.WPF" />

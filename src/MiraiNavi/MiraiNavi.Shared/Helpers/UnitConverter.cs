@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Common.Helpers;
+﻿namespace MiraiNavi.Shared.Common.Helpers;
 
 public static class UnitConverter
 {

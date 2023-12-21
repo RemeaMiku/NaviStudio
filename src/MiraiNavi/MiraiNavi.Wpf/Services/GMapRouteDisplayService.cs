@@ -7,9 +7,11 @@ using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using MiraiNavi.WpfApp.Services.Contracts;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace MiraiNavi.WpfApp.Services;
 
+//TODO 地图标记点优化
 public class GMapRouteDisplayService : IGMapRouteDisplayService
 {
     GMapControl? _gMapControl;
@@ -115,15 +117,22 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
 
     void TryOptimize()
     {
-        if (!NeedOptimize)
-            return;
-        var visibleMarkers = DisableMarkersOutsideOfViewArea();
-        var clusterLevel = 1;
-        while (clusterLevel <= 10 && visibleMarkers.Count() > _maxVisibleMarkers)
-        {
-            visibleMarkers = ClusterMarkers(visibleMarkers, clusterLevel * 3);
-            clusterLevel++;
-        }
+        //if (!NeedOptimize)
+        //    return;
+        //var watch = new Stopwatch();
+        //watch.Start();
+        //var visibleMarkers = DisableMarkersOutsideOfViewArea();
+        //watch.Stop();
+        //Trace.WriteLine($"DisableMarkersOutsideOfViewArea: {watch.ElapsedMilliseconds} ms");
+        //watch.Restart();
+        //var clusterLevel = 1;
+        //while (clusterLevel <= 3 && visibleMarkers.Count() > _maxVisibleMarkers)
+        //{
+        //    visibleMarkers = ClusterMarkers(visibleMarkers, clusterLevel * 5);
+        //    clusterLevel++;
+        //}
+        //watch.Stop();
+        //Trace.WriteLine($"ClusterMarkers: {watch.ElapsedMilliseconds} ms");
     }
 
     void EnableMarker(GMapMarker marker)

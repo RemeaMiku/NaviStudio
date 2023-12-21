@@ -5,26 +5,26 @@ namespace MiraiNavi.Shared.Models;
 
 public record class Pose
 {
-    public UtcTime? TimeStamp { get; init; }
+    public UtcTime TimeStamp { get; set; }
 
-    public EcefCoord EcefCoord { get; init; }
+    public EcefCoord EcefCoord { get; set; }
 
-    public GeodeticCoord GeodeticCoord { get; init; }
+    public GeodeticCoord GeodeticCoord { get; set; }
 
-    public double EastVelocity { get; init; }
+    public double EastVelocity { get; set; }
 
-    public double NorthVelocity { get; init; }
+    public double NorthVelocity { get; set; }
 
-    public double UpVelocity { get; init; }
+    public double UpVelocity { get; set; }
 
-    public double XVelocity { get; init; }
+    public double XVelocity { get; set; }
 
-    public double YVelocity { get; init; }
+    public double YVelocity { get; set; }
 
-    public double ZVelocity { get; init; }
+    public double ZVelocity { get; set; }
 
     public double Velocity => Math.Sqrt(Math.Pow(XVelocity, 2) + Math.Pow(YVelocity, 2) + Math.Pow(ZVelocity, 2));
 
-    public EulerAngles EulerAngles { get; init; }
+    public EulerAngles EulerAngles { get; set; }
 
 }

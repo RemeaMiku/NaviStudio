@@ -4,11 +4,11 @@ namespace MiraiNavi.Shared.Models;
 
 public record class ImuData
 {
-    public UtcTime? TimeStamp { get; init; }
+    public UtcTime TimeStamp { get; set; }
 
-    public Vector3 Acceleration { get; init; }
+    public Vector3 Acceleration { get; set; }
 
-    public Vector3 AngularVelocity { get; init; }
+    public Vector3 AngularVelocity { get; set; }
 
-    public TimeSpan Duration { get; init; }
+    public TimeSpan Duration { get; set; }
 }

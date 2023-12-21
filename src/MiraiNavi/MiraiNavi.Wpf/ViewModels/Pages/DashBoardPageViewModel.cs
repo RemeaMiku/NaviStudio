@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using MiraiNavi.Shared.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
@@ -7,10 +8,8 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<EpochData>, IRecipient<NotificationMessage>
+public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
-
     [ObservableProperty]
     double _speed;
 
@@ -35,15 +34,7 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Sync();
     }
 
-    void Sync()
-    {
-        if (_epochDatasService.LastestData is not null)
-            Receive(_epochDatasService.LastestData);
-        else
-            Reset();
-    }
-
-    public void Reset()
+    protected override void Reset()
     {
         Speed = default;
         Yaw = default;
@@ -51,7 +42,7 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Roll = default;
     }
 
-    public void Receive(EpochData data)
+    public override void Receive(EpochData data)
     {
         if (data.Pose is null)
         {
@@ -62,13 +53,5 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Yaw = data.Pose.EulerAngles.Yaw.Degrees;
         Pitch = data.Pose.EulerAngles.Pitch.Degrees;
         Roll = data.Pose.EulerAngles.Roll.Degrees;
-    }
-
-    public void Receive(NotificationMessage message)
-    {
-        if (message.Type == NotificationType.Reset)
-            Reset();
-        if (message.Type == NotificationType.Sync)
-            Sync();
     }
 }

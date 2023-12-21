@@ -85,6 +85,10 @@ public partial class App : Application
                 ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new(e.Args[0]);
             }
         }
+        else
+        {
+            ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
+        }
 #endif
         new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();

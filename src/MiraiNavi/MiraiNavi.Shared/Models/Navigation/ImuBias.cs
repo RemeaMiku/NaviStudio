@@ -4,9 +4,9 @@ namespace MiraiNavi.Shared.Models;
 
 public record class ImuBias
 {
-    public UtcTime? TimeStamp { get; init; }
+    public UtcTime TimeStamp { get; set; }
 
-    public Vector3 AccelerometerBias { get; init; }
+    public Vector3 AccelerometerBias { get; set; }
 
-    public Vector3 GyroscopeBias { get; init; }
+    public Vector3 GyroscopeBias { get; set; }
 }

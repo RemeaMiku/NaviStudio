@@ -4,35 +4,35 @@ namespace MiraiNavi.Shared.Models;
 
 public record class PosePrecision
 {
-    public UtcTime? TimeStamp { get; init; }
+    public UtcTime TimeStamp { get; set; }
 
-    public float Ratio { get; init; }
+    public float Ratio { get; set; }
 
-    public float Hdop { get; init; }
+    public float Hdop { get; set; }
 
-    public float Vdop { get; init; }
+    public float Vdop { get; set; }
 
-    public float StdEastVelocity { get; init; }
+    public float StdEastVelocity { get; set; }
 
-    public float StdNorthVelocity { get; init; }
+    public float StdNorthVelocity { get; set; }
 
-    public float StdUpVelocity { get; init; }
+    public float StdUpVelocity { get; set; }
 
-    public float StdEastNorthVelocity { get; init; }
+    public float StdEastNorthVelocity { get; set; }
 
-    public float StdEastUpVelocity { get; init; }
+    public float StdEastUpVelocity { get; set; }
 
-    public float StdNorthUpVelocity { get; init; }
+    public float StdNorthUpVelocity { get; set; }
 
-    public Angle StdYaw { get; init; }
+    public Angle StdYaw { get; set; }
 
-    public Angle StdPitch { get; init; }
+    public Angle StdPitch { get; set; }
 
-    public Angle StdRoll { get; init; }
+    public Angle StdRoll { get; set; }
 
-    public Angle StdYawPitch { get; init; }
+    public Angle StdYawPitch { get; set; }
 
-    public Angle StdYawRoll { get; init; }
+    public Angle StdYawRoll { get; set; }
 
-    public Angle StdPitchRoll { get; init; }
+    public Angle StdPitchRoll { get; set; }
 }

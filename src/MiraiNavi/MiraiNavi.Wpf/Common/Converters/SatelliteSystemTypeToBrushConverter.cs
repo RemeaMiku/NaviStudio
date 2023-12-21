@@ -8,13 +8,13 @@ public class SatelliteSystemTypeToBrushConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return (SatelliteSystem)value switch
+        return (SatelliteSystems)value switch
         {
-            SatelliteSystem.GPS => Brushes.Navy,
-            SatelliteSystem.BDS => Brushes.Red,
-            SatelliteSystem.GLONASS => Brushes.Green,
-            SatelliteSystem.Galileo => Brushes.Orange,
-            SatelliteSystem.Others => Brushes.Purple,
+            SatelliteSystems.GPS => Brushes.Navy,
+            SatelliteSystems.BDS => Brushes.Red,
+            SatelliteSystems.GLONASS => Brushes.Green,
+            SatelliteSystems.Galileo => Brushes.Orange,
+            SatelliteSystems.Others => Brushes.Purple,
             _ => throw new ArgumentOutOfRangeException(nameof(value)),
         };
     }

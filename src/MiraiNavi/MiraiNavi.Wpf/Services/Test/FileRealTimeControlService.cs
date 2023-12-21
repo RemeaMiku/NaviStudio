@@ -144,12 +144,16 @@ public class FileRealTimeControlService() : IRealTimeControlService
         reader.ReadLine();
         await Task.Run(() =>
         {
+            //TODO 测试海量地图标记点性能
+            var count = 0;
             while (!token.IsCancellationRequested && !reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var epochData = ParseLine(line!);
                 EpochDataReceived?.Invoke(this, epochData);
-                Thread.Sleep(500);
+                count++;
+                if (count > 1000)
+                    Thread.Sleep(500);
             }
         }, token);
         _isRunning = false;

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GMap.NET;
+﻿using GMap.NET;
+using MiraiNavi.Shared.Models.Satellites;
 
 namespace MiraiNavi.WpfApp.Common.Helpers;
 
@@ -18,5 +14,39 @@ public static class RandomDataGenerator
             var lng = random.NextDouble() * 360 - 180;
             yield return new PointLatLng(lat, lng);
         }
+    }
+
+    public static IEnumerable<Satellite> GetSatellites(int count)
+    {
+        var random = new Random();
+        var systems = Enum.GetValues<SatelliteSystems>();
+        for (int i = 0; i < count; i++)
+        {
+            var system = systems[random.Next(0, systems.Length)];
+            var number = random.Next(1, 33);
+            yield return $"{(char)system}{number:00}";
+        }
+    }
+
+    public static SatelliteSkyPosition GetSatelliteSkyPosition(Satellite satellite)
+    {
+        var random = new Random();
+        return new SatelliteSkyPosition
+        {
+            Satellite = satellite,
+            Azimuth = random.NextDouble() * 360,
+            Elevation = random.NextDouble() * 90
+        };
+    }
+
+    public static SatelliteSignalNoiseRatio GetSatelliteSignalNoiseRatio(Satellite satellite)
+    {
+        var random = new Random();
+        return new SatelliteSignalNoiseRatio
+        {
+            Satellite = satellite,
+            Frequency = 1000 + random.NextDouble() * 1000,
+            SignalNoiseRatio = random.NextDouble() * 100
+        };
     }
 }

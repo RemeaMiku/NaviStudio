@@ -4,9 +4,11 @@ namespace MiraiNavi.Shared.Models;
 
 public class RealTimeControlOptions(string name)
 {
+    public static readonly IPEndPoint DefaultIPEndPoint = new(IPAddress.Loopback, 39831);
+
     public string Name { get; set; } = name;
 
-    public IPEndPoint IPEndPoint { get; set; } = new(IPAddress.Loopback, 39831);
+    public IPEndPoint IPEndPoint { get; set; } = DefaultIPEndPoint;
 
     public int? MaxEpochCount { get; set; }
 
