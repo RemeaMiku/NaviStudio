@@ -8,7 +8,7 @@ namespace MiraiNavi.Shared.Models.Satellites;
 
 public struct SatelliteSignalNoiseRatio
 {
-    public string Satellite { get; set; }
+    public Satellite Satellite { get; set; }
 
     public double Frequency { get; set; }
 

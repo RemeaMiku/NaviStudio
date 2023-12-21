@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using MiraiNavi.Shared.Models.Satellites;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 

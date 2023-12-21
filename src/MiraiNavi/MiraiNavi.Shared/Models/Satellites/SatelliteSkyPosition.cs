@@ -11,7 +11,7 @@ public struct SatelliteSkyPosition
     double _azimuth;
     double _elevation;
 
-    public string Satellite { get; set; }
+    public Satellite Satellite { get; set; }
 
     /// <summary>
     /// 方位角

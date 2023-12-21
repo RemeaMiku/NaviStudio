@@ -62,7 +62,6 @@ public partial class App : Application
         .AddSingleton<IRealTimeControlService, FileRealTimeControlService>()
         .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
-        .AddSingleton<ISatelliteServcie, DesignTimeSatelliteService>()
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<DashBoardPageViewModel>()
