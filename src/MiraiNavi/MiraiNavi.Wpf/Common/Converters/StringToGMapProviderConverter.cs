@@ -4,6 +4,7 @@ using GMap.NET.MapProviders;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
+[ValueConversion(typeof(string), typeof(GMapProvider))]
 public class StringToGMapProviderConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

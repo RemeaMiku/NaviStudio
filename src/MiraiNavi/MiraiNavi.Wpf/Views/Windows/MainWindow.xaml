@@ -10,7 +10,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="MainWindow"
+    Title="MiraiNavi"
     Width="{Binding MinWidth, Mode=OneTime}"
     Height="{Binding MinHeight, Mode=OneTime}"
     MinWidth="1250"

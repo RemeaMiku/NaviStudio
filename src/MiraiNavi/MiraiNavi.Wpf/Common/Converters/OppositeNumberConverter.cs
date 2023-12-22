@@ -3,6 +3,7 @@ using System.Windows.Data;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
+[ValueConversion(typeof(double), typeof(double))]
 public class OppositeNumberConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

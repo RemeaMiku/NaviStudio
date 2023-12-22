@@ -35,9 +35,10 @@ public partial class MainWindow : UiWindow
     void SetPages()
     {
         MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
-        //SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
+        SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
         PoseView.Content = App.Current.ServiceProvider.GetRequiredService<PosePage>();
         DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
+        OutputView.Content = App.Current.ServiceProvider.GetRequiredService<OutputPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }

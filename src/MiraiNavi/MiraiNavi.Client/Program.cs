@@ -7,12 +7,12 @@ using MiraiNavi.Shared.Models;
 using MiraiNavi.Shared.Serialization;
 using NaviSharp;
 
+using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
 using var client = new TcpClient();
 client.Connect(RealTimeControlOptions.DefaultIPEndPoint);
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
 using var writer = new BinaryWriter(stream, Encoding.UTF8);
-using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
 reader.ReadLine();
 reader.ReadLine();
 var options = new JsonSerializerOptions()
@@ -27,19 +27,15 @@ while (!reader.EndOfStream)
     var startTime = DateTime.Now;
     var line = reader.ReadLine();
     var epochData = ParseLine(line!);
-    var satellites = RandomDataGenerator.GetSatellites(20);
-    epochData.Satellites = new(satellites);
-    epochData.SatelliteSkyPositions = new(RandomDataGenerator.GetSatelliteSkyPositions(satellites));
-    epochData.SatelliteSignalNoiseRatios = new(RandomDataGenerator.GetSatelliteSignalNoiseRatios(satellites));
+    epochData.Satellites = new(RandomDataGenerator.GetSatellites(20).Order());
+    epochData.SatelliteSkyPositions = new(RandomDataGenerator.GetSatelliteSkyPositions(epochData.Satellites));
+    epochData.SatelliteSignalNoiseRatios = new(RandomDataGenerator.GetSatelliteSignalNoiseRatios(epochData.Satellites));
     var message = JsonSerializer.Serialize(epochData, options);
+    Console.WriteLine(message);
     writer.Write(message);
-    //var bytes = Encoding.UTF8.GetBytes(message);
-    //await stream.WriteAsync(bytes);
     var endTime = DateTime.Now;
-    Thread.Sleep(TimeSpan.FromMilliseconds(500) - (endTime - startTime));
+    Thread.Sleep(500);
 }
-//writer.WriteLine("END");
-client.Close();
 
 static EpochData ParseLine(string line)
 {

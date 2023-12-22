@@ -47,6 +47,9 @@ public static class RandomDataGenerator
     public static IEnumerable<SatelliteSignalNoiseRatio> GetSatelliteSignalNoiseRatios(IEnumerable<Satellite> satellites)
     {
         foreach (var satellite in satellites)
+        {
             yield return GetSatelliteSignalNoiseRatio(satellite);
+            yield return GetSatelliteSignalNoiseRatio(satellite);
+        }
     }
 }

@@ -8,7 +8,7 @@ public interface IRealTimeControlService
 {
     public bool IsRunning { get; }
 
-    public event EventHandler<EpochData>? EpochDataReceived;
+    public event EventHandler<EpochData?>? EpochDataReceived;
 
     public Task StartListeningAsync(RealTimeControlOptions options, CancellationToken token);
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
@@ -14,6 +15,11 @@ public partial class SkyMapPage : UserControl
         DataContext = this;
         ViewModel = viewModel;
     }
+
+    public static string XBindingPath => nameof(SatelliteSkyPosition.Azimuth);
+
+
+    public static string YBindingPath => nameof(SatelliteSkyPosition.Elevation);
 
     public SkyMapPageViewModel ViewModel { get; }
 

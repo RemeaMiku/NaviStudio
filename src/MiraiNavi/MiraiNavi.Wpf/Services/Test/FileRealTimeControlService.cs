@@ -9,11 +9,9 @@ namespace MiraiNavi.WpfApp.Services.Test;
 
 public class FileRealTimeControlService() : IRealTimeControlService
 {
-    public bool IsRunning => _isRunning;
+    public bool IsRunning { get; protected set; } = false;
 
-    bool _isRunning = false;
-
-    public event EventHandler<EpochData>? EpochDataReceived;
+    public event EventHandler<EpochData?>? EpochDataReceived;
 
     private static EpochData ParseLine(string line)
     {
@@ -135,9 +133,9 @@ public class FileRealTimeControlService() : IRealTimeControlService
 
     public async Task StartListeningAsync(RealTimeControlOptions options, CancellationToken token)
     {
-        if (_isRunning)
+        if (IsRunning)
             throw new InvalidOperationException("It's already started.");
-        _isRunning = true;
+        IsRunning = true;
         using var stream = new FileStream(options.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var reader = new StreamReader(stream);
         reader.ReadLine();
@@ -156,6 +154,6 @@ public class FileRealTimeControlService() : IRealTimeControlService
                     Thread.Sleep(500);
             }
         }, token);
-        _isRunning = false;
+        IsRunning = false;
     }
 }

@@ -57,16 +57,19 @@ public partial class App : Application
 
     public static new App Current => (App)Application.Current;
 
+
     public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
         .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-        .AddSingleton<IRealTimeControlService, FileRealTimeControlService>()
+        .AddSingleton<IRealTimeControlService, TcpJsonRealTimeControlService>()
         .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+        .AddSingleton<OutputPageViewModel>()
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<DashBoardPageViewModel>()
         .AddSingleton<PosePageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddSingleton<OutputPage>()
         .AddSingleton<DashBoardPage>()
         .AddSingleton<MapPage>()
         .AddSingleton<SkyMapPage>()
@@ -77,19 +80,9 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
 #if DEBUG
-        if (e.Args.Length > 0)
-        {
-            if (Path.Exists(e.Args[0]))
-            {
-                ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new(e.Args[0]);
-            }
-        }
-        else
-        {
-            ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
-        }
+        ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("文件模拟");
 #endif
-        new SplashScreen("Assets/splash-screen.png").Show(true);
+        //new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }

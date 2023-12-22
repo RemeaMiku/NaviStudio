@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using MiraiNavi.WpfApp.ViewModels.Pages;
+using Wpf.Ui.Common;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
 
@@ -7,8 +10,22 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class OutputPage : UserControl
 {
-    public OutputPage()
+    public OutputPage(OutputPageViewModel viewModel)
     {
         InitializeComponent();
+        ViewModel = viewModel;
+        DataContext = this;
+        ViewModel.ScrollToBottomRequested += OnViewModelScrollToBottomRequested;
     }
+
+    private void OnViewModelScrollToBottomRequested(object? sender, EventArgs e)
+    {
+        App.Current.Dispatcher.Invoke(() =>
+        {
+            if (OutputList.Items.Count > 0)
+                OutputList.ScrollIntoView(OutputList.Items[^1]);
+        });
+    }
+
+    public OutputPageViewModel ViewModel { get; }
 }

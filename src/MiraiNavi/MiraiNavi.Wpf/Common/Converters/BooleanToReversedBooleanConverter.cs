@@ -3,6 +3,7 @@ using System.Windows.Data;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
+[ValueConversion(typeof(bool), typeof(bool))]
 public class BooleanToReversedBooleanConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -21,13 +21,11 @@ var options = new JsonSerializerOptions()
 };
 options.Converters.Add(new UtcTimeJsonConverter());
 options.Converters.Add(new Vector3JsonConverter());
-var buffer = new byte[4096];
 while (true)
 {
-    //var count = await stream.ReadAsync(buffer);
     var message = reader.ReadString();
-    Console.WriteLine(message);
+    if (message is null)
+        continue;
     var epochData = JsonSerializer.Deserialize<EpochData>(message, options);
     Console.WriteLine($"Deserialized: {epochData!.TimeStamp:yyyy/MM/dd HH:mm:ss.fff}");
-    //Console.WriteLine(JsonSerializer.Deserialize<EpochData>(message, options));
 }

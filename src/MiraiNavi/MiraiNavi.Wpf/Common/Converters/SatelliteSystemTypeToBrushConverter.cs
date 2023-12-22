@@ -5,6 +5,7 @@ using MiraiNavi.Shared.Models.Satellites;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
+[ValueConversion(typeof(SatelliteSystems), typeof(Brush))]
 public class SatelliteSystemTypeToBrushConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

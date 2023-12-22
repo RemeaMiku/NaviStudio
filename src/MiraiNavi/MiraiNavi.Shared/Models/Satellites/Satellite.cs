@@ -4,7 +4,7 @@ using MiraiNavi.Shared.Serialization;
 namespace MiraiNavi.Shared.Models.Satellites;
 
 [JsonConverter(typeof(SatelliteJsonConverter))]
-public record struct Satellite
+public record struct Satellite : IComparable<Satellite>
 {
     public Satellite(string prnCode)
     {
@@ -22,4 +22,10 @@ public record struct Satellite
     public static implicit operator Satellite(string prnCode) => new(prnCode);
 
     public override readonly string ToString() => PrnCode;
+
+    public readonly int CompareTo(Satellite other)
+    {
+        var systemCompare = System.CompareTo(other.System);
+        return systemCompare == 0 ? Number.CompareTo(other.Number) : systemCompare;
+    }
 }

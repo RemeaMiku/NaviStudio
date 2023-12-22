@@ -2,6 +2,7 @@
     x:Class="MiraiNavi.WpfApp.Views.Pages.OutputPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:MiraiNavi.WpfApp.Common.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,53 +10,115 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Padding="5"
     d:Background="Black"
+    d:DataContext="{d:DesignInstance Type=local:OutputPage}"
     d:DesignHeight="300"
     d:DesignWidth="600"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <cv:StringFormatConverter x:Key="StringFormatConverter" />
+        <cv:BooleanToControlAppearance x:Key="BooleanToControlAppearance" />
+        <Thickness x:Key="SmallSpacing">1,0</Thickness>
         <Style
             x:Key="OutputFilterButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
             TargetType="ui:Button">
-            <Setter Property="Padding" Value="5" />
+            <Setter Property="Padding" Value="5,3" />
+            <Setter Property="Margin" Value="{StaticResource SmallSpacing}" />
         </Style>
-        <Thickness x:Key="SmallSpacing">5,0,0,0</Thickness>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <ui:Button
-                d:Content="错误 0 "
-                Appearance="Danger"
-                Icon="DismissCircle24"
-                Style="{StaticResource OutputFilterButtonStyle}" />
-            <ui:Button
-                Margin="{StaticResource SmallSpacing}"
-                d:Content="警告 0 "
-                Appearance="Caution"
-                Icon="ErrorCircle24"
-                Style="{StaticResource OutputFilterButtonStyle}" />
-            <ui:Button
-                Margin="{StaticResource SmallSpacing}"
-                d:Content="消息 0 "
-                Appearance="Info"
-                Icon="Info24"
-                Style="{StaticResource OutputFilterButtonStyle}" />
-            <ui:Button
-                Margin="{StaticResource SmallSpacing}"
-                d:Content="成功 0 "
-                Appearance="Success"
-                Icon="CheckmarkCircle24"
-                Style="{StaticResource OutputFilterButtonStyle}" />
-            <ui:Button
-                Margin="{StaticResource SmallSpacing}"
-                Icon="FilterDismiss24"
-                Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
-        </StackPanel>
-        <ListView Grid.Row="1" Margin="0,5,0,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                Padding="5,3"
+                ItemsSource="{Binding ViewModel.Senders, Mode=OneTime}"
+                SelectedItem="{Binding ViewModel.SelectedSender, Mode=TwoWay}"
+                Style="{StaticResource DefaultComboBoxStyle}">
+                <ComboBox.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
+                        <Setter Property="Padding" Value="5,3" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+            <WrapPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <ui:Button
+                    d:Appearance="Danger"
+                    d:Content="错误 0 "
+                    Appearance="{Binding ViewModel.ShowError, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Danger}}"
+                    Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
+                    CommandParameter="{x:Static ui:InfoBarSeverity.Error}"
+                    Content="{Binding ViewModel.ErrorCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='错误 {0} ', Mode=OneWay}"
+                    Icon="DismissCircle24"
+                    Style="{StaticResource OutputFilterButtonStyle}" />
+                <ui:Button
+                    d:Appearance="Caution"
+                    d:Content="警告 0 "
+                    Appearance="{Binding ViewModel.ShowWarning, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Caution}}"
+                    Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
+                    CommandParameter="{x:Static ui:InfoBarSeverity.Warning}"
+                    Content="{Binding ViewModel.WarningCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='警告 {0} ', Mode=OneWay}"
+                    Icon="ErrorCircle24"
+                    Style="{StaticResource OutputFilterButtonStyle}" />
+                <ui:Button
+                    d:Appearance="Info"
+                    d:Content="消息 0 "
+                    Appearance="{Binding ViewModel.ShowInformational, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Info}}"
+                    Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
+                    CommandParameter="{x:Static ui:InfoBarSeverity.Informational}"
+                    Content="{Binding ViewModel.InformationalCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='消息 {0} ', Mode=OneWay}"
+                    Icon="Info24"
+                    Style="{StaticResource OutputFilterButtonStyle}" />
+                <ui:Button
+                    d:Appearance="Success"
+                    d:Content="成功 0 "
+                    Appearance="{Binding ViewModel.ShowSuccess, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Success}}"
+                    Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
+                    CommandParameter="{x:Static ui:InfoBarSeverity.Success}"
+                    Content="{Binding ViewModel.SuccessCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='成功 {0} ', Mode=OneWay}"
+                    Icon="CheckmarkCircle24"
+                    Style="{StaticResource OutputFilterButtonStyle}" />
+                <ui:Button
+                    Margin="{StaticResource SmallSpacing}"
+                    Command="{Binding ViewModel.ClearFilterCommand, Mode=OneTime}"
+                    Icon="FilterDismiss24"
+                    Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+                <ui:ToggleSwitch
+                    Margin="{StaticResource SmallSpacing}"
+                    Content="保持最底部"
+                    IsChecked="{Binding ViewModel.KeepBottom, Mode=OneWayToSource}" />
+            </WrapPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <ui:TextBox
+                    Width="100"
+                    Margin="{StaticResource SmallSpacing}"
+                    Padding="5,3"
+                    VerticalAlignment="Center"
+                    PlaceholderText="搜索"
+                    Text="{Binding ViewModel.SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:Button
+                    Command="{Binding ViewModel.SearchCommand, Mode=OneTime}"
+                    Icon="Search24"
+                    Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+            </StackPanel>
+        </Grid>
+        <ListView
+            x:Name="OutputList"
+            Grid.Row="1"
+            Margin="0,5,0,0"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding ViewModel.OutputsView, Mode=OneTime}">
             <ListView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
                     <Setter Property="Margin" Value="0" />
@@ -64,13 +127,15 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate DataType="models:Output">
-                    <ui:InfoBar
-                        Title="{Binding TimeStamp, StringFormat='HH:mm:ss.fff'}"
-                        Padding="5,3"
-                        IsClosable="False"
-                        IsOpen="True"
-                        Message="{Binding Message}"
-                        Severity="{Binding Severity}" />
+                    <Grid HorizontalAlignment="Stretch">
+                        <ui:InfoBar
+                            Title="{Binding TimeStamp, StringFormat='HH:mm:ss.fff'}"
+                            Padding="5,3"
+                            IsClosable="False"
+                            IsOpen="True"
+                            Message="{Binding DisplayMessage}"
+                            Severity="{Binding Severity}" />
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
