@@ -48,9 +48,7 @@ public partial class App : Application
 
     static void RegisterKeys()
     {
-        //注册 Syncfusion 控件
-        var syncKey = "Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCflFrRWJEfV5ycEVHaFZTQ3xbR1ZhSXxQd0dhX35WcnNRQ2ZbV0I=";
-        //注册 GMap.NET Bing Map Key
+        var syncKey = "Mjk5OTQ4MEAzMjM0MmUzMDJlMzBoZlRQNFJpUC8xNXNBM09RUTUxa2tWYzdweUNtYUhJMDZiVXV0NlpSR1ZvPQ==";
         var bingKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
         SyncfusionLicenseProvider.RegisterLicense(syncKey);
         BingSatelliteMapProvider.Instance.ClientKey = bingKey;
@@ -86,7 +84,6 @@ public partial class App : Application
         ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("文件模拟");
 #endif
         new SplashScreen("Assets/splash-screen.png").Show(true);
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Show();
+        ServiceProvider.GetRequiredService<MainWindow>().Show();
     }
 }
