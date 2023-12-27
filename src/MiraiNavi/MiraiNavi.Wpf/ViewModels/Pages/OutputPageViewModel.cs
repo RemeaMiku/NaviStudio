@@ -14,6 +14,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 {
+    public static string Title => "输出";
+
     readonly IMessenger _messenger;
 
     const string _allSenders = "全部";

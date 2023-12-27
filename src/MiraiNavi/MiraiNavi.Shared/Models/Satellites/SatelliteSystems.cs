@@ -3,7 +3,7 @@
 public enum SatelliteSystems
 {
     GPS = 'G',
-    BDS = 'C',
+    Beidou = 'C',
     GLONASS = 'R',
     Galileo = 'E',
     Others = -1

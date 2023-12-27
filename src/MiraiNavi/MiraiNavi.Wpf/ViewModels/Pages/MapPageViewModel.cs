@@ -14,6 +14,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
+    public static string Title => "地图";
+
     readonly IGMapRouteDisplayService _gMapRouteDisplayService = gMapRouteReplayService;
 
     [ObservableProperty]

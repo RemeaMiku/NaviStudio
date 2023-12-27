@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace MiraiNavi.Shared.Models.Satellites;
 
-public struct SatelliteSignalNoiseRatio
+public struct SatelliteTracking
 {
     public Satellite Satellite { get; set; }
+
+    public bool IsUsed { get; set; }
 
     public double Frequency { get; set; }
 

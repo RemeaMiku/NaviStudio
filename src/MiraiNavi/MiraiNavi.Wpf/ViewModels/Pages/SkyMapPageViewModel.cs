@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.WpfApp.Models;
@@ -10,7 +11,6 @@ using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-//TODO 高度角和系统筛选器
 public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
     public static string Title => "卫星天空图";
@@ -21,7 +21,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(EnabledPositions))]
-    double _minElevation = 0;
+    double _minElevation = 5;
 
     readonly List<SatelliteSystems> _enabledSystems = new(Enum.GetValues<SatelliteSystems>());
 
@@ -29,7 +29,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     {
         if (message.SatelliteSkyPositions is null)
         {
-            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "卫星坐标数据缺失"));
+            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "卫星坐标数据异常"));
             Reset();
             return;
         }
@@ -40,6 +40,14 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     protected override void Reset()
     {
         _positions = Enumerable.Empty<SatelliteSkyPosition>();
+        OnPropertyChanged(nameof(EnabledPositions));
+    }
+
+    [RelayCommand]
+    void EnableOrDisableSystem(SatelliteSystems systems)
+    {
+        if (!_enabledSystems.Remove(systems))
+            _enabledSystems.Add(systems);
         OnPropertyChanged(nameof(EnabledPositions));
     }
 }

@@ -13,6 +13,7 @@ using MiraiNavi.WpfApp.ViewModels.Pages;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using MiraiNavi.WpfApp.Views.Windows;
+using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
 using Wpf.Ui.Appearance;
@@ -48,10 +49,10 @@ public partial class App : Application
     static void RegisterKeys()
     {
         //注册 Syncfusion 控件
-        var syncKey = "Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5ecXZWQmhfWUZzV0A=";
+        var syncKey = "Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCflFrRWJEfV5ycEVHaFZTQ3xbR1ZhSXxQd0dhX35WcnNRQ2ZbV0I=";
         //注册 GMap.NET Bing Map Key
         var bingKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
-        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncKey);
+        SyncfusionLicenseProvider.RegisterLicense(syncKey);
         BingSatelliteMapProvider.Instance.ClientKey = bingKey;
     }
 
@@ -63,12 +64,14 @@ public partial class App : Application
         .AddSingleton<IRealTimeControlService, TcpJsonRealTimeControlService>()
         .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+        .AddSingleton<SatelliteTrackingPageViewModel>()
         .AddSingleton<OutputPageViewModel>()
         .AddSingleton<MapPageViewModel>()
         .AddSingleton<SkyMapPageViewModel>()
         .AddSingleton<DashBoardPageViewModel>()
         .AddSingleton<PosePageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddSingleton<SatelliteTrackingPage>()
         .AddSingleton<OutputPage>()
         .AddSingleton<DashBoardPage>()
         .AddSingleton<MapPage>()
@@ -82,7 +85,7 @@ public partial class App : Application
 #if DEBUG
         ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("文件模拟");
 #endif
-        //new SplashScreen("Assets/splash-screen.png").Show(true);
+        new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }

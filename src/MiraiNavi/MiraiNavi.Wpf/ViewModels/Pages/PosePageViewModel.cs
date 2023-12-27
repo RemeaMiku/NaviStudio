@@ -4,11 +4,13 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
+using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
+    public static string Title => "位姿";
 
     [ObservableProperty]
     UtcTime _timeStamp;
@@ -68,6 +70,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         if (data.Pose is null)
         {
             Reset();
+            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, $"{data.TimeStamp} 历元位姿数据异常"));
             return;
         }
         Latitude = data.Pose.GeodeticCoord.Latitude.Degrees;

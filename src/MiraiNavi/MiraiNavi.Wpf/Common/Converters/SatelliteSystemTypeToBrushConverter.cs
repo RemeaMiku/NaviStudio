@@ -13,7 +13,7 @@ public class SatelliteSystemTypeToBrushConverter : IValueConverter
         return (SatelliteSystems)value switch
         {
             SatelliteSystems.GPS => Brushes.Navy,
-            SatelliteSystems.BDS => Brushes.Red,
+            SatelliteSystems.Beidou => Brushes.Red,
             SatelliteSystems.GLONASS => Brushes.Green,
             SatelliteSystems.Galileo => Brushes.Orange,
             SatelliteSystems.Others => Brushes.Purple,

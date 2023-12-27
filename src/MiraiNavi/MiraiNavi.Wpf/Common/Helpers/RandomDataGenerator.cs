@@ -39,10 +39,10 @@ public static class RandomDataGenerator
         };
     }
 
-    public static SatelliteSignalNoiseRatio GetSatelliteSignalNoiseRatio(Satellite satellite)
+    public static SatelliteTracking GetSatelliteSignalNoiseRatio(Satellite satellite)
     {
         var random = new Random();
-        return new SatelliteSignalNoiseRatio
+        return new SatelliteTracking
         {
             Satellite = satellite,
             Frequency = 1000 + random.NextDouble() * 1000,

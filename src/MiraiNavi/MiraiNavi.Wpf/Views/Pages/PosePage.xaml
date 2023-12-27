@@ -7,15 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance local:PosePage}"
-    d:DesignHeight="300"
-    d:DesignWidth="500"
+    d:DesignHeight="220"
+    d:DesignWidth="400"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Thickness x:Key="SmallSpacing">0,3,0,0</Thickness>
         <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
     </UserControl.Resources>
-    <Border Padding="10" d:Background="Black">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Border Padding="5" d:Background="Black">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock
                     d:Foreground="White"

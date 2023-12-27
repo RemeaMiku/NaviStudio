@@ -29,7 +29,7 @@ while (!reader.EndOfStream)
     var epochData = ParseLine(line!);
     epochData.Satellites = new(RandomDataGenerator.GetSatellites(20).Order());
     epochData.SatelliteSkyPositions = new(RandomDataGenerator.GetSatelliteSkyPositions(epochData.Satellites));
-    epochData.SatelliteSignalNoiseRatios = new(RandomDataGenerator.GetSatelliteSignalNoiseRatios(epochData.Satellites));
+    epochData.SatelliteTrackings = new(RandomDataGenerator.GetSatelliteTrackings(epochData.Satellites));
     var message = JsonSerializer.Serialize(epochData, options);
     Console.WriteLine(message);
     writer.Write(message);

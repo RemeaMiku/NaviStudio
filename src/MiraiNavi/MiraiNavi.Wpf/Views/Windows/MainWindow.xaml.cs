@@ -39,6 +39,7 @@ public partial class MainWindow : UiWindow
         PoseView.Content = App.Current.ServiceProvider.GetRequiredService<PosePage>();
         DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
         OutputView.Content = App.Current.ServiceProvider.GetRequiredService<OutputPage>();
+        SatelliteTrackingView.Content = App.Current.ServiceProvider.GetRequiredService<SatelliteTrackingPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }

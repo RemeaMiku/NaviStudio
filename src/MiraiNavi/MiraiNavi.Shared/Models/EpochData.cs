@@ -26,5 +26,5 @@ public record class EpochData
 
     public List<SatelliteSkyPosition>? SatelliteSkyPositions { get; set; }
 
-    public List<SatelliteSignalNoiseRatio>? SatelliteSignalNoiseRatios { get; set; }
+    public List<SatelliteTracking>? SatelliteTrackings { get; set; }
 }

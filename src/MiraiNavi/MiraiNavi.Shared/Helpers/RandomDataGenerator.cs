@@ -33,23 +33,24 @@ public static class RandomDataGenerator
             yield return GetSatelliteSkyPosition(satellite);
     }
 
-    public static SatelliteSignalNoiseRatio GetSatelliteSignalNoiseRatio(Satellite satellite)
+    public static SatelliteTracking GetSatelliteTracking(Satellite satellite)
     {
         var random = new Random();
-        return new SatelliteSignalNoiseRatio
+        return new SatelliteTracking
         {
             Satellite = satellite,
-            Frequency = 1000 + random.NextDouble() * 1000,
+            IsUsed = random.NextDouble() < 0.9,
+            Frequency = Math.Round(1000 + random.NextDouble() * 1000, 1),
             SignalNoiseRatio = random.NextDouble() * 100
         };
     }
 
-    public static IEnumerable<SatelliteSignalNoiseRatio> GetSatelliteSignalNoiseRatios(IEnumerable<Satellite> satellites)
+    public static IEnumerable<SatelliteTracking> GetSatelliteTrackings(IEnumerable<Satellite> satellites)
     {
         foreach (var satellite in satellites)
         {
-            yield return GetSatelliteSignalNoiseRatio(satellite);
-            yield return GetSatelliteSignalNoiseRatio(satellite);
+            yield return GetSatelliteTracking(satellite);
+            yield return GetSatelliteTracking(satellite);
         }
     }
 }

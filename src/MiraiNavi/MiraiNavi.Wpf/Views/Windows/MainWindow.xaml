@@ -7,14 +7,14 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notification="clr-namespace:Syncfusion.Windows.Controls.Notification;assembly=Syncfusion.SfBusyIndicator.WPF"
+    xmlns:pages="clr-namespace:MiraiNavi.WpfApp.ViewModels.Pages"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="MiraiNavi"
-    Width="{Binding MinWidth, Mode=OneTime}"
-    Height="{Binding MinHeight, Mode=OneTime}"
-    MinWidth="1250"
-    MinHeight="700"
+    xmlns:windows="clr-namespace:MiraiNavi.WpfApp.ViewModels.Windows"
+    Title="{x:Static windows:MainWindowViewModel.Title}"
+    Width="1250"
+    Height="700"
     d:DataContext="{d:DesignInstance local:MainWindow}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Acrylic"
@@ -81,10 +81,6 @@
                                 Tag="{Binding ElementName=SatelliteTrackingView}" />
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="图表工具(_C)"
-                                Tag="{Binding ElementName=ChartToolView}" />
-                            <ui:MenuItem
-                                Click="OnViewMenuItemClicked"
                                 Header="属性(_P)"
                                 Tag="{Binding ElementName=PropertyView}" />
                             <ui:MenuItem
@@ -103,7 +99,7 @@
         </ui:TitleBar>
         <Border
             Grid.Row="1"
-            Padding="0,5"
+            Padding="3"
             d:Background="{ui:ThemeResource}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -170,7 +166,7 @@
                 <syncfusion:DockingManager
                     x:Name="DockingManagerControl"
                     Grid.Row="1"
-                    Margin="0,5,0,0"
+                    Margin="0,3,0,0"
                     d:Background="Black"
                     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
@@ -188,72 +184,60 @@
                     UseNativeFloatWindow="True"
                     WindowClosing="OnDockingManagerNotDocumentWindowClosing">
                     <ContentControl
+                        x:Name="DashBoardView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="220"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="210"
+                        syncfusion:DockingManager.Header="{x:Static pages:DashBoardPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Left"
+                        syncfusion:DockingManager.State="Dock"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
                         x:Name="MapView"
                         syncfusion:DockingManager.CanDock="False"
-                        syncfusion:DockingManager.Header="地图"
+                        syncfusion:DockingManager.Header="{x:Static pages:MapPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="StartView"
                         syncfusion:DockingManager.CanDock="False"
-                        syncfusion:DockingManager.Header="开始"
+                        syncfusion:DockingManager.Header="{x:Static pages:StartPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="PropertyView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="属性"
-                        syncfusion:DockingManager.SideInDockedMode="Right"
-                        syncfusion:DockingManager.State="Dock"
-                        Style="{StaticResource DefaultContentControlStyle}" />
-                    <ContentControl
                         x:Name="SkyMapView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="120"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="300"
-                        syncfusion:DockingManager.Header="卫星星空图"
-                        syncfusion:DockingManager.SideInDockedMode="Top"
-                        syncfusion:DockingManager.TargetNameInDockedMode="PropertyView"
-                        Style="{StaticResource DefaultContentControlStyle}" />
-                    <ContentControl
-                        x:Name="OutputView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="280"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="150"
-                        syncfusion:DockingManager.Header="输出"
-                        syncfusion:DockingManager.SideInDockedMode="Bottom"
+                        syncfusion:DockingManager.Header="{x:Static pages:SkyMapPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Right"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="SatelliteTrackingView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="卫星跟踪列表"
+                        syncfusion:DockingManager.Header="{x:Static pages:SatelliteTrackingPageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                        syncfusion:DockingManager.TargetNameInDockedMode="OutputView"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=SkyMapView}"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="DashBoardView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
+                        x:Name="PropertyView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="100"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="仪表盘"
-                        syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                        syncfusion:DockingManager.TargetNameInDockedMode="PoseView"
+                        syncfusion:DockingManager.Header="属性"
+                        syncfusion:DockingManager.SideInDockedMode="Bottom"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=SkyMapView}"
                         Style="{StaticResource DefaultContentControlStyle}" />
-
                     <ContentControl
                         x:Name="PoseView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="150"
-                        syncfusion:DockingManager.Header="导航位姿"
-                        syncfusion:DockingManager.SideInDockedMode="Right"
-                        syncfusion:DockingManager.TargetNameInDockedMode="OutputView"
+                        syncfusion:DockingManager.Header="{x:Static pages:PosePageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Bottom"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="ChartToolView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="200"
+                        x:Name="OutputView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="图表工具"
+                        syncfusion:DockingManager.Header="{x:Static pages:OutputPageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Left"
-                        syncfusion:DockingManager.State="AutoHidden"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=PoseView}"
                         Style="{StaticResource DefaultContentControlStyle}" />
                 </syncfusion:DockingManager>
                 <Grid Grid.Row="2" Margin="0,5,0,0">

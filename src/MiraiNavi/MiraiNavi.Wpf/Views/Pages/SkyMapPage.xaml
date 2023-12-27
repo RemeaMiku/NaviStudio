@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MiraiNavi.Shared.Models.Satellites;assembly=MiraiNavi.Shared"
+    xmlns:satellites="clr-namespace:MiraiNavi.Shared.Models.Satellites;assembly=MiraiNavi.Shared"
     xmlns:sfcharts="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -16,8 +18,33 @@
     <UserControl.Resources>
         <cv:SatelliteSystemTypeToBrushConverter x:Key="SatelliteSystemTypeToBrushConverter" />
         <sys:Double x:Key="SymbolSize">20</sys:Double>
+        <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="IsChecked" Value="True" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Width" Value="65" />
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+            <Setter Property="Margin" Value="1" />
+            <Setter Property="Command" Value="{Binding ViewModel.EnableOrDisableSystemCommand, Mode=OneTime}" />
+            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{Binding Content, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource SatelliteSystemTypeToBrushConverter}}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
-    <Border Padding="10" d:Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <sfcharts:SfChart>
             <sfcharts:SfChart.PrimaryAxis>
                 <sfcharts:NumericalAxis
@@ -66,5 +93,43 @@
                 </sfcharts:PolarSeries>
             </sfcharts:SfChart.Series>
         </sfcharts:SfChart>
-    </Border>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+            <ToggleButton Content="{x:Static satellites:SatelliteSystems.GPS}" />
+            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Beidou}" />
+            <ToggleButton Content="{x:Static satellites:SatelliteSystems.GLONASS}" />
+            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Galileo}" />
+            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Others}" />
+        </WrapPanel>
+        <Grid Grid.Row="2" Margin="5,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ui:NumberBox
+                Width="50"
+                Padding="3"
+                VerticalContentAlignment="Center"
+                ClearButtonEnabled="False"
+                FontSize="{StaticResource SmallFontSize}"
+                Maximum="90"
+                Minimum="0"
+                SmallChange="5"
+                SpinButtonPlacementMode="Compact"
+                Text="{Binding ViewModel.MinElevation, StringFormat='{}{0:F1}', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Slider
+                x:Name="ElevationSlider"
+                Grid.Column="1"
+                AutoToolTipPlacement="TopLeft"
+                AutoToolTipPrecision="1"
+                IsMoveToPointEnabled="True"
+                LargeChange="15"
+                Maximum="90"
+                Minimum="0"
+                SmallChange="5"
+                TickFrequency="0.1"
+                TickPlacement="BottomRight"
+                Ticks="0,15,30,45,60,75,90"
+                Value="{Binding ViewModel.MinElevation, Mode=TwoWay}" />
+        </Grid>
+    </Grid>
 </UserControl>

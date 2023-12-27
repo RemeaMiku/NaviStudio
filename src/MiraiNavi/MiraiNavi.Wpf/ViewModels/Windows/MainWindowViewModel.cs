@@ -19,7 +19,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     readonly IEpochDatasService _epochDatasService = epochDatasService;
     readonly IRealTimeControlService _realTimeControlService = realTimeControlService;
 
-    public static string Title => "解算控制";
+    public static string Title => "MiraiNavi";
 
     protected override void OnActivated()
     {
@@ -37,11 +37,11 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     {
         if (e is null)
         {
-            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "从解算程序接收到异常数据"));
+            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "数据异常"));
             return;
         }
         _epochDatasService.Add(e);
-        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Success, $"成功接收到第{_epochDatasService.Datas.Count}个历元数据：{e.TimeStamp:yyyy/MM/dd HH:mm:ss.fff}"));
+        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Success, $"已解算第 {_epochDatasService.Datas.Count} 个历元数据：{e.TimeStamp:yyyy/MM/dd HH:mm:ss.fff}"));
         if (IsRealTimeRunning)
             Messenger.Send(e);
     }
