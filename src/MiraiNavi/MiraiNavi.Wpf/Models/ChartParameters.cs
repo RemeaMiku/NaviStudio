@@ -9,9 +9,7 @@ namespace MiraiNavi.WpfApp.Models;
 
 public partial class ChartParameters
 {
-    public string Title { get; init; } = default!;
-
-    public string[] Labels { get; init; } = default!;
+    public string Title { get; init; } = default!;    
 
     public FrozenDictionary<string, Func<EpochData, double?>> LabelFuncs { get; init; } = default!;
 }

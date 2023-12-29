@@ -47,7 +47,11 @@ public partial class MainWindow : UiWindow
 
     public void AddDocument(string header, object content)
     {
-        var contentControl = new ContentControl() { Content = content };
+        var contentControl = new ContentControl()
+        {
+            Content = content,
+            Style = (Style)Resources["DefaultContentControlStyle"],
+        };
         DockingManagerControl.Children.Add(contentControl);
         DockingManager.SetState(contentControl, DockState.Document);
         DockingManager.SetHeader(contentControl, header);

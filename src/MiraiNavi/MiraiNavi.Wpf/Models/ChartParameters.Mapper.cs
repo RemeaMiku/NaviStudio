@@ -21,7 +21,6 @@ partial class ChartParameters
             ChartItems.LongitudeAndLatitude, new()
             {
                 Title = ChartItems.LongitudeAndLatitude,
-                Labels= ["纬度","经度"],
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "纬度", epochData =>  epochData.Pose?.GeodeticCoord.Latitude.Degrees },
@@ -33,7 +32,6 @@ partial class ChartParameters
             ChartItems.Altitude, new()
             {
                 Title = ChartItems.Altitude,
-                Labels= ["椭球高"],
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "椭球高", epochData => epochData.Pose?.GeodeticCoord.Altitude }
@@ -44,7 +42,6 @@ partial class ChartParameters
             ChartItems.LocalPosition, new()
             {
                 Title = ChartItems.LocalPosition,
-                Labels= _enu,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "E", epochData => epochData.EastLocalPosition },
@@ -57,7 +54,6 @@ partial class ChartParameters
             ChartItems.Velocity, new()
             {
                 Title = ChartItems.Velocity,
-                Labels= _xyz,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "X", epochData => epochData.Pose?.XVelocity },
@@ -70,7 +66,6 @@ partial class ChartParameters
             ChartItems.EulerAngles, new()
             {
                 Title = ChartItems.EulerAngles,
-                Labels= _eulerAngles,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "航向角", epochData => epochData.Pose?.EulerAngles.Yaw.Degrees },
@@ -83,7 +78,6 @@ partial class ChartParameters
             ChartItems.AccelerometerBias, new()
             {
                 Title = ChartItems.AccelerometerBias,
-                Labels= _xyz,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "X", epochData => epochData.ImuBias?.AccelerometerBias.X },
@@ -96,7 +90,6 @@ partial class ChartParameters
             ChartItems.GyroscopeBias, new()
             {
                 Title = ChartItems.GyroscopeBias,
-                Labels= _xyz,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "X", epochData => epochData.ImuBias?.GyroscopeBias.X },
@@ -109,7 +102,6 @@ partial class ChartParameters
             ChartItems.StdLocalPosition, new()
             {
                 Title = ChartItems.StdLocalPosition,
-                Labels= _enu,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "E", epochData => epochData.LocalPositionPrecision?.StdEast},
@@ -122,7 +114,6 @@ partial class ChartParameters
             ChartItems.StdVelocity, new()
             {
                 Title = ChartItems.StdVelocity,
-                Labels= _enu,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "E", epochData => epochData.PosePrecision?.StdEastVelocity },
@@ -135,7 +126,6 @@ partial class ChartParameters
             ChartItems.StdEulerAngles, new()
             {
                 Title = ChartItems.StdEulerAngles,
-                Labels= _eulerAngles,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "航向角", epochData => epochData.PosePrecision?.StdYaw.Degrees },
@@ -148,7 +138,6 @@ partial class ChartParameters
             ChartItems.StdAccelerometerBias, new()
             {
                 Title = ChartItems.StdAccelerometerBias,
-                Labels= _xyz,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "X", epochData => epochData.ImuBiasPrecision?.StdAccelerometerBias.X },
@@ -161,7 +150,6 @@ partial class ChartParameters
             ChartItems.StdGyroscopeBias, new()
             {
                 Title = ChartItems.StdGyroscopeBias,
-                Labels= _xyz,
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "X", epochData => epochData.ImuBiasPrecision?.StdGyroscopeBias.X },
@@ -174,7 +162,6 @@ partial class ChartParameters
             ChartItems.Dop, new()
             {
                 Title = ChartItems.Dop,
-                Labels= ["PDOP", "HDOP", "VDOP", "GDOP"],
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
                     { "PDOP", epochData => epochData.Pdop },
@@ -188,10 +175,9 @@ partial class ChartParameters
             ChartItems.Ratio, new()
             {
                 Title = ChartItems.Ratio,
-                Labels= [ChartItems.Ratio],
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
-                    { "Ratio", epochData => epochData.Ratio }
+                    { ChartItems.Ratio, epochData => epochData.Ratio }
                 }.ToFrozenDictionary()
             }
         },
@@ -200,10 +186,9 @@ partial class ChartParameters
             new()
             {
                 Title= ChartItems.SatelliteCount,
-                Labels= [ChartItems.SatelliteCount],
                 LabelFuncs=new Dictionary<string, Func<EpochData, double?>>()
                 {
-                    { "SatelliteCount", epochData => epochData.Satellites?.Count }
+                    { ChartItems.SatelliteCount, epochData => epochData.Satellites?.Count }
                 }.ToFrozenDictionary()
             }
         }

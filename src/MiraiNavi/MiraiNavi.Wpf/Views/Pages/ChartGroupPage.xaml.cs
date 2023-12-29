@@ -36,7 +36,7 @@ public partial class ChartGroupPage : UserControl
     {
         ViewModel.Title = groupParas.Title;
         ViewModel.MaxEpochCount = groupParas.MaxEpochCount;
-        var count = 0;
+        var index = 0;
         foreach (var item in groupParas.Items)
         {
             var page = App.Current.ServiceProvider.GetRequiredService<ChartPage>();
@@ -46,11 +46,16 @@ public partial class ChartGroupPage : UserControl
             DocumentContainer.SetHeader(page, item);
             DocumentContainer.SetCanClose(page, false);
             DocumentContainer.SetMDIWindowState(page, MDIWindowState.Normal);
-            DocumentContainer.SetMDIBounds(page, new(count * 100, count * 50, 400, 200));
+            DocumentContainer.SetMDIBounds(page, new(index * 100, index * 50, 400, 200));
             DocumentContainerControl.Items.Add(page);
-            count++;
+            index++;
         }
     }
 
     public ChartGroupPageViewModel ViewModel { get; }
+
+    private void OnLayoutButtonClicked(object sender, RoutedEventArgs e)
+    {
+        DocumentContainerControl.SetLayout((MDILayout)((Button)sender).Tag);
+    }
 }

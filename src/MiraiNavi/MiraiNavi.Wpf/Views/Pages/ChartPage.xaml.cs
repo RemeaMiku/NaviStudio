@@ -24,27 +24,29 @@ public partial class ChartPage : UserControl
     static readonly Brush[] _brushes =
     [
         (Brush)App.Current.Resources["MikuGreenBrush"],
+        (Brush)App.Current.Resources["MeaYellowBrush"],
         (Brush)App.Current.Resources["MeaBlueBrush"],
         (Brush)App.Current.Resources["MikuRedBrush"],
-        (Brush)App.Current.Resources["MeaYellowBrush"],
     ];
 
     public void CreateSeries(ChartParameters paras)
     {
         ViewModel.Title = paras.Title;
-        for (int i = 0; i < paras.Labels.Length; i++)
+        var index = 0;
+        foreach ((var label, _) in paras.LabelFuncs)
         {
             var seriesData = new ObservableCollection<ChartModel>();
-            ViewModel.SeriesDatas.Add(paras.Labels[i], seriesData);
+            ViewModel.SeriesDatas.Add(label, seriesData);
             Chart.Series.Add(new FastLineSeries()
             {
-                Label = paras.Labels[i],
+                Label = label,
                 ItemsSource = seriesData,
                 ShowEmptyPoints = false,
                 XBindingPath = nameof(ChartModel.TimeStamp),
                 YBindingPath = nameof(ChartModel.Value),
-                Interior = _brushes[i % _brushes.Length],
+                Interior = _brushes[index % _brushes.Length],
             });
+            index++;
         }
     }
 }
