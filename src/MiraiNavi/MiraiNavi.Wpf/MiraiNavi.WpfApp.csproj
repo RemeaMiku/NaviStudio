@@ -26,6 +26,7 @@
 		<PackageReference Include="Syncfusion.SfChart.WPF" />
 		<PackageReference Include="Syncfusion.SfGauge.WPF" />
 		<PackageReference Include="Syncfusion.Themes.FluentDark.WPF" />
+		<PackageReference Include="Syncfusion.Themes.Windows11Dark.WPF" />
 		<PackageReference Include="Syncfusion.Tools.WPF" />
 		<PackageReference Include="WPF-UI" />
 	</ItemGroup>

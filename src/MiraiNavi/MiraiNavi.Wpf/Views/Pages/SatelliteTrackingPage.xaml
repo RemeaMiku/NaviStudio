@@ -64,45 +64,47 @@
                     Text="信号强度" />
             </Grid>
             <ScrollViewer Grid.Row="1" Padding="0,0,10,0">
-                <ItemsControl ItemsSource="{Binding ViewModel.SatelliteTrackings, Mode=OneWay}">
+                <ItemsControl
+                    ItemsSource="{Binding ViewModel.SatelliteTrackings, Mode=OneWay}"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.ScrollUnit="Item"
+                    VirtualizingPanel.VirtualizationMode="Recycling">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="satellites:SatelliteTracking">
-                            <ui:CardAction Padding="4,0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="60" />
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        d:Text="GPS"
-                                        Style="{StaticResource ListItemTextStyle}"
-                                        Text="{Binding Satellite.System, Mode=OneWay}" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        d:Text="01"
-                                        Style="{StaticResource ListItemTextStyle}"
-                                        Text="{Binding Satellite.Number, Mode=OneWay, StringFormat='{}{0:00}'}" />
-                                    <TextBlock
-                                        Grid.Column="2"
-                                        d:Text="1561.1"
-                                        Style="{StaticResource ListItemTextStyle}"
-                                        Text="{Binding Frequency, Mode=OneWay}" />
-                                    <TextBlock
-                                        Grid.Column="3"
-                                        d:Text="是"
-                                        Style="{StaticResource ListItemTextStyle}"
-                                        Text="{Binding IsUsed, Converter={StaticResource BooleanToStringConverter}, Mode=OneWay}" />
-                                    <ProgressBar
-                                        Grid.Column="4"
-                                        Margin="10,0"
-                                        d:Value="39"
-                                        Style="{StaticResource ProgressBarStyle}"
-                                        Value="{Binding SignalNoiseRatio, Mode=OneWay}" />
-                                </Grid>
-                            </ui:CardAction>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    d:Text="GPS"
+                                    Style="{StaticResource ListItemTextStyle}"
+                                    Text="{Binding Satellite.System, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    d:Text="01"
+                                    Style="{StaticResource ListItemTextStyle}"
+                                    Text="{Binding Satellite.Number, Mode=OneWay, StringFormat='{}{0:00}'}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    d:Text="1561.1"
+                                    Style="{StaticResource ListItemTextStyle}"
+                                    Text="{Binding Frequency, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    d:Text="是"
+                                    Style="{StaticResource ListItemTextStyle}"
+                                    Text="{Binding IsUsed, Converter={StaticResource BooleanToStringConverter}, Mode=OneWay}" />
+                                <ProgressBar
+                                    Grid.Column="4"
+                                    Margin="10,0"
+                                    d:Value="39"
+                                    Style="{StaticResource ProgressBarStyle}"
+                                    Value="{Binding SignalNoiseRatio, Mode=OneWay}" />
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <!--<d:CardAction Padding="4,0">

@@ -14,8 +14,12 @@
         <Thickness x:Key="SmallSpacing">0,3,0,0</Thickness>
         <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
     </UserControl.Resources>
-    <Border Padding="5" d:Background="Black">
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border Padding="10" d:Background="Black">
+        <ui:DynamicScrollViewer
+            HorizontalScrollBarVisibility="Auto"
+            IsScrollingHorizontally="True"
+            IsScrollingVertically="True"
+            VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock
                     d:Foreground="White"
@@ -67,6 +71,6 @@
                     <Run d:Text="39.114" Text="{Binding ViewModel.Roll, StringFormat='{}{0:F3}', Mode=OneWay}" />
                 </TextBlock>
             </StackPanel>
-        </ScrollViewer>
+        </ui:DynamicScrollViewer>
     </Border>
 </UserControl>

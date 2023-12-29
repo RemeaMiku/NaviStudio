@@ -8,7 +8,6 @@ using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
-using MiraiNavi.WpfApp.Services.Test;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
@@ -16,6 +15,7 @@ using MiraiNavi.WpfApp.Views.Windows;
 using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
+using Syncfusion.Themes.Windows11Dark.WPF;
 using Wpf.Ui.Appearance;
 
 namespace MiraiNavi.WpfApp;
@@ -42,8 +42,18 @@ public partial class App : Application
         SfSkinManager.RegisterThemeSettings("FluentDark", new FluentDarkThemeSettings()
         {
             PrimaryBackground = Accent.PrimaryAccentBrush,
-            FontFamily = new("Microsoft YaHei UI")
+            FontFamily = new("Microsoft YaHei UI"),
+            PrimaryForeground = Brushes.White,
         });
+        //SfSkinManager.RegisterThemeSettings("Windows11Dark", new Windows11DarkThemeSettings()
+        //{
+        //    PrimaryBackground = Accent.PrimaryAccentBrush,
+        //    FontFamily = new("Microsoft YaHei UI"),
+        //    BodyAltFontSize = 12,
+        //    HeaderFontSize = 24,
+        //    SubHeaderFontSize = 18,
+        //    PrimaryForeground = Brushes.White,
+        //});
     }
 
     static void RegisterKeys()
@@ -62,6 +72,8 @@ public partial class App : Application
         .AddSingleton<IRealTimeControlService, TcpJsonRealTimeControlService>()
         .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+        .AddTransient<ChartPageViewModel>()
+        .AddTransient<ChartGroupPageViewModel>()
         .AddSingleton<SatelliteTrackingPageViewModel>()
         .AddSingleton<OutputPageViewModel>()
         .AddSingleton<MapPageViewModel>()
@@ -69,6 +81,7 @@ public partial class App : Application
         .AddSingleton<DashBoardPageViewModel>()
         .AddSingleton<PosePageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddTransient<ChartToolWindowViewModel>()
         .AddSingleton<SatelliteTrackingPage>()
         .AddSingleton<OutputPage>()
         .AddSingleton<DashBoardPage>()
@@ -76,14 +89,19 @@ public partial class App : Application
         .AddSingleton<SkyMapPage>()
         .AddSingleton<PosePage>()
         .AddSingleton<MainWindow>()
+        .AddTransient<ChartToolWindow>()
+        .AddTransient<ChartPage>()
+        .AddTransient<ChartGroupPage>()
         .BuildServiceProvider();
 
     protected override void OnStartup(StartupEventArgs e)
     {
-#if DEBUG
-        ServiceProvider.GetRequiredService<MainWindowViewModel>().RealTimeControlOptions = new("文件模拟");
-#endif
         new SplashScreen("Assets/splash-screen.png").Show(true);
-        ServiceProvider.GetRequiredService<MainWindow>().Show();
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        mainWindow.Show();
+        mainWindow.WindowState = WindowState.Maximized;
+#if DEBUG
+        mainWindow.ViewModel.RealTimeControlOptions = new("调试");
+#endif
     }
 }

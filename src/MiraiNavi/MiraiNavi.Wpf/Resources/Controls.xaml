@@ -22,7 +22,7 @@
         <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
     </Style>
 
-    <Style TargetType="{x:Type ProgressBar}" x:Key="ProgressBarStyle">
+    <Style x:Key="ProgressBarStyle" TargetType="{x:Type ProgressBar}">
         <Setter Property="Foreground" Value="{DynamicResource ProgressBarForeground}" />
         <Setter Property="Background" Value="{DynamicResource ProgressBarBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ProgressBarBorderBrush}" />

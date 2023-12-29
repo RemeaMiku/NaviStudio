@@ -1,6 +1,6 @@
 ﻿namespace MiraiNavi.Shared.Models;
 
-public record class BaseLinePrecision
+public record class LocalPositionPrecision
 {
     public UtcTime TimeStamp { get; set; }
 

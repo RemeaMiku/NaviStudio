@@ -55,44 +55,83 @@
                     <Image Width="30" Source="{StaticResource NaviStudioLogoDrawingImage}" />
                     <Menu HorizontalAlignment="Left" Background="{ui:ThemeResource}">
                         <ui:MenuItem Header="文件(_F)">
-                            <ui:MenuItem Header="导入(_I)" />
-                            <ui:MenuItem Header="导出(_O)" />
+                            <!--<ui:MenuItem Header="导入(_I)" />
+                            <ui:MenuItem Header="导出(_O)" />-->
                         </ui:MenuItem>
                         <ui:MenuItem Header="视图(_V)">
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="开始窗口(_C)"
-                                Tag="{Binding ElementName=StartView}" />
+                                Header="开始(_S)"
+                                InputGestureText=""
+                                Tag="{Binding ElementName=StartView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="PlaySettings20" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="地图窗口(_M)"
-                                Tag="{Binding ElementName=MapView}" />
+                                Header="地图(_M)"
+                                Tag="{Binding ElementName=MapView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Map24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="导航位姿(_N)"
-                                Tag="{Binding ElementName=PoseView}" />
+                                Header="位姿(_N)"
+                                Tag="{Binding ElementName=PoseView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Location24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
-                                Header="卫星星空图(_S)"
-                                Tag="{Binding ElementName=SkyMapView}" />
+                                Header="卫星星空图(_P)"
+                                Tag="{Binding ElementName=SkyMapView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Target24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
                                 Header="卫星跟踪列表(_T)"
-                                Tag="{Binding ElementName=SatelliteTrackingView}" />
+                                Tag="{Binding ElementName=SatelliteTrackingView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="List24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
                                 Header="属性(_P)"
-                                Tag="{Binding ElementName=PropertyView}" />
+                                Tag="{Binding ElementName=PropertyView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Wrench24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
                                 Header="仪表盘(_D)"
-                                Tag="{Binding ElementName=DashBoardView}" />
+                                Tag="{Binding ElementName=DashBoardView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="TopSpeed24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                             <ui:MenuItem
                                 Click="OnViewMenuItemClicked"
                                 Header="输出(_O)"
-                                Tag="{Binding ElementName=OutputView}" />
+                                Tag="{Binding ElementName=OutputView}">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="ArrowExit20" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
                         </ui:MenuItem>
-                        <ui:MenuItem Header="选项(_O)" />
+                        <ui:MenuItem Header="工具(_T)">
+                            <ui:MenuItem Click="OnChartToolItemClicked" Header="创建图表(_C)">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="ChartMultiple24" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
+                        </ui:MenuItem>
                     </Menu>
                 </StackPanel>
             </ui:TitleBar.Header>
@@ -185,8 +224,7 @@
                     WindowClosing="OnDockingManagerNotDocumentWindowClosing">
                     <ContentControl
                         x:Name="DashBoardView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="220"
-                        syncfusion:DockingManager.DesiredWidthInDockedMode="210"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="{x:Static pages:DashBoardPageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Left"
                         syncfusion:DockingManager.State="Dock"

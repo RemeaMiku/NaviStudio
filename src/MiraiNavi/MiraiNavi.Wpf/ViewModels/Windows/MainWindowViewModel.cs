@@ -49,6 +49,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     public static readonly RealTimeControlOptions DefaultOptions = new("默认");
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
     RealTimeControlOptions? _realTimeControlOptions;
 
     [ObservableProperty]

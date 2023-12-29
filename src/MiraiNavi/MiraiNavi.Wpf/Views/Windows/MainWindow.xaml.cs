@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
+using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
 using Wpf.Ui.Controls;
 
@@ -44,6 +45,14 @@ public partial class MainWindow : UiWindow
 
     public MainWindowViewModel ViewModel { get; }
 
+    public void AddDocument(string header, object content)
+    {
+        var contentControl = new ContentControl() { Content = content };
+        DockingManagerControl.Children.Add(contentControl);
+        DockingManager.SetState(contentControl, DockState.Document);
+        DockingManager.SetHeader(contentControl, header);
+    }
+
     void OnViewMenuItemClicked(object sender, RoutedEventArgs e)
     {
         var contentControl = (ContentControl)((Wpf.Ui.Controls.MenuItem)sender).Tag;
@@ -81,5 +90,10 @@ public partial class MainWindow : UiWindow
     private void DockingManagerControl_Loaded(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void OnChartToolItemClicked(object sender, RoutedEventArgs e)
+    {
+        App.Current.ServiceProvider.GetRequiredService<ChartToolWindow>().ShowDialog();
     }
 }

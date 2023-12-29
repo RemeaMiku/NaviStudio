@@ -45,7 +45,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <sfcharts:SfChart>
+        <sfcharts:SfChart Background="Transparent">
             <sfcharts:SfChart.PrimaryAxis>
                 <sfcharts:NumericalAxis
                     Interval="30"

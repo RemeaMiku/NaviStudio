@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance local:DashBoardPage}"
     d:DesignHeight="200"
     d:DesignWidth="600"

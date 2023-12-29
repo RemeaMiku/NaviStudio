@@ -6,12 +6,6 @@ public record class PosePrecision
 {
     public UtcTime TimeStamp { get; set; }
 
-    public float Ratio { get; set; }
-
-    public float Hdop { get; set; }
-
-    public float Vdop { get; set; }
-
     public float StdEastVelocity { get; set; }
 
     public float StdNorthVelocity { get; set; }

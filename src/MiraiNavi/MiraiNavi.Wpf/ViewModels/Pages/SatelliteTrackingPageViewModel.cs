@@ -18,7 +18,7 @@ public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpoch
     public static string Title => "卫星跟踪列表";
 
     [ObservableProperty]
-    IEnumerable<SatelliteTracking> _satelliteTrackings = Enumerable.Empty<SatelliteTracking>();
+    List<SatelliteTracking>? _satelliteTrackings;
 
     public override void Receive(EpochData message)
     {
@@ -33,6 +33,6 @@ public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpoch
 
     protected override void Reset()
     {
-        SatelliteTrackings = Enumerable.Empty<SatelliteTracking>();
+        SatelliteTrackings = default;
     }
 }

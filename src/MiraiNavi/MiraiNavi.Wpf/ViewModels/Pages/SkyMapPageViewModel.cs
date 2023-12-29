@@ -15,9 +15,9 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
 {
     public static string Title => "卫星天空图";
 
-    public IEnumerable<SatelliteSkyPosition> EnabledPositions => _positions.Where(p => p.Elevation >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
+    public IEnumerable<SatelliteSkyPosition>? EnabledPositions => _positions?.Where(p => p.Elevation >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
 
-    IEnumerable<SatelliteSkyPosition> _positions = Enumerable.Empty<SatelliteSkyPosition>();
+    List<SatelliteSkyPosition>? _positions = default;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(EnabledPositions))]
@@ -39,7 +39,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
 
     protected override void Reset()
     {
-        _positions = Enumerable.Empty<SatelliteSkyPosition>();
+        _positions = default;
         OnPropertyChanged(nameof(EnabledPositions));
     }
 

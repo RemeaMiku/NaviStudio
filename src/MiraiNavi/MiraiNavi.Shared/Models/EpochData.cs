@@ -8,17 +8,17 @@ public record class EpochData
 
     public Pose? Pose { get; set; }
 
-    public double? EastBaseLine { get; set; }
+    public double? EastLocalPosition { get; set; }
 
-    public double? NorthBaseLine { get; set; }
+    public double? NorthLocalPosition { get; set; }
 
-    public double? UpBaseLine { get; set; }
+    public double? UpLocalPosition { get; set; }
 
     public ImuBias? ImuBias { get; set; }
 
     public PosePrecision? PosePrecision { get; set; }
 
-    public BaseLinePrecision? BaseLinePrecision { get; set; }
+    public LocalPositionPrecision? LocalPositionPrecision { get; set; }
 
     public ImuBiasPrecision? ImuBiasPrecision { get; set; }
 
@@ -27,4 +27,15 @@ public record class EpochData
     public List<SatelliteSkyPosition>? SatelliteSkyPositions { get; set; }
 
     public List<SatelliteTracking>? SatelliteTrackings { get; set; }
+
+    public float Ratio { get; set; }
+
+    public float Hdop { get; set; }
+
+    public float Vdop { get; set; }
+
+    public float Pdop { get; set; }
+
+    public float Gdop { get; set; }
+
 }

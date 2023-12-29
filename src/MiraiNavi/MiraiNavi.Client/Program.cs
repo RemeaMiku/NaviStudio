@@ -108,9 +108,9 @@ static EpochData ParseLine(string line)
             ZVelocity = ecef_vz,
             EulerAngles = new(yaw, pitch, roll)
         },
-        EastBaseLine = bl_e,
-        NorthBaseLine = bl_n,
-        UpBaseLine = bl_u,
+        EastLocalPosition = bl_e,
+        NorthLocalPosition = bl_n,
+        UpLocalPosition = bl_u,
         ImuBias = new()
         {
             TimeStamp = timeStamp,
@@ -120,9 +120,6 @@ static EpochData ParseLine(string line)
         PosePrecision = new()
         {
             TimeStamp = timeStamp,
-            Ratio = ratio,
-            Hdop = hdop,
-            Vdop = vdop,
             StdEastVelocity = std_vel_e,
             StdNorthVelocity = std_vel_n,
             StdUpVelocity = std_vel_u,
@@ -136,7 +133,7 @@ static EpochData ParseLine(string line)
             StdYawRoll = std_yaw_roll,
             StdPitchRoll = std_pitch_roll
         },
-        BaseLinePrecision = new()
+        LocalPositionPrecision = new()
         {
             TimeStamp = timeStamp,
             StdEast = std_bl_e,
@@ -151,6 +148,9 @@ static EpochData ParseLine(string line)
             TimeStamp = timeStamp,
             StdAccelerometerBias = new(std_accBias_x, std_accBias_y, std_accBias_z),
             StdGyroscopeBias = new(std_gyroBias_x, std_gyroBias_y, std_gyroBias_z)
-        }
+        },
+        Ratio = ratio,
+        Hdop = hdop,
+        Vdop = vdop,
     };
 }
