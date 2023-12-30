@@ -13,14 +13,18 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}" TargetType="ui:Button">
+            <Setter Property="Height" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}" />
             <Setter Property="Padding" Value="3" />
             <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
         </Style>
     </UserControl.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <syncfusion:DocumentContainer
             x:Name="DocumentContainerControl"
-            Grid.ColumnSpan="2"
             d:Background="Black"
             syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
             Background="Transparent"
@@ -29,10 +33,10 @@
             Mode="MDI"
             PersistState="False" />
         <StackPanel
+            Grid.Row="1"
             Margin="5"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
             Orientation="Horizontal">
             <ui:Button
                 Click="OnLayoutButtonClicked"

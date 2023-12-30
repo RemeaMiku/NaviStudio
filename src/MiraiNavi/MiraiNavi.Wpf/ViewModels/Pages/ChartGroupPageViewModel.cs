@@ -27,26 +27,38 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 
     public override void Receive(EpochData message)
     {
+        var removeCount = _epochCount - MaxEpochCount + 1;
         foreach ((var viewModel, var paras) in ChartParas)
         {
-            Add(message, viewModel, paras);
-            RemoveIfReachMaxEpochCount(viewModel);
+            if (removeCount > 0)
+                viewModel.RemoveOnAllSeries(removeCount);
+            AddOnAllSeries(message, viewModel, paras);
         }
+        _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
     }
 
-    void Add(EpochData epochData, ChartPageViewModel viewModel, ChartParameters paras)
+    protected override void Sync()
+    {
+        Reset();
+        _epochCount = Math.Min(MaxEpochCount, _epochDatasService.Datas.Count);
+        foreach (var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
+            foreach ((var viewModel, var paras) in ChartParas)
+                AddOnAllSeries(epochData, viewModel, paras);
+    }
+
+    static void AddOnAllSeries(EpochData epochData, ChartPageViewModel viewModel, ChartParameters paras)
     {
         foreach ((var label, var func) in paras.LabelFuncs)
             viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
-        _epochCount++;
     }
 
-    void RemoveIfReachMaxEpochCount(ChartPageViewModel viewModel)
+    void RemoveIfReachMaxEpochCount()
     {
         var count = _epochCount - MaxEpochCount;
         if (count <= 0)
             return;
-        viewModel.Remove(count);
+        foreach (var viewModel in ChartParas.Keys)
+            viewModel.RemoveOnAllSeries(count);
         _epochCount -= count;
     }
 

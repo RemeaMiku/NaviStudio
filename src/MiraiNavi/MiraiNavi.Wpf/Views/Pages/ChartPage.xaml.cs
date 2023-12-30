@@ -25,8 +25,8 @@ public partial class ChartPage : UserControl
     [
         (Brush)App.Current.Resources["MikuGreenBrush"],
         (Brush)App.Current.Resources["MeaYellowBrush"],
-        (Brush)App.Current.Resources["MeaBlueBrush"],
         (Brush)App.Current.Resources["MikuRedBrush"],
+        (Brush)App.Current.Resources["MeaBlueBrush"],
     ];
 
     public void CreateSeries(ChartParameters paras)

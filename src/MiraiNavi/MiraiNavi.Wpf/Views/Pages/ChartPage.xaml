@@ -12,21 +12,25 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
+    <Border Padding="20">
         <sfcharts:SfChart x:Name="Chart" Background="Transparent">
             <sfcharts:SfChart.Legend>
-                <sfcharts:ChartLegend />
+                <sfcharts:ChartLegend
+                    DockPosition="Right"
+                    FontSize="{StaticResource SmallFontSize}"
+                    LegendPosition="Outside" />
             </sfcharts:SfChart.Legend>
             <sfcharts:SfChart.PrimaryAxis>
                 <sfcharts:DateTimeAxis
-                    Header="UTC"
+                    FontSize="{StaticResource MediumFontSize}"
+                    Header="UTC(HH:mm:ss)"
                     Interval="1"
                     IntervalType="Seconds"
                     LabelFormat="HH:mm:ss" />
             </sfcharts:SfChart.PrimaryAxis>
             <sfcharts:SfChart.SecondaryAxis>
-                <sfcharts:NumericalAxis Header="{Binding ViewModel.Title}" />
+                <sfcharts:NumericalAxis FontSize="{StaticResource MediumFontSize}" Header="{Binding ViewModel.Title}" />
             </sfcharts:SfChart.SecondaryAxis>
         </sfcharts:SfChart>
-    </Grid>
+    </Border>
 </UserControl>

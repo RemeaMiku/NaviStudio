@@ -18,7 +18,7 @@ public partial class ChartToolWindow : UiWindow
         ViewModel.CreateRequested += (sender, paras) =>
         {
             var page = App.Current.ServiceProvider.GetRequiredService<ChartGroupPage>();
-            App.Current.ServiceProvider.GetRequiredService<MainWindow>().AddDocument(paras.Title, page);
+            App.Current.ServiceProvider.GetRequiredService<MainWindow>().AddDocument($"图表组: {paras.Title}", page);
             page.CreateChartPages(paras);
             Close();
         };

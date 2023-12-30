@@ -23,8 +23,9 @@ public partial class ChartPageViewModel : ObservableObject
 
     public Dictionary<string, ObservableCollection<ChartModel>> SeriesDatas { get; } = [];
 
-    public void Remove(int count)
+    public void RemoveOnAllSeries(int count)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThan(count, 0);
         App.Current.Dispatcher.Invoke(() =>
         {
             foreach (var seriesData in SeriesDatas.Values)
