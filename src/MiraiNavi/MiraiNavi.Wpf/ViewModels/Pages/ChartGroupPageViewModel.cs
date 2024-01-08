@@ -16,7 +16,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 {
 
     [ObservableProperty]
-    string _title = string.Empty;
+    string _title = "图表组";
 
     [ObservableProperty]
     int _maxEpochCount;

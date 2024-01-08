@@ -14,7 +14,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 {
-    public static string Title => "输出";
+    public const string Title = "输出";
+    public const string MenuItemHeader = $"{Title}(_O)";
 
     readonly IMessenger _messenger;
 

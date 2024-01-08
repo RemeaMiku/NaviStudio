@@ -10,14 +10,16 @@ using CommunityToolkit.Mvvm.Input;
 using MiraiNavi.WpfApp.Models;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
-//TODO 属性验证器
+//TODO 属性验证模板
 public partial class ChartToolWindowViewModel : ObservableValidator
 {
-    public static string Title => "图表工具";
+    public const string Title = "创建图表组";
+    public const string MenuItemHeader = $"{Title}(_C)";
 
     public static List<string> EstimatedResultItems { get; } =
     [
         ChartItems.LongitudeAndLatitude,
+        ChartItems.LocalPosition,
         ChartItems.Altitude,
         ChartItems.EulerAngles,
         ChartItems.AccelerometerBias,
@@ -42,7 +44,6 @@ public partial class ChartToolWindowViewModel : ObservableValidator
 
     public static List<string> SatelliteInfoItems { get; } =
     [
-        "卫星可视性",
     ];
 
     public ObservableCollection<string> SelectedItems { get; } = [];
@@ -50,7 +51,7 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyCanExecuteChangedFor(nameof(CreateChartGroupCommand))]
-    [Range(1, 100, ErrorMessage = "大小需在 1 到 100 之间")]
+    [Range(1, 100, ErrorMessage = $"大小需在 1 到 100 之间")]
     int _maxEpochCount = 10;
 
     [ObservableProperty]
@@ -65,7 +66,7 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     {
         if (!SelectedItems.Remove(item))
             SelectedItems.Add(item);
-        ValidateAllProperties();        
+        ValidateAllProperties();
         CreateChartGroupCommand.NotifyCanExecuteChanged();
         ClearErrors();
     }

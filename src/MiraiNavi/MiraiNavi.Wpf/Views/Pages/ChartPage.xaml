@@ -6,14 +6,31 @@
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sfcharts="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     MinWidth="100"
     MinHeight="50"
     d:DataContext="{d:DesignInstance Type=local:ChartPage}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Border Padding="20">
-        <sfcharts:SfChart x:Name="Chart" Background="Transparent">
+    <Border
+        Padding="10"
+        Background="{ui:ThemeResource}"
+        CornerRadius="5">
+        <sfcharts:SfChart x:Name="Chart">
+            <sfcharts:SfChart.Behaviors>
+                <sfcharts:ChartZoomPanBehavior
+                    EnableMouseWheelZooming="True"
+                    EnableSelectionZooming="True"
+                    EnableZoomingToolBar="True"
+                    Fill="{StaticResource MikuGreenBrushAlpha}"
+                    ResetOnDoubleTap="True"
+                    Stroke="{StaticResource MikuGreenBrush}"
+                    StrokeThickness="1"
+                    ToolBarBackground="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                    ToolBarItems="All"
+                    ZoomRelativeToCursor="True" />
+            </sfcharts:SfChart.Behaviors>
             <sfcharts:SfChart.Legend>
                 <sfcharts:ChartLegend
                     DockPosition="Right"
@@ -22,14 +39,14 @@
             </sfcharts:SfChart.Legend>
             <sfcharts:SfChart.PrimaryAxis>
                 <sfcharts:DateTimeAxis
-                    FontSize="{StaticResource MediumFontSize}"
+                    FontSize="{StaticResource SmallFontSize}"
                     Header="UTC(HH:mm:ss)"
                     Interval="1"
                     IntervalType="Seconds"
                     LabelFormat="HH:mm:ss" />
             </sfcharts:SfChart.PrimaryAxis>
             <sfcharts:SfChart.SecondaryAxis>
-                <sfcharts:NumericalAxis FontSize="{StaticResource MediumFontSize}" Header="{Binding ViewModel.Title}" />
+                <sfcharts:NumericalAxis FontSize="{StaticResource SmallFontSize}" Header="{Binding ViewModel.Title}" />
             </sfcharts:SfChart.SecondaryAxis>
         </sfcharts:SfChart>
     </Border>

@@ -139,7 +139,7 @@
                             <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="最大历元数" />
                             <ui:NumberBox
                                 Margin="{StaticResource SmallSpacing}"
-                                Maximum="1000"
+                                Maximum="100"
                                 Minimum="1"
                                 PlaceholderText="输入最大历元数..."
                                 Text="{Binding ViewModel.MaxEpochCount, UpdateSourceTrigger=PropertyChanged}" />
@@ -158,11 +158,10 @@
                             VerticalAlignment="Center"
                             Appearance="Primary"
                             Command="{Binding ViewModel.CreateChartGroupCommand, Mode=OneTime}"
-                            Content="创建图表组"
+                            Content="创建"
                             Icon="ChartMultiple24" />
                     </Grid>
                 </Border>
-
             </Grid>
         </Border>
     </Grid>

@@ -10,7 +10,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    public static string Title => "位姿";
+    public const string Title = "位姿";
+    public const string MenuItemHeader = $"{Title}(_P)";
 
     [ObservableProperty]
     UtcTime _timeStamp;

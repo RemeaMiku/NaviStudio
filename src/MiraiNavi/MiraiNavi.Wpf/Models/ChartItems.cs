@@ -22,7 +22,7 @@ public static class ChartItems
 
     public const string GyroscopeBias = "陀螺仪零偏(°/s)";
 
-    public const string StdLocalPosition = "位置标准差(m)";
+    public const string StdLocalPosition = "本地坐标标准差(m)";
 
     public const string StdVelocity = "速度标准差(m/s)";
 

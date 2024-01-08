@@ -19,7 +19,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     readonly IEpochDatasService _epochDatasService = epochDatasService;
     readonly IRealTimeControlService _realTimeControlService = realTimeControlService;
 
-    public static string Title => "MiraiNavi";
+    public const string Title = "MiraiNavi";
 
     protected override void OnActivated()
     {

@@ -15,7 +15,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 // TODO 添加系统筛选器
 public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    public static string Title => "卫星跟踪列表";
+    public const string Title = "卫星跟踪列表";
+    public const string MenuItemHeader = $"{Title}(_T)";
 
     [ObservableProperty]
     List<SatelliteTracking>? _satelliteTrackings;

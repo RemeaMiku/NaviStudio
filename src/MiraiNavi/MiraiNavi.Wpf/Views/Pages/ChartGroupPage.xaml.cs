@@ -41,6 +41,8 @@ public partial class ChartGroupPage : UserControl
         {
             var page = App.Current.ServiceProvider.GetRequiredService<ChartPage>();
             var paras = ChartParameters.FromChartItem(item);
+            if (paras is null)
+                continue;
             page.CreateSeries(paras);
             ViewModel.ChartParas.Add(page.ViewModel, paras);
             DocumentContainer.SetHeader(page, item);

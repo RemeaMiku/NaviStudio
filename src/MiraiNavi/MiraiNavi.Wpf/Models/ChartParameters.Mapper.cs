@@ -9,7 +9,7 @@ namespace MiraiNavi.WpfApp.Models;
 
 partial class ChartParameters
 {
-    public static ChartParameters FromChartItem(string chartItem) => _chartParas[chartItem];
+    public static ChartParameters? FromChartItem(string chartItem) => _chartParas.GetValueOrDefault(chartItem);
 
     readonly static string[] _xyz = ["X", "Y", "Z"];
     readonly static string[] _enu = ["E", "N", "U"];

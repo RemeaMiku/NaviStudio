@@ -13,7 +13,8 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
 {
-    public static string Title => "卫星天空图";
+    public const string Title = "卫星天空图";
+    public const string MenuItemHeader = $"{Title}(_P)";
 
     public IEnumerable<SatelliteSkyPosition>? EnabledPositions => _positions?.Where(p => p.Elevation >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
 
