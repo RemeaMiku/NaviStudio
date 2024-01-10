@@ -1,7 +1,6 @@
 ﻿using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
 using NaviSharp.Time;
-using System.Collections.ObjectModel;
 
 namespace MiraiNavi.Shared.Models.Solution;
 

@@ -1,7 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using MiraiNavi.WpfApp.ViewModels.Pages;
-using Wpf.Ui.Common;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
 

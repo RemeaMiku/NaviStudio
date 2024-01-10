@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using NaviSharp;
+﻿using NaviSharp;
 using NaviSharp.SpatialReference;
 
 namespace MiraiNavi.Shared.Models.Navi;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Frozen;
 using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
 using MiraiNavi.Shared.Models.Solution;

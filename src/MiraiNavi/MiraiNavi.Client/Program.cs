@@ -1,9 +1,7 @@
 ﻿using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
 using MiraiNavi.Shared.Common.Helpers;
-using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.Shared.Models.Solution.RealTime;
 using MiraiNavi.Shared.Serialization;

@@ -7,7 +7,6 @@ using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using MiraiNavi.WpfApp.Services.Contracts;
 using System.Windows.Media;
-using System.Diagnostics;
 using MiraiNavi.WpfApp.Common.Extensions;
 
 namespace MiraiNavi.WpfApp.Services;

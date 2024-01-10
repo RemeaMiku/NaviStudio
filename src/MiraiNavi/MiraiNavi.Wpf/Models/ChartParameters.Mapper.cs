@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Frozen;
 using MiraiNavi.Shared.Models.Solution;
-using Syncfusion.Windows.PropertyGrid;
 
 namespace MiraiNavi.WpfApp.Models;
 

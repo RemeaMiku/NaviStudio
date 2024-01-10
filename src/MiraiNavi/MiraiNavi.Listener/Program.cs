@@ -1,12 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
-using MiraiNavi.Shared.Models;
-using MiraiNavi.Shared.Serialization;
-using NaviSharp.SpatialReference;
-
-//using var listener = new TcpListener(RealTimeControlOptions.DefaultIPEndPoint);
+﻿//using var listener = new TcpListener(RealTimeControlOptions.DefaultIPEndPoint);
 //listener.Start();
 //Console.WriteLine("Listening");
 //var process = Process.Start("D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe");

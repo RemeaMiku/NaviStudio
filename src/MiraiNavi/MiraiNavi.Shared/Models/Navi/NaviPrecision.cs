@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using NaviSharp;
+﻿using NaviSharp;
 
 namespace MiraiNavi.Shared.Models.Navi;
 

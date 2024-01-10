@@ -5,9 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
-using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
-using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Windows;

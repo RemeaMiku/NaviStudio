@@ -1,15 +1,10 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Extensions;
-using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Common.Messages;
-using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;

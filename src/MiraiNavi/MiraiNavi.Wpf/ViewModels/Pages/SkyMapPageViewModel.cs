@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Data;
+﻿using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -8,7 +6,6 @@ using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
-using NaviSharp;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,11 +7,8 @@ using System.Windows.Shapes;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Extensions.DependencyInjection;
-using MiraiNavi.WpfApp.Common.Extensions;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
-using Wpf.Ui.Common;
-using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
 

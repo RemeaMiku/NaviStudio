@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
@@ -16,7 +15,6 @@ using MiraiNavi.WpfApp.Views.Windows;
 using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
-using Syncfusion.Themes.Windows11Dark.WPF;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
