@@ -1,14 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Common.Helpers;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.WpfApp.Common.Helpers;
+using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
+public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
-    public const string Title = "仪表盘";
+    public const string Title = "速度和姿态仪表盘";
     public const string MenuItemHeader = $"{Title}(_D)";
 
     [ObservableProperty]
@@ -43,7 +44,7 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Roll = default;
     }
 
-    public override void Receive(EpochData data)
+    protected override void Update(EpochData data)
     {
         if (data.Result is null)
         {

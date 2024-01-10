@@ -1,6 +1,6 @@
 ﻿namespace MiraiNavi.WpfApp.Models;
 
-public enum NotificationType
+public enum Notifications
 {
     Reset,
     Sync,

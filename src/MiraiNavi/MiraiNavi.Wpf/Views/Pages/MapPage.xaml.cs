@@ -69,6 +69,7 @@ public partial class MapPage : UserControl
     private void OnGMapMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         GMap.Markers.Remove(_selectedPointMarker);
+        ViewModel.SelectedPoint = default;
         var mousePosition = e.GetPosition(GMap);
         var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
         VisualTreeHelper.HitTest(GMap, null, (r) =>
@@ -76,7 +77,7 @@ public partial class MapPage : UserControl
             if (r.VisualHit is Ellipse e && e.Tag is not null)
             {
                 ViewModel.SelectedPoint = (TimePointLatLng)e.Tag;
-                _selectedPointMarker.Position = ViewModel.SelectedPoint.Item2;
+                _selectedPointMarker.Position = ViewModel.SelectedPoint.Value.Item2;
                 GMap.Markers.Add(_selectedPointMarker);
                 return HitTestResultBehavior.Stop;
             }

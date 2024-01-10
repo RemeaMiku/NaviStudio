@@ -2,14 +2,14 @@
 using System.Text;
 using System.Text.Json;
 using MiraiNavi.Shared.Common.Helpers;
-using MiraiNavi.Shared.Models.Solution;
-using MiraiNavi.Shared.Models.Solution.RealTime;
+using MiraiNavi.Shared.Models;
+using MiraiNavi.Shared.Models.RealTime;
 using MiraiNavi.Shared.Serialization;
 using NaviSharp;
 
-using var reader = new StreamReader("D:\\onedrive\\文档\\WeChat Files\\wxid_anpso2po497f22\\FileStorage\\File\\2024-01\\gps_serial_node_2024_01_06_08_34_51.dts");
+using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
 using var client = new TcpClient();
-client.Connect(RealTimeSolutionOptions.DefaultRoverIPEndPoint);
+client.Connect(RealTimeSolutionOptions.DefaultEpochDataIPEndPoint);
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
 using var writer = new BinaryWriter(stream, Encoding.UTF8);
@@ -28,8 +28,8 @@ while (!reader.EndOfStream)
     var line = reader.ReadLine();
     var epochData = ParseLine(line!);
     var satellites = RandomDataGenerator.GetSatellites(20).Order().ToList();
-    epochData.SatelliteSkyPositions = RandomDataGenerator.GetSatelliteSkyPositions(satellites);
-    epochData.SatelliteTrackings = RandomDataGenerator.GetSatelliteTrackings(satellites);
+    epochData.SatelliteSkyPositions = RandomDataGenerator.GetSatelliteSkyPositions(satellites).ToList();
+    epochData.SatelliteTrackings = RandomDataGenerator.GetSatelliteTrackings(satellites).ToList();
     var message = JsonSerializer.Serialize(epochData, options);
     Console.WriteLine(message);
     writer.Write(message);

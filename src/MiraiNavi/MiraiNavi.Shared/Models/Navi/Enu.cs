@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.Shared.Models;
+﻿namespace MiraiNavi.Shared.Models.Navi;
 
 public record struct Enu
 {

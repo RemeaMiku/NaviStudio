@@ -1,5 +1,5 @@
 ﻿using System.Collections.Frozen;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.WpfApp.Models.Chart;
 
 namespace MiraiNavi.WpfApp.Models;
 

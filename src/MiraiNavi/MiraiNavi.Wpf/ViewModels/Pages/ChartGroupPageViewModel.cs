@@ -1,13 +1,12 @@
 ﻿using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
+public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
 
     [ObservableProperty]
@@ -20,14 +19,14 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 
     public Dictionary<ChartPageViewModel, ChartParameters> ChartParas { get; } = [];
 
-    public override void Receive(EpochData message)
+    protected override void Update(EpochData epochData)
     {
         var removeCount = _epochCount - MaxEpochCount + 1;
         foreach ((var viewModel, var paras) in ChartParas)
         {
             if (removeCount > 0)
                 viewModel.RemoveOnAllSeries(removeCount);
-            AddOnAllSeries(message, viewModel, paras);
+            AddOnAllSeries(epochData, viewModel, paras);
         }
         _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
     }
@@ -35,7 +34,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
     protected override void Sync()
     {
         Reset();
-        _epochCount = Math.Min(MaxEpochCount, _epochDatasService.Datas.Count);
+        _epochCount = Math.Min(MaxEpochCount, _epochDatasService.EpochCount);
         foreach (var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
             foreach ((var viewModel, var paras) in ChartParas)
                 AddOnAllSeries(epochData, viewModel, paras);

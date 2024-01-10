@@ -45,7 +45,6 @@ public partial class App : Application
                 if (window is UiWindow uiWindow)
                     uiWindow.WindowBackdropType = setType;
         }
-
         try
         {
             SetWindowsBackdropType(type);
@@ -83,7 +82,7 @@ public partial class App : Application
 
     public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
         .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-        .AddSingleton<IRealTimeControlService, TcpJsonRealTimeControlService>()
+        .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
         .AddSingleton<IEpochDatasService, EpochDatasService>()
         .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
         .AddTransient<ChartPageViewModel>()
@@ -117,7 +116,9 @@ public partial class App : Application
         ApplyWindowBackdrop(BackgroundType.Acrylic);
         mainWindow.Show();
         mainWindow.WindowState = WindowState.Maximized;
+#if DEBUG
         // TODO DEBUG
-        mainWindow.ViewModel.Options = new("调试");
+        mainWindow.ViewModel.Options = new("Debug");
+#endif
     }
 }

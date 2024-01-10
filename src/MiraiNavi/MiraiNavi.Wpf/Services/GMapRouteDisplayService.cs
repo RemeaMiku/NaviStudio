@@ -268,21 +268,24 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_positionMarker);
         if (!points.Any())
             return;
-        _gMapControl.Markers.Remove(_positionMarker);
-        foreach ((var point, var timeStamp) in points)
+        App.Current.Dispatcher.Invoke(() =>
         {
-            var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
-            _routeMarkers.Add(marker);
-            _timeStamps.Add(timeStamp);
-            _gMapControl.Markers.Add(marker);
-        }
-        if (updatePositionMarker)
-        {
-            _positionMarker.Position = _routeMarkers[^1].Position;
-            _positionIndex = _routeMarkers.Count - 1;
-        }
-        _positionMarker.Shape.Visibility = Visibility.Visible;
-        _gMapControl.Markers.Add(_positionMarker);
+            _gMapControl.Markers.Remove(_positionMarker);
+            foreach ((var point, var timeStamp) in points)
+            {
+                var marker = CreateEllipseMarker(_afterFill, point, timeStamp);
+                _routeMarkers.Add(marker);
+                _timeStamps.Add(timeStamp);
+                _gMapControl.Markers.Add(marker);
+            }
+            if (updatePositionMarker)
+            {
+                _positionMarker.Position = _routeMarkers[^1].Position;
+                _positionIndex = _routeMarkers.Count - 1;
+            }
+            _positionMarker.Shape.Visibility = Visibility.Visible;
+            _gMapControl.Markers.Add(_positionMarker);
+        });
         TryOptimize();
     }
 }

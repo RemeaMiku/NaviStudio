@@ -1,30 +1,32 @@
 ﻿using System.Collections.ObjectModel;
-using MiraiNavi.Shared.Models.Solution;
+using System.Linq;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;
 
-public class EpochDatasService() : IEpochDatasService
+public class EpochDatasService : IEpochDatasService
 {
-    private readonly List<EpochData> _epochDatas = [];
 
-    private readonly HashSet<UtcTime> _existTimeStamps = [];
+    readonly Dictionary<UtcTime, EpochData> _datas = [];
 
-    public ReadOnlyCollection<EpochData> Datas => _epochDatas.AsReadOnly();
+    public EpochData? LastestData => _datas.Values.LastOrDefault();
+
+    public IEnumerable<EpochData> Datas => _datas.Values;
+
+    public int EpochCount => _datas.Count;
+
+    public EpochData? Last => _datas.Values.LastOrDefault();
 
     public void Clear()
     {
-        if (_epochDatas.Count == 0)
+        if (_datas.Count == 0)
             return;
-        _epochDatas.Clear();
-        _existTimeStamps.Clear();
+        _datas.Clear();
     }
 
     public void Add(EpochData epochData)
-    {
-        if (_existTimeStamps.Contains(epochData.TimeStamp))
-            throw new ArgumentException("Data for this timestamp already exists.");
-        _existTimeStamps.Add(epochData.TimeStamp);
-        _epochDatas.Add(epochData);
-    }
+        => _datas.Add(epochData.TimeStamp, epochData);
+
+    public EpochData? GetByTimeStamp(UtcTime timeStamp)
+        => _datas.GetValueOrDefault(timeStamp);
 }

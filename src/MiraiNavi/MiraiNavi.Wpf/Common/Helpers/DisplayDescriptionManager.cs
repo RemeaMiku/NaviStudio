@@ -1,7 +1,6 @@
 ﻿using System.Collections.Frozen;
 using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
-using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Models;
 using NaviSharp;
 using NaviSharp.Time;
@@ -9,23 +8,22 @@ using NaviSharp.SpatialReference;
 
 namespace MiraiNavi.WpfApp.Common.Helpers;
 
-public static class PropertyDescriptionManager
+public static class DisplayDescriptionManager
 {
-    static PropertyDescriptionManager()
+    static DisplayDescriptionManager()
     {
         Descriptions = GetDefaultDescriptions();
     }
 
-    static FrozenDictionary<string, PropertyDescription> GetDefaultDescriptions()
+    static FrozenDictionary<string, DisplayDescription> GetDefaultDescriptions()
     {
-        return new Dictionary<string, PropertyDescription>()
+        return new Dictionary<string, DisplayDescription>()
         {
             {
                 nameof(EpochData.Result),
                 new()
                 {
                     DisplayName = "解算结果",
-                    Category = "导航解算"
                 }
             },
             {
@@ -33,7 +31,6 @@ public static class PropertyDescriptionManager
                 new()
                 {
                     DisplayName = "解算精度",
-                    Category = "导航解算"
                 }
             },
             {
@@ -41,15 +38,13 @@ public static class PropertyDescriptionManager
                 new()
                 {
                     DisplayName = "质量因子",
-                    Category = "导航解算"
                 }
             },
             {
-                nameof(EpochData.TimeStamp),
+                nameof(EpochData.DisplayTimeStamp),
                 new()
                 {
                     DisplayName = "UTC",
-                    Category = "时间戳"
                 }
             },
             {
@@ -57,7 +52,6 @@ public static class PropertyDescriptionManager
                 new()
                 {
                     DisplayName = "GPS时间",
-                    Category = "时间戳"
                 }
             },
             {
@@ -65,7 +59,6 @@ public static class PropertyDescriptionManager
                 new()
                 {
                     DisplayName = "卫星天空坐标数据",
-                    Category = "卫星数据"
                 }
             },
             {
@@ -73,7 +66,6 @@ public static class PropertyDescriptionManager
                 new()
                 {
                     DisplayName = "卫星信号跟踪数据",
-                    Category = "卫星数据"
                 }
             },
             {
@@ -119,34 +111,6 @@ public static class PropertyDescriptionManager
                 {
                     DisplayName = "U",
                     Description = "天向"
-                }
-            },
-            {
-                nameof(UtcTime.Year),
-                new()
-                {
-                    DisplayName = "年",
-                }
-            },
-            {
-                nameof(UtcTime.Month),
-                new()
-                {
-                    DisplayName = "月",
-                }
-            },
-            {
-                nameof(UtcTime.Day),
-                new()
-                {
-                    DisplayName = "日",
-                }
-            },
-            {
-                nameof(UtcTime.TimeOfDay),
-                new()
-                {
-                    DisplayName = "时刻",
                 }
             },
             {
@@ -385,12 +349,5 @@ public static class PropertyDescriptionManager
         }.ToFrozenDictionary();
     }
 
-    public static FrozenDictionary<string, PropertyDescription> Descriptions { get; }
-
-    //public static PropertyDescription GetDescription(string propertyName)
-    //{
-    //    if (_descriptions.TryGetValue(propertyName, out var description))
-    //        return description;
-    //    return new(propertyName);
-    //}
+    public static FrozenDictionary<string, DisplayDescription> Descriptions { get; }
 }

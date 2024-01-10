@@ -2,9 +2,9 @@
 
 namespace MiraiNavi.WpfApp.Models;
 
-public class Output(UtcTime timeStamp, string senderName, InfoBarSeverity severity, string message)
+public class Output(string senderName, InfoBarSeverity severity, string message, string? details = default)
 {
-    public UtcTime TimeStamp { get; } = timeStamp;
+    public UtcTime TimeStamp { get; } = UtcTime.Now;
 
     public string SenderName { get; init; } = senderName;
 
@@ -13,4 +13,6 @@ public class Output(UtcTime timeStamp, string senderName, InfoBarSeverity severi
     public string Message { get; init; } = message;
 
     public string DisplayMessage => $"[{SenderName}] {Message}";
+
+    public string? Details { get; init; } = details;
 }

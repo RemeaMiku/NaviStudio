@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models;
+﻿namespace MiraiNavi.WpfApp.Models.Chart;
 
 public class ChartGroupParameters(string title, int maxEpochCount, IEnumerable<string> items)
 {

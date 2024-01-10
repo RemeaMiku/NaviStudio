@@ -24,7 +24,6 @@ public partial class MainWindow : UiWindow
         DataContext = this;
         App.ApplyTheme();
         SetPages();
-        ViewModel.IsActive = true;
     }
 
     void SetPages()

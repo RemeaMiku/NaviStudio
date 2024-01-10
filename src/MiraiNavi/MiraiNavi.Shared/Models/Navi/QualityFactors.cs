@@ -1,6 +1,6 @@
 ﻿namespace MiraiNavi.Shared.Models.Navi;
 
-public record class QualityFactors
+public class QualityFactors
 {
     public double AmbFixedRatio { get; set; }
 
@@ -12,5 +12,5 @@ public record class QualityFactors
 
     public double GDop { get; set; }
 
-    public int VisibleSalliteCount { get; set; }
+    //public int VisibleSalliteCount { get; set; }
 }

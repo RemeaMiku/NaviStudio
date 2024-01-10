@@ -30,4 +30,6 @@ public record struct SatelliteSkyPosition
     public readonly double AzimuthDegrees => Azimuth.Degrees;
 
     public readonly double ElevationDegrees => Elevation.Degrees;
+
+    public override readonly string ToString() => $"{Satellite}: {Azimuth:F1}°, {Elevation:F1}°";
 }

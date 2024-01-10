@@ -6,8 +6,8 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Extensions.DependencyInjection;
-using MiraiNavi.Shared.Models.Solution;
-using MiraiNavi.Shared.Models.Solution.RealTime;
+using MiraiNavi.Shared.Models.RealTime;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
@@ -15,37 +15,37 @@ using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [FromKeyedServices("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts")] IRealTimeControlService realTimeControlService) : ObservableRecipient, IRecipient<RequestMessage<EpochData>>, IRecipient<RequestMessage<IEnumerable<EpochData>>>
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeSolutionService realTimeControlService, IMessenger messenger) : ObservableObject
 {
     CancellationTokenSource? _tokenSource;
     readonly IEpochDatasService _epochDatasService = epochDatasService;
-    readonly IRealTimeControlService _realTimeControlService = realTimeControlService;
+    readonly IRealTimeSolutionService _realTimeControlService = realTimeControlService;
+    readonly IMessenger _messenger = messenger;
 
     public const string Title = "MiraiNavi";
 
-    protected override void OnActivated()
+    void ValidateEpochData(EpochData epochData)
     {
-        base.OnActivated();
-        _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
-    }
-
-    protected override void OnDeactivated()
-    {
-        base.OnDeactivated();
-        _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
-    }
-
-    private void OnEpochDataReceived(object? sender, EpochData? e)
-    {
-        if (e is null)
+        foreach (var info in typeof(EpochData).GetProperties())
         {
-            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "数据异常"));
+            if (info.GetValue(epochData) is null)
+            {
+                _messenger.Send(new Output(Title, InfoBarSeverity.Warning, $"{DisplayDescriptionManager.Descriptions[info.Name]}数据异常"));
+            }
+        }
+    }
+
+    void OnEpochDataReceived(object? sender, EpochData? data)
+    {
+        if (data is null)
+        {
+            _messenger.Send(new Output(Title, InfoBarSeverity.Warning, "数据异常"));
             return;
         }
-        _epochDatasService.Add(e);
-        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Success, $"已解算第 {_epochDatasService.Datas.Count} 个历元数据：{e.TimeStamp:yyyy/MM/dd HH:mm:ss.fff}"));
+        ValidateEpochData(data);
+        _epochDatasService.Add(data);
         if (IsRealTimeRunning)
-            Messenger.Send(e);
+            _messenger.Send(new NotificationMessage(Notifications.Sync));
     }
 
     public static readonly RealTimeSolutionOptions DefaultOptions = new("默认");
@@ -62,10 +62,25 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     [ObservableProperty]
     bool _isRealTimeRunning;
 
+    partial void OnIsRealTimeStartedChanged(bool value)
+    {
+        if (value)
+        {
+            _messenger.Send(new NotificationMessage(Notifications.Reset));
+            _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "解算开始"));
+            _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
+        }
+        else
+        {
+            _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
+            _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "解算停止"));
+        }
+    }
+
     partial void OnIsRealTimeRunningChanged(bool value)
     {
         if (value)
-            Messenger.Send(new NotificationMessage(NotificationType.Sync));
+            _messenger.Send(new NotificationMessage(Notifications.Sync));
     }
 
     public string StartOrResumeText
@@ -84,16 +99,14 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
         _tokenSource = new();
         IsRealTimeStarted = true;
         IsRealTimeRunning = true;
-        var notificationMessage = Messenger.Send(new NotificationMessage(NotificationType.Reset));
-        Messenger.Send(new Output(notificationMessage.TimeStamp, Title, InfoBarSeverity.Informational, "开始解算"));
         try
         {
-            await _realTimeControlService.StartListeningAsync(Options, _tokenSource.Token);
+            await _realTimeControlService.StartAsync(Options, _tokenSource.Token);
         }
         catch (Exception ex)
         {
-            Trace.TraceError(ex.ToString());
-            Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Error, $"发生致命错误，解算中止：{Environment.NewLine}{ex.Message}"));
+            Trace.TraceError(ex.Message);
+            _messenger.Send(new Output(Title, InfoBarSeverity.Error, $"出错了，实时解算中止：{Environment.NewLine}{ex.Message}", ex.StackTrace));
         }
         finally
         {
@@ -110,7 +123,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
         if (!IsRealTimeStarted)
             return;
         IsRealTimeRunning = true;
-        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Informational, "继续更新"));
+        _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "更新继续"));
     }
 
     [RelayCommand]
@@ -119,7 +132,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
         if (!IsRealTimeRunning)
             return;
         IsRealTimeRunning = false;
-        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Informational, "暂停更新"));
+        _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "更新暂停"));
     }
 
     [RelayCommand]
@@ -130,18 +143,5 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
         ArgumentNullException.ThrowIfNull(_tokenSource);
         _tokenSource.Cancel();
         IsRealTimeStarted = false;
-        Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Informational, "停止解算"));
-    }
-
-    public void Receive(RequestMessage<EpochData> message)
-    {
-        if (_epochDatasService.Datas.Count > 0)
-            message.Reply(_epochDatasService.Datas[^1]);
-    }
-
-    public void Receive(RequestMessage<IEnumerable<EpochData>> message)
-    {
-        if (_epochDatasService.Datas.Count > 0)
-            message.Reply(_epochDatasService.Datas);
     }
 }

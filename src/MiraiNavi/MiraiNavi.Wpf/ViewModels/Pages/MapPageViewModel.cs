@@ -2,14 +2,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using GMap.NET;
-using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Extensions;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableNotificationEpochDataRecipient(messenger, epochDatasService)
+public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService, IGMapRouteDisplayService gMapRouteReplayService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
     public const string Title = "地图";
     public const string MenuItemHeader = $"{Title}(_M)";
@@ -22,8 +22,8 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     [ObservableProperty]
     bool _keepCenter = true;
 
-    [ObservableProperty]
-    bool _isRealTime = false;
+    //[ObservableProperty]
+    //bool _isRealTime = false;
 
     [ObservableProperty]
     int _positionIndex = -1;
@@ -32,12 +32,12 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     int _routePointsCount = 0;
 
     [ObservableProperty]
-    TimePointLatLng _selectedPoint;
+    TimePointLatLng? _selectedPoint;
 
-    partial void OnSelectedPointChanged(TimePointLatLng value)
+    partial void OnSelectedPointChanged(TimePointLatLng? value)
     {
-        (var timeStamp, var _) = SelectedPoint;
-        Messenger.Send(_epochDatasService.GetEpochDataByTimeStamp(timeStamp), Title);
+        var epochData = !value.HasValue ? default : _epochDatasService.GetByTimeStamp(value.Value.Item1);
+        Messenger.Send(new ValueChangedMessage<EpochData?>(epochData), Title);
     }
 
     [RelayCommand]
@@ -48,15 +48,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
             MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 
-    protected override void OnActivated()
-    {
-        base.OnActivated();
-        if (!IsRealTime)
-            return;
-        Sync();
-    }
-
-    public override void Receive(EpochData data)
+    protected override void Update(EpochData data)
     {
         if (data.Result is null)
             return;
@@ -69,10 +61,19 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     protected override void Sync()
     {
-        KeepCenter = true;
+        if (_epochDatasService.Last is null)
+        {
+            Reset();
+            return;
+        }
+        if (_epochDatasService.EpochCount == RoutePointsCount + 1)
+        {
+            Update(_epochDatasService.Last);
+            return;
+        }
         _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Result!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
-        RoutePointsCount = _epochDatasService.Datas.Count;
-        if (_gMapRouteDisplayService.CurrentPosition.HasValue)
+        RoutePointsCount = _epochDatasService.EpochCount;
+        if (KeepCenter && _gMapRouteDisplayService.CurrentPosition.HasValue)
             MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 
@@ -85,7 +86,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     protected override void Reset()
     {
         _gMapRouteDisplayService.Clear();
-        IsRealTime = true;
+        //IsRealTime = true;
         KeepCenter = true;
     }
 }

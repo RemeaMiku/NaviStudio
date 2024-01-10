@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Chart;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

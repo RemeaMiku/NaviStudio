@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using Syncfusion.Windows.Tools.Controls;
 

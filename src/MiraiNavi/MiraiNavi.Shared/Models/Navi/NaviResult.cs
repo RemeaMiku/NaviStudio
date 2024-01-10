@@ -3,7 +3,7 @@ using NaviSharp.SpatialReference;
 
 namespace MiraiNavi.Shared.Models.Navi;
 
-public record class NaviResult
+public class NaviResult
 {
     public Xyz EcefCoord { get; set; }
 

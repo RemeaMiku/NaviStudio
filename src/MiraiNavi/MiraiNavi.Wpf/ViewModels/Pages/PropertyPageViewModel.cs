@@ -1,17 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.Shared.Models.Solution;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class PropertyPageViewModel : ObservableRecipient, IRecipient<EpochData>
+public partial class PropertyPageViewModel : ObservableRecipient, IRecipient<ValueChangedMessage<EpochData?>>
 {
     [ObservableProperty]
-    EpochData? _epochData;
+    object? _epochData;
 
-    public void Receive(EpochData? message)
+    public void Receive(ValueChangedMessage<EpochData?> message)
     {
-        EpochData = message;
+        EpochData = message.Value;
     }
 
     protected override void OnActivated()

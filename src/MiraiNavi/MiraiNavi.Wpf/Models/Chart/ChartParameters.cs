@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using MiraiNavi.Shared.Models.Solution;
 
 namespace MiraiNavi.WpfApp.Models;
 

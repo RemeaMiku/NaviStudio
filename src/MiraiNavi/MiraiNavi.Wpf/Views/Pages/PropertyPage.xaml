@@ -13,17 +13,23 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="100" />
-            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="80" MinHeight="10" />
         </Grid.RowDefinitions>
         <syncfusion:PropertyGrid
             x:Name="PropertyGrid"
             d:Background="Black"
             AutoGeneratingPropertyGridItem="OnPropertyGridAutoGeneratingPropertyGridItem"
             Background="Transparent"
+            ButtonPanelVisibility="Collapsed"
             CategoryForeground="{StaticResource MikuGreenBrush}"
+            CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
+            EnableGrouping="False"
+            FontSize="20"
+            IsVirtualizing="True"
             PropertyExpandMode="NestedMode"
             ReadOnlyBackground="Transparent"
             SelectedObject="{Binding ViewModel.EpochData, Mode=OneWay}"
+            SortDirection="{x:Null}"
             ViewBackgroundColor="Transparent" />
         <TextBlock
             Grid.Row="1"

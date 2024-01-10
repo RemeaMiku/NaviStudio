@@ -9,4 +9,6 @@ public record struct SatelliteTracking
     public double Frequency { get; set; }
 
     public double SignalNoiseRatio { get; set; }
+
+    public override readonly string ToString() => $"{Satellite}: {Frequency}, {SignalNoiseRatio:F1}";
 }

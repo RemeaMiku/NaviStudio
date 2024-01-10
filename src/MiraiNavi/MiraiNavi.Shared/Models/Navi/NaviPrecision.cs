@@ -2,7 +2,7 @@
 
 namespace MiraiNavi.Shared.Models.Navi;
 
-public record class NaviPrecision
+public class NaviPrecision
 {
     public Enu StdLocalCoord { get; set; }
 

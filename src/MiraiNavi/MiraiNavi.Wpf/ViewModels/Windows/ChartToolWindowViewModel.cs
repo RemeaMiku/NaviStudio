@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Chart;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 //TODO 属性验证模板

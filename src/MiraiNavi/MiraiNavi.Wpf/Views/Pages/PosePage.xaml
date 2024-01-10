@@ -35,17 +35,6 @@
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="GPS 时 : (WN, SOW)" />
-                <TextBlock
-                    Margin="{StaticResource SmallSpacing}"
-                    d:Foreground="White"
-                    d:Text="2024, 114514"
-                    FontSize="{StaticResource LargeFontSize}"
-                    Text="{Binding ViewModel.GpsTime, Mode=OneWay}" />
-                <TextBlock
-                    Margin="{StaticResource LargeSpacing}"
-                    d:Foreground="White"
-                    FontSize="{StaticResource SmallFontSize}"
                     Text="位置 : 纬度(°), 经度(°), 椭球高(m)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"

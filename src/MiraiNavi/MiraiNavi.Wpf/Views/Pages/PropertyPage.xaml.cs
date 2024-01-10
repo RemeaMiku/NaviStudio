@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Windows.Controls;
+using System.Windows.Input;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using Syncfusion.Windows.PropertyGrid;
@@ -21,14 +24,18 @@ public partial class PropertyPage : UserControl
 
     private void OnPropertyGridAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
-        if (!PropertyDescriptionManager.Descriptions.TryGetValue(e.DisplayName, out var description))
+        if (!DisplayDescriptionManager.Descriptions.TryGetValue(e.DisplayName, out var description))
         {
             e.Cancel = true;
             return;
         }
         e.DisplayName = description.DisplayName;
         e.Description = description.Description;
-        e.Category = description.Category;
         e.ReadOnly = true;
+    }
+
+    private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
+    {
+        e.IsReadonly = true;
     }
 }
