@@ -63,7 +63,7 @@
                 <sfcharts:PolarSeries
                     DrawType="Area"
                     Interior="Transparent"
-                    ItemsSource="{Binding ViewModel.EnabledPositions}"
+                    ItemsSource="{Binding ViewModel.EnabledPositions, Mode=OneWay}"
                     XBindingPath="{x:Static local:SkyMapPage.XBindingPath}"
                     YBindingPath="{x:Static local:SkyMapPage.YBindingPath}">
                     <sfcharts:PolarSeries.AdornmentsInfo>
@@ -77,14 +77,14 @@
                                         <Ellipse
                                             Width="{StaticResource SymbolSize}"
                                             Height="{StaticResource SymbolSize}"
-                                            Fill="{Binding Item.Satellite.System, Converter={StaticResource SatelliteSystemTypeToBrushConverter}}" />
+                                            Fill="{Binding Item.Satellite.System, Converter={StaticResource SatelliteSystemTypeToBrushConverter}, Mode=OneTime}" />
                                         <TextBlock
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             FontSize="{StaticResource SmallFontSize}"
                                             FontWeight="Bold"
                                             Style="{StaticResource DynamicForegroundTextBlock}"
-                                            Text="{Binding Item.Satellite.Number, StringFormat=' {0:D2} '}" />
+                                            Text="{Binding Item.Satellite.Number, StringFormat=' {0:D2} ', Mode=OneTime}" />
                                     </Grid>
                                 </DataTemplate>
                             </sfcharts:ChartAdornmentInfo.LabelTemplate>

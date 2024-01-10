@@ -3,13 +3,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
 using MiraiNavi.Shared.Common.Helpers;
-using MiraiNavi.Shared.Models;
+using MiraiNavi.Shared.Models.Satellites;
+using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Solution.RealTime;
 using MiraiNavi.Shared.Serialization;
 using NaviSharp;
 
-using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
+using var reader = new StreamReader("D:\\onedrive\\文档\\WeChat Files\\wxid_anpso2po497f22\\FileStorage\\File\\2024-01\\gps_serial_node_2024_01_06_08_34_51.dts");
 using var client = new TcpClient();
-client.Connect(RealTimeControlOptions.DefaultIPEndPoint);
+client.Connect(RealTimeSolutionOptions.DefaultRoverIPEndPoint);
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
 using var writer = new BinaryWriter(stream, Encoding.UTF8);
@@ -21,15 +23,15 @@ var options = new JsonSerializerOptions()
     WriteIndented = true,
 };
 options.Converters.Add(new UtcTimeJsonConverter());
-options.Converters.Add(new Vector3JsonConverter());
+//options.Converters.Add(new XyzJsonConverter());
 while (!reader.EndOfStream)
 {
     var startTime = DateTime.Now;
     var line = reader.ReadLine();
     var epochData = ParseLine(line!);
-    epochData.Satellites = new(RandomDataGenerator.GetSatellites(20).Order());
-    epochData.SatelliteSkyPositions = new(RandomDataGenerator.GetSatelliteSkyPositions(epochData.Satellites));
-    epochData.SatelliteTrackings = new(RandomDataGenerator.GetSatelliteTrackings(epochData.Satellites));
+    var satellites = RandomDataGenerator.GetSatellites(20).Order().ToList();
+    epochData.SatelliteSkyPositions = RandomDataGenerator.GetSatelliteSkyPositions(satellites);
+    epochData.SatelliteTrackings = RandomDataGenerator.GetSatelliteTrackings(satellites);
     var message = JsonSerializer.Serialize(epochData, options);
     Console.WriteLine(message);
     writer.Write(message);
@@ -95,62 +97,24 @@ static EpochData ParseLine(string line)
     return new()
     {
         TimeStamp = timeStamp,
-        Pose = new()
+        Result = new()
         {
-            TimeStamp = timeStamp,
             EcefCoord = new(ecef_x, ecef_y, ecef_z),
             GeodeticCoord = new(lat, lng, hgt),
-            EastVelocity = vel_e,
-            NorthVelocity = vel_n,
-            UpVelocity = vel_u,
-            XVelocity = ecef_vx,
-            YVelocity = ecef_vy,
-            ZVelocity = ecef_vz,
-            EulerAngles = new(yaw, pitch, roll)
+            Velocity = new(vel_e, vel_n, vel_u),
+            LocalCoord = new(bl_e, bl_n, bl_u),
+            Attitude = new(yaw, pitch, roll)
         },
-        EastLocalPosition = bl_e,
-        NorthLocalPosition = bl_n,
-        UpLocalPosition = bl_u,
-        ImuBias = new()
+        Precision = new()
         {
-            TimeStamp = timeStamp,
-            AccelerometerBias = new(accBias_x, accBias_y, accBias_z),
-            GyroscopeBias = new(gyroBias_x, gyroBias_y, gyroBias_z)
+            StdLocalCoord = new(std_bl_e, std_bl_n, std_bl_u),
+            StdVelocity = new(std_vel_e, std_vel_n, std_vel_u),
+            StdAttitude = new(std_yaw, std_pitch, std_roll),
         },
-        PosePrecision = new()
+        QualityFactors = new()
         {
-            TimeStamp = timeStamp,
-            StdEastVelocity = std_vel_e,
-            StdNorthVelocity = std_vel_n,
-            StdUpVelocity = std_vel_u,
-            StdEastNorthVelocity = std_vel_en,
-            StdEastUpVelocity = std_vel_eu,
-            StdNorthUpVelocity = std_vel_nu,
-            StdYaw = std_yaw,
-            StdPitch = std_pitch,
-            StdRoll = std_roll,
-            StdYawPitch = std_yaw_pitch,
-            StdYawRoll = std_yaw_roll,
-            StdPitchRoll = std_pitch_roll
-        },
-        LocalPositionPrecision = new()
-        {
-            TimeStamp = timeStamp,
-            StdEast = std_bl_e,
-            StdNorth = std_bl_n,
-            StdUp = std_bl_u,
-            StdEastNorth = std_bl_en,
-            StdEastUp = std_bl_eu,
-            StdNorthUp = std_bl_nu
-        },
-        ImuBiasPrecision = new()
-        {
-            TimeStamp = timeStamp,
-            StdAccelerometerBias = new(std_accBias_x, std_accBias_y, std_accBias_z),
-            StdGyroscopeBias = new(std_gyroBias_x, std_gyroBias_y, std_gyroBias_z)
-        },
-        Ratio = ratio,
-        Hdop = hdop,
-        Vdop = vdop,
+            AmbFixedRatio = ratio,
+            HDop = hdop,
+        }
     };
 }

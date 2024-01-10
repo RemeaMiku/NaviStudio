@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Models.Satellites;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
 using Wpf.Ui.Controls;
@@ -29,7 +30,7 @@ public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpoch
             Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, "卫星跟踪数据异常"));
             return;
         }
-        SatelliteTrackings = message.SatelliteTrackings;
+        SatelliteTrackings = message.SatelliteTrackings.ToList();
     }
 
     protected override void Reset()

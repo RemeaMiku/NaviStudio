@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,8 +8,11 @@ using System.Windows.Shapes;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.WpfApp.Common.Extensions;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
+using Wpf.Ui.Common;
+using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
 
@@ -24,6 +28,12 @@ public partial class MapPage : UserControl
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         DataContext = this;
         InitializeGMap();
+        var shape = (FrameworkElement)Resources["SelectedPointMarkerShape"];
+        _selectedPointMarker = new GMapMarker(new())
+        {
+            Shape = shape,
+            Offset = new(0, -20)
+        };
         //TODO：比例尺
         //GMap.OnMapZoomChanged += () => Test.Text = GMap.MapProvider.Projection.GetGroundResolution((int)GMap.Zoom, GMap.Position.Lat).ToString();
     }
@@ -58,22 +68,24 @@ public partial class MapPage : UserControl
         GMap.DragButton = MouseButton.Right;
     }
 
+    readonly GMapMarker _selectedPointMarker;
+
     private void OnGMapMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        //TODO:测试点击Marker：VisualTreeHelper.HitTest
-        //var mousePosition = e.GetPosition(GMap);
-        //var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
-        //VisualTreeHelper.HitTest(GMap, null, (r) =>
-        //{
-        //    if (r.VisualHit is Ellipse e && e.Tag is not null)
-        //    {
-        //        (var location, var timeStamp) = ((PointLatLng, UtcTime))e.Tag;
-        //        MessageBox.Show($"{timeStamp:yyyy/MM/dd HH:mm:ss.fff}{Environment.NewLine}纬度：{location.Lat}, 经度：{location.Lng}");
-        //        return HitTestResultBehavior.Stop;
-        //    }
-        //    return HitTestResultBehavior.Continue;
-        //}, new PointHitTestParameters(mousePosition));
-
+        GMap.Markers.Remove(_selectedPointMarker);
+        var mousePosition = e.GetPosition(GMap);
+        var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
+        VisualTreeHelper.HitTest(GMap, null, (r) =>
+        {
+            if (r.VisualHit is Ellipse e && e.Tag is not null)
+            {
+                ViewModel.SelectedPoint = (TimePointLatLng)e.Tag;
+                _selectedPointMarker.Position = ViewModel.SelectedPoint.Item2;
+                GMap.Markers.Add(_selectedPointMarker);
+                return HitTestResultBehavior.Stop;
+            }
+            return HitTestResultBehavior.Continue;
+        }, new PointHitTestParameters(mousePosition));
     }
 
     private void OnGMapOnPositionChanged(PointLatLng point)

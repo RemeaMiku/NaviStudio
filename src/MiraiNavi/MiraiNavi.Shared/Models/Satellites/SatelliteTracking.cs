@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiraiNavi.Shared.Models.Satellites;
 
-public struct SatelliteTracking
+public record struct SatelliteTracking
 {
     public Satellite Satellite { get; set; }
 

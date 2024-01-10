@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Numerics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Common.Helpers;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
@@ -48,14 +50,14 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
 
     public override void Receive(EpochData data)
     {
-        if (data.Pose is null)
+        if (data.Result is null)
         {
             Reset();
             return;
         }
-        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(data.Pose.Velocity);
-        Yaw = data.Pose.EulerAngles.Yaw.Degrees;
-        Pitch = data.Pose.EulerAngles.Pitch.Degrees;
-        Roll = data.Pose.EulerAngles.Roll.Degrees;
+        Speed = UnitConverter.MetersPerSecondToKilometersPerHour(data.Result.Velocity.Length());
+        Yaw = data.Result.Attitude.Yaw.Degrees;
+        Pitch = data.Result.Attitude.Pitch.Degrees;
+        Roll = data.Result.Attitude.Roll.Degrees;
     }
 }

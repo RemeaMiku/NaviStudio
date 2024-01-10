@@ -5,8 +5,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Models.Satellites;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
+using NaviSharp;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
@@ -16,7 +18,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     public const string Title = "卫星天空图";
     public const string MenuItemHeader = $"{Title}(_P)";
 
-    public IEnumerable<SatelliteSkyPosition>? EnabledPositions => _positions?.Where(p => p.Elevation >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
+    public IEnumerable<SatelliteSkyPosition>? EnabledPositions => _positions?.Where(p => p.Elevation.Degrees >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
 
     List<SatelliteSkyPosition>? _positions = default;
 
@@ -34,7 +36,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
             Reset();
             return;
         }
-        _positions = message.SatelliteSkyPositions;
+        _positions = message.SatelliteSkyPositions.ToList();
         OnPropertyChanged(nameof(EnabledPositions));
     }
 

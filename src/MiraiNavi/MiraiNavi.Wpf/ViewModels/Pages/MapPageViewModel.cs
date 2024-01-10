@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Extensions;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messages;
@@ -34,6 +36,15 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     [ObservableProperty]
     int _routePointsCount = 0;
 
+    [ObservableProperty]
+    TimePointLatLng _selectedPoint;
+
+    partial void OnSelectedPointChanged(TimePointLatLng value)
+    {
+        (var timeStamp, var _) = SelectedPoint;
+        Messenger.Send(_epochDatasService.GetEpochDataByTimeStamp(timeStamp), Title);
+    }
+
     [RelayCommand]
     void ReturnToPosition()
     {
@@ -52,10 +63,10 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     public override void Receive(EpochData data)
     {
-        if (data.Pose is null)
+        if (data.Result is null)
             return;
         RoutePointsCount++;
-        var point = data.Pose.GeodeticCoord.ToPointLatLng();
+        var point = data.Result.GeodeticCoord.ToPointLatLng();
         if (KeepCenter)
             MapCenter = point;
         _gMapRouteDisplayService.AddPoint(point, data.TimeStamp, true);
@@ -64,7 +75,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     protected override void Sync()
     {
         KeepCenter = true;
-        _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Pose!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
+        _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Result!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
         RoutePointsCount = _epochDatasService.Datas.Count;
         if (_gMapRouteDisplayService.CurrentPosition.HasValue)
             MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;

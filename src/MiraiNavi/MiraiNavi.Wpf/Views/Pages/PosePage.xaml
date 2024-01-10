@@ -7,11 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance local:PosePage}"
-    d:DesignHeight="220"
+    d:DesignHeight="320"
     d:DesignWidth="400"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Thickness x:Key="SmallSpacing">0,3,0,0</Thickness>
+        <Thickness x:Key="SmallSpacing">0,-3,0,0</Thickness>
         <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
     </UserControl.Resources>
     <Border Padding="10" d:Background="Black">
@@ -24,16 +24,29 @@
                 <TextBlock
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="UTC：(yyyy/MM/dd HH:mm:ss.fff)" />
+                    Text="UTC : " />
                 <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
                     d:Text="2023/08/31 11:45:14.831"
                     FontSize="{StaticResource LargeFontSize}"
                     Text="{Binding ViewModel.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', Mode=OneWay}" />
                 <TextBlock
+                    Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="位置：B(°), L(°), H(m)" />
+                    Text="GPS 时 : (WN, SOW)" />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    d:Text="2024, 114514"
+                    FontSize="{StaticResource LargeFontSize}"
+                    Text="{Binding ViewModel.GpsTime, Mode=OneWay}" />
+                <TextBlock
+                    Margin="{StaticResource LargeSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="位置 : 纬度(°), 经度(°), 椭球高(m)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
@@ -48,18 +61,24 @@
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="速度：(m/s)" />
+                    Text="速度 : 大小(m/s), E(m/s), N(m/s), U(m/s)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"
-                    d:Text="11.4"
-                    FontSize="{StaticResource LargeFontSize}"
-                    Text="{Binding ViewModel.Velocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run d:Text="14.0" Text="{Binding ViewModel.Velocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="1.0" Text="{Binding ViewModel.EastVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="2.0" Text="{Binding ViewModel.NorthVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="3.0" Text="{Binding ViewModel.UpVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                </TextBlock>
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"
                     FontSize="{StaticResource SmallFontSize}"
-                    Text="姿态：Yaw(°), Pitch(°)，Roll(°)" />
+                    Text="姿态：航向(°), 俯仰(°)，横滚(°)" />
                 <TextBlock
                     Margin="{StaticResource SmallSpacing}"
                     d:Foreground="White"

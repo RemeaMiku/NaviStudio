@@ -1,14 +1,18 @@
 ﻿using System.Net;
 
-namespace MiraiNavi.Shared.Models;
+namespace MiraiNavi.Shared.Models.Solution.RealTime;
 
-public class RealTimeControlOptions(string name)
+public class RealTimeSolutionOptions(string name)
 {
-    public static readonly IPEndPoint DefaultIPEndPoint = new(IPAddress.Loopback, 39831);
+    //public static readonly IPEndPoint DefaultBaseIPEndPoint=new(new(),);
+
+    public static readonly IPEndPoint DefaultRoverIPEndPoint = new(IPAddress.Loopback, 39831);
 
     public string Name { get; set; } = name;
 
-    public IPEndPoint IPEndPoint { get; set; } = DefaultIPEndPoint;
+    public IPEndPoint BaseRoverEndPoint { get; set; } = null!;
+
+    public IPEndPoint RoverIPEndPoint { get; set; } = DefaultRoverIPEndPoint;
 
     public int MaxEpochCount { get; set; } = int.MaxValue;
 

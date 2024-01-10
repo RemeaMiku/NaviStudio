@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
+using NaviSharp.Time;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
@@ -14,7 +16,10 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     public const string MenuItemHeader = $"{Title}(_P)";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(GpsTime))]
     UtcTime _timeStamp;
+
+    public GpsTime GpsTime => GpsTime.FromUtc(TimeStamp);
 
     [ObservableProperty]
     double _latitude;
@@ -37,6 +42,15 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     [ObservableProperty]
     double _velocity;
 
+    [ObservableProperty]
+    double _eastVelocity;
+
+    [ObservableProperty]
+    double _northVelocity;
+
+    [ObservableProperty]
+    double _upVelocity;
+
     protected override void Reset()
     {
         TimeStamp = default;
@@ -47,6 +61,9 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         Pitch = double.NaN;
         Roll = double.NaN;
         Velocity = double.NaN;
+        EastVelocity = double.NaN;
+        NorthVelocity = double.NaN;
+        UpVelocity = double.NaN;
     }
 
     protected override void OnActivated()
@@ -68,18 +85,21 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     public override void Receive(EpochData data)
     {
         TimeStamp = data.TimeStamp;
-        if (data.Pose is null)
+        if (data.Result is null)
         {
             Reset();
             Messenger.Send(new Output(UtcTime.Now, Title, InfoBarSeverity.Warning, $"{data.TimeStamp} 历元位姿数据异常"));
             return;
         }
-        Latitude = data.Pose.GeodeticCoord.Latitude.Degrees;
-        Longitude = data.Pose.GeodeticCoord.Longitude.Degrees;
-        Altitude = data.Pose.GeodeticCoord.Altitude;
-        Yaw = data.Pose.EulerAngles.Yaw.Degrees;
-        Pitch = data.Pose.EulerAngles.Pitch.Degrees;
-        Roll = data.Pose.EulerAngles.Roll.Degrees;
-        Velocity = data.Pose.Velocity;
+        Latitude = data.Result.GeodeticCoord.Latitude.Degrees;
+        Longitude = data.Result.GeodeticCoord.Longitude.Degrees;
+        Altitude = data.Result.GeodeticCoord.Altitude;
+        Yaw = data.Result.Attitude.Yaw.Degrees;
+        Pitch = data.Result.Attitude.Pitch.Degrees;
+        Roll = data.Result.Attitude.Roll.Degrees;
+        Velocity = data.Result.Velocity.Length();
+        EastVelocity = data.Result.Velocity.E;
+        NorthVelocity = data.Result.Velocity.N;
+        UpVelocity = data.Result.Velocity.U;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;

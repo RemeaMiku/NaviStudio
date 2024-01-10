@@ -19,27 +19,28 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     public static List<string> EstimatedResultItems { get; } =
     [
         ChartItems.LongitudeAndLatitude,
-        ChartItems.LocalPosition,
         ChartItems.Altitude,
-        ChartItems.EulerAngles,
-        ChartItems.AccelerometerBias,
-        ChartItems.GyroscopeBias,
+        ChartItems.LocalCoord,
+        ChartItems.Velocity,
+        ChartItems.Attitude,
+        //ChartItems.AccelerometerBias,
+        //ChartItems.GyroscopeBias,
     ];
 
     public static List<string> EstimatedAccuracyItems { get; } =
     [
-        ChartItems.StdLocalPosition,
+        ChartItems.StdLocalCoord,
         ChartItems.StdVelocity,
-        ChartItems.StdEulerAngles,
-        ChartItems.StdAccelerometerBias,
-        ChartItems.StdGyroscopeBias,
+        ChartItems.StdAttitude,
+        //ChartItems.StdAccelerometerBias,
+        //ChartItems.StdGyroscopeBias,
     ];
 
     public static List<string> QualityCheckItems { get; } =
     [
         ChartItems.Dop,
         ChartItems.Ratio,
-        ChartItems.SatelliteCount,
+        //ChartItems.VisibleSatelliteCount,
     ];
 
     public static List<string> SatelliteInfoItems { get; } =

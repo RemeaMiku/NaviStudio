@@ -1,4 +1,5 @@
 ﻿using MiraiNavi.Shared.Models.Satellites;
+using NaviSharp;
 
 namespace MiraiNavi.Shared.Common.Helpers;
 
@@ -22,8 +23,8 @@ public static class RandomDataGenerator
         return new SatelliteSkyPosition
         {
             Satellite = satellite,
-            Azimuth = random.NextDouble() * 360,
-            Elevation = random.NextDouble() * 90
+            Azimuth = Angle.FromDegrees(random.NextDouble() * 360),
+            Elevation = Angle.FromDegrees(random.NextDouble() * 90)
         };
     }
 

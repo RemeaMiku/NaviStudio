@@ -7,6 +7,7 @@ using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Windows;
@@ -23,11 +24,6 @@ public partial class MainWindow : UiWindow
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
-        Loaded += OnMainWindowLoaded;
-    }
-
-    private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
-    {
         App.ApplyTheme();
         SetPages();
         ViewModel.IsActive = true;
@@ -41,6 +37,7 @@ public partial class MainWindow : UiWindow
         DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
         OutputView.Content = App.Current.ServiceProvider.GetRequiredService<OutputPage>();
         SatelliteTrackingView.Content = App.Current.ServiceProvider.GetRequiredService<SatelliteTrackingPage>();
+        PropertyView.Content = App.Current.ServiceProvider.GetRequiredService<PropertyPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }

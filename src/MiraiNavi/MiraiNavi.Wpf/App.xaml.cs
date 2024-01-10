@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
@@ -17,6 +18,7 @@ using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
 using Syncfusion.Themes.Windows11Dark.WPF;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp;
 
@@ -35,25 +37,39 @@ public partial class App : Application
         ApplyTheme();
     }
 
+    public bool ApplyWindowBackdrop(BackgroundType type)
+    {
+        if (!Background.IsSupported(type)) return false;
+        var preType = Windows.OfType<MainWindow>().First().WindowBackdropType;
+        void SetWindowsBackdropType(BackgroundType setType)
+        {
+            foreach (var window in Windows)
+                if (window is UiWindow uiWindow)
+                    uiWindow.WindowBackdropType = setType;
+        }
+
+        try
+        {
+            SetWindowsBackdropType(type);
+            return true;
+        }
+        catch (Exception)
+        {
+            SetWindowsBackdropType(preType);
+            return false;
+        }
+    }
+
     public static void ApplyTheme()
     {
         Accent.Apply((Color)ColorConverter.ConvertFromString("#FF39c5bb"));
-        Wpf.Ui.Appearance.Theme.Apply(ThemeType.Dark, BackgroundType.Acrylic, false, true);
+        Wpf.Ui.Appearance.Theme.Apply(ThemeType.Dark, BackgroundType.Auto, false, true);
         SfSkinManager.RegisterThemeSettings("FluentDark", new FluentDarkThemeSettings()
         {
             PrimaryBackground = Accent.PrimaryAccentBrush,
             FontFamily = new("Microsoft YaHei UI"),
             PrimaryForeground = Brushes.White,
         });
-        //SfSkinManager.RegisterThemeSettings("Windows11Dark", new Windows11DarkThemeSettings()
-        //{
-        //    PrimaryBackground = Accent.PrimaryAccentBrush,
-        //    FontFamily = new("Microsoft YaHei UI"),
-        //    BodyAltFontSize = 12,
-        //    HeaderFontSize = 24,
-        //    SubHeaderFontSize = 18,
-        //    PrimaryForeground = Brushes.White,
-        //});
     }
 
     static void RegisterKeys()
@@ -81,6 +97,7 @@ public partial class App : Application
         .AddSingleton<DashBoardPageViewModel>()
         .AddSingleton<PosePageViewModel>()
         .AddSingleton<MainWindowViewModel>()
+        .AddSingleton<PropertyPageViewModel>()
         .AddTransient<ChartToolWindowViewModel>()
         .AddSingleton<SatelliteTrackingPage>()
         .AddSingleton<OutputPage>()
@@ -89,6 +106,7 @@ public partial class App : Application
         .AddSingleton<SkyMapPage>()
         .AddSingleton<PosePage>()
         .AddSingleton<MainWindow>()
+        .AddSingleton<PropertyPage>()
         .AddTransient<ChartToolWindow>()
         .AddTransient<ChartPage>()
         .AddTransient<ChartGroupPage>()
@@ -98,10 +116,10 @@ public partial class App : Application
     {
         new SplashScreen("Assets/splash-screen.png").Show(true);
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        ApplyWindowBackdrop(BackgroundType.Acrylic);
         mainWindow.Show();
         mainWindow.WindowState = WindowState.Maximized;
-#if DEBUG
-        mainWindow.ViewModel.RealTimeControlOptions = new("调试");
-#endif
+        // TODO DEBUG
+        mainWindow.ViewModel.Options = new("调试");
     }
 }

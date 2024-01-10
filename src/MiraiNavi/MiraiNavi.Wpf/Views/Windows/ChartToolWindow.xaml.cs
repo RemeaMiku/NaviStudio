@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Windows;

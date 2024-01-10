@@ -2,15 +2,22 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>Assets\mirainavi-logo.ico</ApplicationIcon>
 		<AssemblyName>MiraiNavi</AssemblyName>
+		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+		<Authors>Tianchen Zhou</Authors>
+		<Company>Wuhan University</Company>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="Assets\splash-screen.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="bin\Debug\net8.0-windows10.0.17763.0\PropertyPage.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,6 +29,7 @@
 		<PackageReference Include="GMap.NET.WinPresentation" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 		<PackageReference Include="Syncfusion.Licensing" />
+		<PackageReference Include="Syncfusion.PropertyGrid.WPF" />
 		<PackageReference Include="Syncfusion.SfBusyIndicator.WPF" />
 		<PackageReference Include="Syncfusion.SfChart.WPF" />
 		<PackageReference Include="Syncfusion.SfGauge.WPF" />

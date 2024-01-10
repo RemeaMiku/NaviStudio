@@ -6,6 +6,8 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Solution.RealTime;
 using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
@@ -46,11 +48,11 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
             Messenger.Send(e);
     }
 
-    public static readonly RealTimeControlOptions DefaultOptions = new("默认");
+    public static readonly RealTimeSolutionOptions DefaultOptions = new("默认");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
-    RealTimeControlOptions? _realTimeControlOptions;
+    RealTimeSolutionOptions? _options;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
@@ -67,7 +69,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     }
 
     public string StartOrResumeText
-        => IsRealTimeStarted ? "继续" : RealTimeControlOptions is null ? string.Empty : RealTimeControlOptions.Name;
+        => IsRealTimeStarted ? "继续" : Options is null ? string.Empty : Options.Name;
 
     public IRelayCommand StartOrResumeCommand
         => IsRealTimeStarted ? ResumeCommand : StartCommand;
@@ -77,7 +79,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
     {
         if (IsRealTimeStarted)
             return;
-        ArgumentNullException.ThrowIfNull(RealTimeControlOptions);
+        ArgumentNullException.ThrowIfNull(Options);
         _epochDatasService.Clear();
         _tokenSource = new();
         IsRealTimeStarted = true;
@@ -86,7 +88,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, [
         Messenger.Send(new Output(notificationMessage.TimeStamp, Title, InfoBarSeverity.Informational, "开始解算"));
         try
         {
-            await _realTimeControlService.StartListeningAsync(RealTimeControlOptions, _tokenSource.Token);
+            await _realTimeControlService.StartListeningAsync(Options, _tokenSource.Token);
         }
         catch (Exception ex)
         {

@@ -3,31 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NaviSharp;
 
 namespace MiraiNavi.Shared.Models.Satellites;
 
-public struct SatelliteSkyPosition
+public record struct SatelliteSkyPosition
 {
-    double _azimuth;
-    double _elevation;
+    Angle _azimuth;
+    Angle _elevation;
 
     public Satellite Satellite { get; set; }
 
     /// <summary>
     /// 方位角
     /// </summary>
-    public double Azimuth
+    public Angle Azimuth
     {
         readonly get => _azimuth;
-        set => _azimuth = Math.Clamp(value, 0, 360);
+        set => _azimuth = Angle.Clamp(value, Angle.ZeroAngle, Angle.RoundAngle);
     }
 
     /// <summary>
     /// 高度角
     /// </summary>
-    public double Elevation
+    public Angle Elevation
     {
         readonly get => _elevation;
-        set => _elevation = Math.Clamp(value, 0, 90);
+        set => _elevation = Angle.Clamp(value, Angle.ZeroAngle, Angle.RightAngle);
     }
+
+    public readonly double AzimuthDegrees => Azimuth.Degrees;
+
+    public readonly double ElevationDegrees => Elevation.Degrees;
 }

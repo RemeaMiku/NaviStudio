@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Solution.RealTime;
 using MiraiNavi.Shared.Serialization;
 using MiraiNavi.WpfApp.Services.Contracts;
 
@@ -26,26 +28,25 @@ public class TcpJsonRealTimeControlService() : IRealTimeControlService
 
     public int _epochCount;
 
-    public async Task StartListeningAsync(RealTimeControlOptions options, CancellationToken token)
+    public async Task StartListeningAsync(RealTimeSolutionOptions options, CancellationToken token)
     {
         if (IsRunning)
             throw new InvalidOperationException("It's already started.");
         IsRunning = true;
         try { await options.WaitToStartAsync(token); }
         catch (TaskCanceledException) { return; }
-        using var listener = new TcpListener(options.IPEndPoint);
+        using var listener = new TcpListener(options.RoverIPEndPoint);
         listener.Start();
         var process = Process.Start(_clientPath);
         try
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                using var client = listener.AcceptTcpClient();
+                using var client = await listener.AcceptTcpClientAsync(token);
                 using var stream = client.GetStream();
                 using var reader = new BinaryReader(stream, Encoding.UTF8);
                 var jsonOptions = new JsonSerializerOptions();
                 jsonOptions.Converters.Add(new UtcTimeJsonConverter());
-                jsonOptions.Converters.Add(new Vector3JsonConverter());
                 while (!token.IsCancellationRequested && !options.NeedStop(_epochCount))
                 {
                     var message = reader.ReadString();
@@ -58,6 +59,7 @@ public class TcpJsonRealTimeControlService() : IRealTimeControlService
             }, token);
         }
         catch (TaskCanceledException) { }
+        catch (OperationCanceledException) { }
         catch (IOException ex)
         {
             if (process.HasExited)

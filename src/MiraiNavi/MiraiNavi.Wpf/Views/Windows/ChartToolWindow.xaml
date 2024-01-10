@@ -12,7 +12,6 @@
     Height="500"
     d:DataContext="{d:DesignInstance Type=local:ChartToolWindow}"
     ExtendsContentIntoTitleBar="True"
-    WindowBackdropType="Acrylic"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ui:UiWindow.Resources>

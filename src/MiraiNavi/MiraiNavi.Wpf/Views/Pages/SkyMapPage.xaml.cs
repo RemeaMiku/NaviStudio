@@ -16,10 +16,10 @@ public partial class SkyMapPage : UserControl
         ViewModel = viewModel;
     }
 
-    public static string XBindingPath => nameof(SatelliteSkyPosition.Azimuth);
+    public static string XBindingPath => nameof(SatelliteSkyPosition.AzimuthDegrees);
 
 
-    public static string YBindingPath => nameof(SatelliteSkyPosition.Elevation);
+    public static string YBindingPath => nameof(SatelliteSkyPosition.ElevationDegrees);
 
     public SkyMapPageViewModel ViewModel { get; }
 

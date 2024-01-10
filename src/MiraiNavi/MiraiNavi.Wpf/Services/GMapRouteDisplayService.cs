@@ -8,6 +8,7 @@ using GMap.NET.WindowsPresentation;
 using MiraiNavi.WpfApp.Services.Contracts;
 using System.Windows.Media;
 using System.Diagnostics;
+using MiraiNavi.WpfApp.Common.Extensions;
 
 namespace MiraiNavi.WpfApp.Services;
 
@@ -38,13 +39,10 @@ public class GMapRouteDisplayService : IGMapRouteDisplayService
             Height = 5,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Tag = (point, timeStamp)
+            Tag = new TimePointLatLng(timeStamp, point),
+            ToolTip = timeStamp.ToString()
         };
-        return new GMapMarker(point)
-        {
-            Shape = shape,
-            Offset = new(-shape.Width / 2, -shape.Height / 2)
-        };
+        return new GMapMarker(point).SetShape(shape);
     }
 
     void ThrowIfIsRunnning()

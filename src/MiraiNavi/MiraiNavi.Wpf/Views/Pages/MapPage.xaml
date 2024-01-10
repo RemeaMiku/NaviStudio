@@ -14,11 +14,30 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <cv:StringToGMapProviderConverter x:Key="StringToGMapProviderConverter" />
+        <ui:SymbolIcon
+            x:Key="SelectedPointMarkerShape"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Filled="True"
+            FontSize="{StaticResource LargeFontSize}"
+            Foreground="{StaticResource MikuRedBrush}"
+            Symbol="Pin24">
+            <ui:SymbolIcon.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Direction="0"
+                    Opacity="0.5"
+                    ShadowDepth="0"
+                    Color="{StaticResource MikuRedAlpha}" />
+            </ui:SymbolIcon.Effect>
+        </ui:SymbolIcon>
     </UserControl.Resources>
-    <Grid d:Background="White">
+    <Grid d:Background="White" Cursor="Cross">
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
+            Cursor="Cross"
+            IgnoreMarkerOnMouseWheel="True"
             MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
             MaxZoom="20"
             MinZoom="3"
