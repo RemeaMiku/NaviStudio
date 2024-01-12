@@ -3,5 +3,6 @@
 public enum Notifications
 {
     Reset,
+    Update,
     Sync,
 }

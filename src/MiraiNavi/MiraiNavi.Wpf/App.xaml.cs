@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
@@ -6,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
@@ -27,40 +30,64 @@ public partial class App : Application
 {
     public App()
     {
+        Services = new ServiceCollection()
+            .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
+#if DEBUG
+            .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
+#endif
+            .AddSingleton<IEpochDatasService, EpochDatasService>()
+            .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+            .AddTransient<ChartPageViewModel>()
+            .AddTransient<ChartGroupPageViewModel>()
+            .AddSingleton<SatelliteTrackingPageViewModel>()
+            .AddSingleton<OutputPageViewModel>()
+            .AddSingleton<MapPageViewModel>()
+            .AddSingleton<SkyMapPageViewModel>()
+            .AddSingleton<DashBoardPageViewModel>()
+            .AddSingleton<PosePageViewModel>()
+            .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<PropertyPageViewModel>()
+            .AddTransient<ChartToolWindowViewModel>()
+            .AddSingleton<SatelliteTrackingPage>()
+            .AddSingleton<OutputPage>()
+            .AddSingleton<DashBoardPage>()
+            .AddSingleton<MapPage>()
+            .AddSingleton<SkyMapPage>()
+            .AddSingleton<PosePage>()
+            .AddSingleton<MainWindow>()
+            .AddSingleton<PropertyPage>()
+            .AddTransient<ChartToolWindow>()
+            .AddTransient<ChartPage>()
+            .AddTransient<ChartGroupPage>()
+            .BuildServiceProvider();
+    }
+
+    public static void SetGMap()
+    {
         GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
         GMapProvider.WebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
         GMaps.Instance.Mode = AccessMode.ServerAndCache;
         GMapProvider.Language = LanguageType.ChineseSimplified;
-        RegisterKeys();
-        ApplyTheme();
     }
 
-    public bool ApplyWindowBackdrop(BackgroundType type)
+    public static bool TryApplyAcrylic(UiWindow window)
     {
-        if (!Background.IsSupported(type)) return false;
-        var preType = Windows.OfType<MainWindow>().First().WindowBackdropType;
-        void SetWindowsBackdropType(BackgroundType setType)
-        {
-            foreach (var window in Windows)
-                if (window is UiWindow uiWindow)
-                    uiWindow.WindowBackdropType = setType;
-        }
         try
         {
-            SetWindowsBackdropType(type);
+            window.WindowBackdropType = BackgroundType.Acrylic;
             return true;
         }
         catch (Exception)
         {
-            SetWindowsBackdropType(preType);
+            window.WindowBackdropType = BackgroundType.None;
             return false;
         }
     }
 
     public static void ApplyTheme()
     {
+        //TODO 主题设置
         Accent.Apply((Color)ColorConverter.ConvertFromString("#FF39c5bb"));
-        Wpf.Ui.Appearance.Theme.Apply(ThemeType.Dark, BackgroundType.Auto, false, true);
         SfSkinManager.RegisterThemeSettings("FluentDark", new FluentDarkThemeSettings()
         {
             PrimaryBackground = Accent.PrimaryAccentBrush,
@@ -80,40 +107,17 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
 
-    public IServiceProvider ServiceProvider { get; } = new ServiceCollection()
-        .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-        .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
-        .AddSingleton<IEpochDatasService, EpochDatasService>()
-        .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
-        .AddTransient<ChartPageViewModel>()
-        .AddTransient<ChartGroupPageViewModel>()
-        .AddSingleton<SatelliteTrackingPageViewModel>()
-        .AddSingleton<OutputPageViewModel>()
-        .AddSingleton<MapPageViewModel>()
-        .AddSingleton<SkyMapPageViewModel>()
-        .AddSingleton<DashBoardPageViewModel>()
-        .AddSingleton<PosePageViewModel>()
-        .AddSingleton<MainWindowViewModel>()
-        .AddSingleton<PropertyPageViewModel>()
-        .AddTransient<ChartToolWindowViewModel>()
-        .AddSingleton<SatelliteTrackingPage>()
-        .AddSingleton<OutputPage>()
-        .AddSingleton<DashBoardPage>()
-        .AddSingleton<MapPage>()
-        .AddSingleton<SkyMapPage>()
-        .AddSingleton<PosePage>()
-        .AddSingleton<MainWindow>()
-        .AddSingleton<PropertyPage>()
-        .AddTransient<ChartToolWindow>()
-        .AddTransient<ChartPage>()
-        .AddTransient<ChartGroupPage>()
-        .BuildServiceProvider();
+    public IServiceProvider Services { get; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        SetGMap();
+        RegisterKeys();
+        ApplyTheme();
         new SplashScreen("Assets/splash-screen.png").Show(true);
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-        ApplyWindowBackdrop(BackgroundType.Acrylic);
+        AppSettingsManager.Load("appsettings.json", new());
+        AppSettingsManager.Save();
+        var mainWindow = Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
         mainWindow.WindowState = WindowState.Maximized;
 #if DEBUG

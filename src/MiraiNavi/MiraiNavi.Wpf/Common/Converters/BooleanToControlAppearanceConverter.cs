@@ -5,7 +5,7 @@ using Wpf.Ui.Common;
 namespace MiraiNavi.WpfApp.Common.Converters;
 
 [ValueConversion(typeof(bool), typeof(ControlAppearance))]
-public class BooleanToControlAppearance : IValueConverter
+public class BooleanToControlAppearanceConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

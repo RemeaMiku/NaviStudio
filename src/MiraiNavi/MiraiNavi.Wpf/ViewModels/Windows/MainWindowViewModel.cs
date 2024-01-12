@@ -45,7 +45,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         ValidateEpochData(data);
         _epochDatasService.Add(data);
         if (IsRealTimeRunning)
-            _messenger.Send(new NotificationMessage(Notifications.Sync));
+            _messenger.Send(new NotificationMessage(Notifications.Update));
     }
 
     public static readonly RealTimeSolutionOptions DefaultOptions = new("默认");

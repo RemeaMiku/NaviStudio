@@ -9,7 +9,7 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
-    public const string Title = "速度和姿态仪表盘";
+    public const string Title = "仪表盘";
     public const string MenuItemHeader = $"{Title}(_D)";
 
     [ObservableProperty]

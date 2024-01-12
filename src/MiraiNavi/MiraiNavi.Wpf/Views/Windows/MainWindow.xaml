@@ -70,7 +70,7 @@
                     <ui:MenuItem Header="视图(_V)">
                         <ui:MenuItem
                             Click="OnViewMenuItemClicked"
-                            Header="{x:Static pages:StartPageViewModel.MenuItemHeader}"
+                            Header="{x:Static pages:StartOptionsPageViewModel.MenuItemHeader}"
                             Tag="{Binding ElementName=StartView}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="PlaySettings20" />
@@ -94,7 +94,7 @@
                         </ui:MenuItem>
                         <ui:MenuItem
                             Click="OnViewMenuItemClicked"
-                            Header="{x:Static pages:SatelliteTrackingPageViewModel.MenuItemHeader}"
+                            Header="{x:Static pages:SkyMapPageViewModel.MenuItemHeader}"
                             Tag="{Binding ElementName=SkyMapView}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="Target24" />
@@ -108,14 +108,14 @@
                                 <ui:SymbolIcon Symbol="List24" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
-                        <!--<ui:MenuItem
-                Click="OnViewMenuItemClicked"
-                Header="属性(_P)"
-                Tag="{Binding ElementName=PropertyView}">
-                <ui:MenuItem.Icon>
-                    <ui:SymbolIcon Symbol="Wrench24" />
-                </ui:MenuItem.Icon>
-            </ui:MenuItem>-->
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="属性(_P)"
+                            Tag="{Binding ElementName=PropertyView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Wrench24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
                         <ui:MenuItem
                             Click="OnViewMenuItemClicked"
                             Header="{x:Static pages:DashBoardPageViewModel.MenuItemHeader}"
@@ -246,7 +246,7 @@
                     <ContentControl
                         x:Name="StartView"
                         syncfusion:DockingManager.CanDock="False"
-                        syncfusion:DockingManager.Header="{x:Static pages:StartPageViewModel.Title}"
+                        syncfusion:DockingManager.Header="{x:Static pages:StartOptionsPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl

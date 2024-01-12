@@ -15,7 +15,7 @@ public class EpochDatasService : IEpochDatasService
 
     public int EpochCount => _datas.Count;
 
-    public EpochData? Last => _datas.Values.LastOrDefault();
+    public EpochData Last => _datas.Values.Last();
 
     public void Clear()
     {

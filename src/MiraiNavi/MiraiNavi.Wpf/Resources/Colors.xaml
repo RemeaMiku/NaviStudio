@@ -6,19 +6,25 @@
     <Color x:Key="MikuRed">#e74892</Color>
     <Color x:Key="MeaBlue">#7bcddf</Color>
     <Color x:Key="MeaYellow">#fbd475</Color>
+    <Color x:Key="RinOrange">#FFA500</Color>
+
     <Color x:Key="MikuGreenAlpha">#5539c5bb</Color>
     <Color x:Key="MikuRedAlpha">#55e74892</Color>
     <Color x:Key="MeaBlueAlpha">#557bcddf</Color>
     <Color x:Key="MeaYellowAlpha">#55fbd475</Color>
+    <Color x:Key="RinOrangeAlpha">#55FFA500</Color>
 
     <SolidColorBrush x:Key="MikuGreenBrush" Color="{StaticResource MikuGreen}" />
     <SolidColorBrush x:Key="MikuRedBrush" Color="{StaticResource MikuRed}" />
     <SolidColorBrush x:Key="MeaBlueBrush" Color="{StaticResource MeaBlue}" />
     <SolidColorBrush x:Key="MeaYellowBrush" Color="{StaticResource MeaYellow}" />
+    <SolidColorBrush x:Key="RinOrangeBrush" Color="{StaticResource RinOrange}" />
+
     <SolidColorBrush x:Key="MikuGreenBrushAlpha" Color="{StaticResource MikuGreenAlpha}" />
     <SolidColorBrush x:Key="MikuRedBrushAlpha" Color="{StaticResource MikuRedAlpha}" />
     <SolidColorBrush x:Key="MeaBlueBrushAlpha" Color="{StaticResource MeaBlueAlpha}" />
     <SolidColorBrush x:Key="MeaYellowBrushAlpha" Color="{StaticResource MeaYellowAlpha}" />
+    <SolidColorBrush x:Key="RinOrangeBrushAlpha" Color="{StaticResource RinOrangeAlpha}" />
 
     <LinearGradientBrush x:Key="MikuMeaRedBlueGreenHorizontalBrush" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Offset="0" Color="{StaticResource MikuRed}" />

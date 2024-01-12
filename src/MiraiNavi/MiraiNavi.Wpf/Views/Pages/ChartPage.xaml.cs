@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Models.Chart;
@@ -38,7 +39,7 @@ public partial class ChartPage : UserControl
         {
             var seriesData = new ObservableCollection<ChartModel>();
             ViewModel.SeriesDatas.Add(label, seriesData);
-            Chart.Series.Add(new FastLineSeries()
+            SfChart.Series.Add(new FastLineSeries()
             {
                 Label = label,
                 ItemsSource = seriesData,
@@ -49,5 +50,15 @@ public partial class ChartPage : UserControl
             });
             index++;
         }
+    }
+
+    private void OnSfChartMouseEnter(object sender, MouseEventArgs e)
+    {
+        ChartZoomPanBehavior.EnableZoomingToolBar = true;
+    }
+
+    private void OnSfChartMouseLeave(object sender, MouseEventArgs e)
+    {
+        ChartZoomPanBehavior.EnableZoomingToolBar = false;
     }
 }

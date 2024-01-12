@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:MiraiNavi.Shared.Models.Satellites;assembly=MiraiNavi.Shared"
     xmlns:satellites="clr-namespace:MiraiNavi.Shared.Models.Satellites;assembly=MiraiNavi.Shared"
     xmlns:sfcharts="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -24,17 +23,14 @@
             <Setter Property="Padding" Value="1" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Width" Value="65" />
+            <Setter Property="Width" Value="50" />
             <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
             <Setter Property="Margin" Value="1" />
             <Setter Property="Command" Value="{Binding ViewModel.EnableOrDisableSystemCommand, Mode=OneTime}" />
-            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
+            <Setter Property="CommandParameter" Value="{Binding Tag, RelativeSource={RelativeSource Mode=Self}, Mode=OneWay}" />
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{Binding Content, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource SatelliteSystemTypeToBrushConverter}}" />
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                    <Setter Property="Background" Value="{Binding Tag, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource SatelliteSystemTypeToBrushConverter}, Mode=OneWay}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -94,11 +90,11 @@
             </sfcharts:SfChart.Series>
         </sfcharts:SfChart>
         <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-            <ToggleButton Content="{x:Static satellites:SatelliteSystems.GPS}" />
-            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Beidou}" />
-            <ToggleButton Content="{x:Static satellites:SatelliteSystems.GLONASS}" />
-            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Galileo}" />
-            <ToggleButton Content="{x:Static satellites:SatelliteSystems.Others}" />
+            <ToggleButton Content="GPS" Tag="{x:Static satellites:SatelliteSystems.GPS}" />
+            <ToggleButton Content="北斗" Tag="{x:Static satellites:SatelliteSystems.Beidou}" />
+            <ToggleButton Content="GLO." Tag="{x:Static satellites:SatelliteSystems.GLONASS}" />
+            <ToggleButton Content="Galileo" Tag="{x:Static satellites:SatelliteSystems.Galileo}" />
+            <ToggleButton Content="其他" Tag="{x:Static satellites:SatelliteSystems.Others}" />
         </WrapPanel>
         <Grid Grid.Row="2" Margin="5,3">
             <Grid.ColumnDefinitions>

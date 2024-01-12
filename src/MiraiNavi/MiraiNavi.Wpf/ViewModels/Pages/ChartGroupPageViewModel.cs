@@ -32,8 +32,10 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
     }
 
     protected override void Sync()
-    {
+    {        
         Reset();
+        if (!_epochDatasService.HasData)
+            return;
         _epochCount = Math.Min(MaxEpochCount, _epochDatasService.EpochCount);
         foreach (var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
             foreach ((var viewModel, var paras) in ChartParas)

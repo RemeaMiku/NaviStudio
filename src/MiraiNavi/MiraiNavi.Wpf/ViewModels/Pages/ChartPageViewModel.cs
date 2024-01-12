@@ -32,7 +32,10 @@ public partial class ChartPageViewModel : ObservableObject
 
     public void Clear()
     {
-        foreach (var datas in SeriesDatas.Values)
-            datas.Clear();
+        App.Current.Dispatcher.Invoke(() =>
+        {
+            foreach (var datas in SeriesDatas.Values)
+                datas.Clear();
+        });
     }
 }

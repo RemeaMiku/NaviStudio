@@ -20,21 +20,22 @@ public partial class MainWindow : UiWindow
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
+        if (AppSettingsManager.Settings.AppearanceSettings.EnableAcrylic)
+            App.TryApplyAcrylic(this);
         ViewModel = viewModel;
         DataContext = this;
-        App.ApplyTheme();
         SetPages();
     }
 
     void SetPages()
     {
-        MapView.Content = App.Current.ServiceProvider.GetRequiredService<MapPage>();
-        SkyMapView.Content = App.Current.ServiceProvider.GetRequiredService<SkyMapPage>();
-        PoseView.Content = App.Current.ServiceProvider.GetRequiredService<PosePage>();
-        DashBoardView.Content = App.Current.ServiceProvider.GetRequiredService<DashBoardPage>();
-        OutputView.Content = App.Current.ServiceProvider.GetRequiredService<OutputPage>();
-        SatelliteTrackingView.Content = App.Current.ServiceProvider.GetRequiredService<SatelliteTrackingPage>();
-        PropertyView.Content = App.Current.ServiceProvider.GetRequiredService<PropertyPage>();
+        MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
+        SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
+        PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();
+        DashBoardView.Content = App.Current.Services.GetRequiredService<DashBoardPage>();
+        OutputView.Content = App.Current.Services.GetRequiredService<OutputPage>();
+        SatelliteTrackingView.Content = App.Current.Services.GetRequiredService<SatelliteTrackingPage>();
+        PropertyView.Content = App.Current.Services.GetRequiredService<PropertyPage>();
     }
 
     public MainWindowViewModel ViewModel { get; }
@@ -92,6 +93,6 @@ public partial class MainWindow : UiWindow
 
     private void OnChartToolItemClicked(object sender, RoutedEventArgs e)
     {
-        App.Current.ServiceProvider.GetRequiredService<ChartToolWindow>().ShowDialog();
+        App.Current.Services.GetRequiredService<ChartToolWindow>().ShowDialog();
     }
 }

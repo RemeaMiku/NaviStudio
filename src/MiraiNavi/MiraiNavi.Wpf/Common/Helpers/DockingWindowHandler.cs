@@ -7,7 +7,7 @@ namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public static class DockingWindowHandler
 {
-    static readonly FrozenSet<Type> _documentTypes = new HashSet<Type>() { typeof(MapPage), typeof(StartPage) }.ToFrozenSet();
+    static readonly FrozenSet<Type> _documentTypes = new HashSet<Type>() { typeof(MapPage), typeof(StartOptionsPage) }.ToFrozenSet();
     static readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
 
     public static void RestoreDockState(ContentControl contentControl)

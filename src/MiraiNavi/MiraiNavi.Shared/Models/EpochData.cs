@@ -1,7 +1,6 @@
 ﻿using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
 using NaviSharp.Time;
-using System.Collections.ObjectModel;
 
 namespace MiraiNavi.Shared.Models;
 
@@ -22,5 +21,4 @@ public class EpochData
     public List<SatelliteSkyPosition>? SatelliteSkyPositions { get; set; }
 
     public List<SatelliteTracking>? SatelliteTrackings { get; set; }
-
 }

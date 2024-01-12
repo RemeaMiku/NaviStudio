@@ -61,7 +61,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     protected override void Sync()
     {
-        if (_epochDatasService.Last is null)
+        if (!_epochDatasService.HasData)
         {
             Reset();
             return;

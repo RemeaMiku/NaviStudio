@@ -27,7 +27,7 @@ public partial class ChartGroupPage : UserControl
         var index = 0;
         foreach (var item in groupParas.Items)
         {
-            var page = App.Current.ServiceProvider.GetRequiredService<ChartPage>();
+            var page = App.Current.Services.GetRequiredService<ChartPage>();
             var paras = ChartParameters.FromChartItem(item);
             if (paras is null)
                 continue;

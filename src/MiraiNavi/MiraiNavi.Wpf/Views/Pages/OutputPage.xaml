@@ -16,13 +16,14 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <cv:StringFormatConverter x:Key="StringFormatConverter" />
-        <cv:BooleanToControlAppearance x:Key="BooleanToControlAppearance" />
+        <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
         <Thickness x:Key="SmallSpacing">1,0</Thickness>
+        <Thickness x:Key="LargeSpacing">3,0</Thickness>
         <Style
             x:Key="OutputFilterButtonStyle"
-            BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
             TargetType="ui:Button">
-            <Setter Property="Padding" Value="5,3" />
+            <Setter Property="Padding" Value="3" />
             <Setter Property="Margin" Value="{StaticResource SmallSpacing}" />
         </Style>
     </UserControl.Resources>
@@ -33,7 +34,7 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="Auto" MinWidth="50" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -44,7 +45,7 @@
                 Style="{StaticResource DefaultComboBoxStyle}">
                 <ComboBox.ItemContainerStyle>
                     <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
-                        <Setter Property="Padding" Value="5,3" />
+                        <Setter Property="Padding" Value="5,1" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
@@ -56,7 +57,7 @@
                 <ui:Button
                     d:Appearance="Danger"
                     d:Content="错误 0 "
-                    Appearance="{Binding ViewModel.ShowError, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Danger}}"
+                    Appearance="{Binding ViewModel.ShowError, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Danger}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static ui:InfoBarSeverity.Error}"
                     Content="{Binding ViewModel.ErrorCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='错误 {0} ', Mode=OneWay}"
@@ -65,7 +66,7 @@
                 <ui:Button
                     d:Appearance="Caution"
                     d:Content="警告 0 "
-                    Appearance="{Binding ViewModel.ShowWarning, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Caution}}"
+                    Appearance="{Binding ViewModel.ShowWarning, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Caution}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static ui:InfoBarSeverity.Warning}"
                     Content="{Binding ViewModel.WarningCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='警告 {0} ', Mode=OneWay}"
@@ -74,7 +75,7 @@
                 <ui:Button
                     d:Appearance="Info"
                     d:Content="消息 0 "
-                    Appearance="{Binding ViewModel.ShowInformational, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Info}}"
+                    Appearance="{Binding ViewModel.ShowInformational, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Info}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static ui:InfoBarSeverity.Informational}"
                     Content="{Binding ViewModel.InformationalCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='消息 {0} ', Mode=OneWay}"
@@ -83,32 +84,41 @@
                 <ui:Button
                     d:Appearance="Success"
                     d:Content="成功 0 "
-                    Appearance="{Binding ViewModel.ShowSuccess, Converter={StaticResource BooleanToControlAppearance}, ConverterParameter={x:Static ui:ControlAppearance.Success}}"
+                    Appearance="{Binding ViewModel.ShowSuccess, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Success}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static ui:InfoBarSeverity.Success}"
                     Content="{Binding ViewModel.SuccessCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='成功 {0} ', Mode=OneWay}"
                     Icon="CheckmarkCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
                 <ui:Button
-                    Margin="{StaticResource SmallSpacing}"
+                    Margin="{StaticResource LargeSpacing}"
+                    Padding="3"
                     Command="{Binding ViewModel.ClearFilterCommand, Mode=OneTime}"
+                    FontSize="{StaticResource MediumFontSize}"
                     Icon="FilterDismiss24"
                     Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
-                <ui:ToggleSwitch
-                    Margin="{StaticResource SmallSpacing}"
-                    Content="保持最底部"
-                    IsChecked="{Binding ViewModel.KeepBottom, Mode=OneWayToSource}" />
+                <ToggleButton
+                    Margin="{StaticResource LargeSpacing}"
+                    Padding="3"
+                    BorderThickness="0"
+                    IsChecked="{Binding ViewModel.KeepBottom, Mode=OneWayToSource}"
+                    Style="{StaticResource DefaultToggleButtonStyle}">
+                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="ArrowDown24" />
+                </ToggleButton>
             </WrapPanel>
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <ui:TextBox
-                    Width="100"
+                    Width="80"
                     Margin="{StaticResource SmallSpacing}"
                     Padding="5,3"
                     VerticalAlignment="Center"
                     PlaceholderText="搜索"
                     Text="{Binding ViewModel.SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ui:Button
+                    Margin="{StaticResource SmallSpacing}"
+                    Padding="3"
                     Command="{Binding ViewModel.SearchCommand, Mode=OneTime}"
+                    FontSize="{StaticResource MediumFontSize}"
                     Icon="Search24"
                     Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
             </StackPanel>

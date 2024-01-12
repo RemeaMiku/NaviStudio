@@ -26,6 +26,9 @@ public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpo
             case Notifications.Sync:
                 Sync();
                 break;
+            case Notifications.Update:
+                Update(_epochDatasService.Last);
+                break;
             default:
                 break;
         }
@@ -37,7 +40,7 @@ public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpo
 
     protected virtual void Sync()
     {
-        if (_epochDatasService.Last is not null)
+        if (_epochDatasService.HasData)
             Update(_epochDatasService.Last);
         else
             Reset();
