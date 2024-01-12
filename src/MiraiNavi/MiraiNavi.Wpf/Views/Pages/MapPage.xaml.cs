@@ -38,6 +38,10 @@ public partial class MapPage : UserControl
     {
         if (e.PropertyName == nameof(ViewModel.MapCenter))
             App.Current.Dispatcher.Invoke(() => GMap.CenterPosition = ViewModel.MapCenter);
+        else if (e.PropertyName == nameof(ViewModel.KeepCenter))
+        {
+            GMap.MouseWheelZoomType = ViewModel.KeepCenter ? MouseWheelZoomType.ViewCenter : MouseWheelZoomType.MousePositionWithoutCenter;
+        }
     }
 
     public MapPageViewModel ViewModel { get; }
@@ -94,4 +98,5 @@ public partial class MapPage : UserControl
     {
         ViewModel.KeepCenter = false;
     }
+    
 }

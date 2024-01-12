@@ -14,6 +14,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <cv:StringToGMapProviderConverter x:Key="StringToGMapProviderConverter" />
+        <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
         <ui:SymbolIcon
             x:Key="SelectedPointMarkerShape"
             HorizontalContentAlignment="Center"
@@ -36,13 +37,11 @@
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
-            Cursor="Cross"
             IgnoreMarkerOnMouseWheel="True"
             MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
             MaxZoom="20"
             MinZoom="3"
             MouseLeftButtonDown="OnGMapMouseLeftButtonDown"
-            MouseWheelZoomType="MousePositionWithoutCenter"
             OnMapDrag="OnGMapDrag"
             OnPositionChanged="OnGMapOnPositionChanged"
             Zoom="3" />
@@ -67,33 +66,35 @@
                     <ComboBoxItem Content="卫星" />
                     <ComboBoxItem Content="无" />
                 </ComboBox>
-                <StackPanel
+                <Border
+                    Padding="3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <ui:Button
-                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                        Padding="5"
-                        HorizontalAlignment="Center"
-                        Appearance="Primary"
-                        Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
-                        BorderThickness="0"
-                        Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
-                        Icon="MyLocation24" />
-                    <Slider
-                        Height="150"
-                        HorizontalAlignment="Center"
-                        AutoToolTipPlacement="TopLeft"
-                        AutoToolTipPrecision="0"
-                        IsMoveToPointEnabled="True"
-                        IsSnapToTickEnabled="True"
-                        Maximum="{Binding MaxZoom, ElementName=GMap, Mode=OneTime}"
-                        Minimum="{Binding MinZoom, ElementName=GMap, Mode=OneTime}"
-                        Orientation="Vertical"
-                        TickFrequency="1"
-                        TickPlacement="Both"
-                        Value="{Binding Zoom, ElementName=GMap}" />
-                </StackPanel>
+                    Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                    CornerRadius="3">
+                    <StackPanel Orientation="Vertical">
+                        <ToggleButton
+                            Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                            Padding="5"
+                            HorizontalAlignment="Center"
+                            BorderThickness="0"
+                            Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
+                            IsChecked="{Binding ViewModel.KeepCenter}"
+                            Style="{StaticResource DefaultToggleButtonStyle}">
+                            <ui:SymbolIcon Symbol="MyLocation24" />
+                        </ToggleButton>
+                        <Slider
+                            Height="100"
+                            HorizontalAlignment="Center"
+                            IsMoveToPointEnabled="True"
+                            IsSnapToTickEnabled="True"
+                            Maximum="{Binding MaxZoom, ElementName=GMap, Mode=OneTime}"
+                            Minimum="{Binding MinZoom, ElementName=GMap, Mode=OneTime}"
+                            Orientation="Vertical"
+                            TickFrequency="1"
+                            Value="{Binding Zoom, ElementName=GMap}" />
+                    </StackPanel>
+                </Border>
                 <!--<TextBlock
                     x:Name="Test"
                     HorizontalAlignment="Right"
