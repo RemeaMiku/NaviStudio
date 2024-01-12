@@ -33,8 +33,7 @@ public static class AppSettingsManager
     {
         ArgumentException.ThrowIfNullOrEmpty(filePath);
         ArgumentNullException.ThrowIfNull(fallback);
-        if (!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
-            throw new ArgumentException("File path not legal.");
+        ThrowIfNotJson(filePath);
         FilePath = filePath;
         Settings = fallback;
         try
@@ -56,12 +55,17 @@ public static class AppSettingsManager
         return Settings;
     }
 
+    static void ThrowIfNotJson(string filePath)
+    {
+        if (!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
+            throw new ArgumentException("File path not legal.");
+    }
+
     public static void Save(string? filePath = default)
     {
         filePath ??= FilePath;
         ArgumentException.ThrowIfNullOrEmpty(filePath);
-        if (!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
-            throw new ArgumentException("File path not legal.");
+        ThrowIfNotJson(filePath);
         using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
         using var writer = new StreamWriter(stream);
         writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));

@@ -67,7 +67,7 @@
                     <ComboBoxItem Content="无" />
                 </ComboBox>
                 <Border
-                    Padding="3"
+                    Padding="5"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
@@ -84,7 +84,7 @@
                             <ui:SymbolIcon Symbol="MyLocation24" />
                         </ToggleButton>
                         <Slider
-                            Height="100"
+                            Height="150"
                             HorizontalAlignment="Center"
                             IsMoveToPointEnabled="True"
                             IsSnapToTickEnabled="True"

@@ -13,7 +13,6 @@ public record AppSettings
 
     public bool TryValidate()
     {
-        var context = new ValidationContext(AppearanceSettings);
-        return Validator.TryValidateObject(context, context, default);
+        return Validator.TryValidateObject(AppearanceSettings, new(AppearanceSettings), default);
     }
 }
