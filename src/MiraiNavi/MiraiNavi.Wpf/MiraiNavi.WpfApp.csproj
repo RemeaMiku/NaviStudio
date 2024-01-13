@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Assets\splash-screen.png" />
+	  <None Remove="Assets\splash-screen.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -47,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Assets\splash-screen.png" />
+	  <Resource Include="Assets\splash-screen.png" />
 	</ItemGroup>
 
 </Project>
