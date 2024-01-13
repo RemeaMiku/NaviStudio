@@ -16,7 +16,11 @@
     <UserControl.Resources>
         <cv:OppositeNumberConverter x:Key="OppositeNumberConverter" />
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ui:DynamicScrollViewer
+        HorizontalScrollBarVisibility="Auto"
+        IsScrollingHorizontally="True"
+        IsScrollingVertically="True"
+        VerticalScrollBarVisibility="Auto">
         <WrapPanel
             Width="{Binding ViewportWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Mode=OneWay}"
             MinWidth="200"
@@ -242,5 +246,5 @@
                     Source="{StaticResource AttitudeIndicator}" />
             </Grid>
         </WrapPanel>
-    </ScrollViewer>
+    </ui:DynamicScrollViewer>
 </UserControl>

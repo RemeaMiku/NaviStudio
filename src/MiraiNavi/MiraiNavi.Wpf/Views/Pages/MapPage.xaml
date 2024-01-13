@@ -67,15 +67,15 @@
                     <ComboBoxItem Content="无" />
                 </ComboBox>
                 <Border
-                    Padding="5"
+                    Padding="3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
-                    CornerRadius="3">
+                    CornerRadius="5">
                     <StackPanel Orientation="Vertical">
                         <ToggleButton
                             Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                            Padding="5"
+                            Padding="3"
                             HorizontalAlignment="Center"
                             BorderThickness="0"
                             Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
