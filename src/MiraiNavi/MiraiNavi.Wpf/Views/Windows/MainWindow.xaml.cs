@@ -21,7 +21,7 @@ public partial class MainWindow : UiWindow
     {
         InitializeComponent();
         if (AppSettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            App.TryApplyAcrylic(this);
+            AppSettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
         DataContext = this;
         SetPages();

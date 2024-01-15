@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.WpfApp.Models;
+using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
@@ -10,64 +11,53 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 {
 
     [ObservableProperty]
-    string _title = "图表组";
+    string _title = string.Empty;
 
     [ObservableProperty]
     int _maxEpochCount;
 
     int _epochCount;
 
-    public Dictionary<ChartPageViewModel, ChartParameters> ChartParas { get; } = [];
+    public HashSet<ChartPageViewModel> ItemViewModels { get; } = [];
 
     protected override void Update(EpochData epochData)
     {
         var removeCount = _epochCount - MaxEpochCount + 1;
-        foreach ((var viewModel, var paras) in ChartParas)
+        foreach (var viewModel in ItemViewModels)
         {
             if (removeCount > 0)
                 viewModel.RemoveOnAllSeries(removeCount);
-            AddOnAllSeries(epochData, viewModel, paras);
+            if (ChartItemManager.ChartItemFuncs.ContainsKey(viewModel.Title))
+                UpdateChartItemCommon(viewModel, epochData);
+
         }
         _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
     }
 
+    static void UpdateChartItemCommon(ChartPageViewModel viewModel, EpochData epochData)
+    {
+        var funcs = ChartItemManager.ChartItemFuncs[viewModel.Title];
+        foreach ((var label, var func) in funcs)
+            viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
+    }
+
     protected override void Sync()
-    {        
+    {
         Reset();
         if (!_epochDatasService.HasData)
             return;
         _epochCount = Math.Min(MaxEpochCount, _epochDatasService.EpochCount);
         foreach (var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
-            foreach ((var viewModel, var paras) in ChartParas)
-                AddOnAllSeries(epochData, viewModel, paras);
-    }
-
-    static void AddOnAllSeries(EpochData epochData, ChartPageViewModel viewModel, ChartParameters paras)
-    {
-        foreach ((var label, var func) in paras.LabelFuncs)
-            viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
-    }
-
-    void RemoveIfReachMaxEpochCount()
-    {
-        var count = _epochCount - MaxEpochCount;
-        if (count <= 0)
-            return;
-        foreach (var viewModel in ChartParas.Keys)
-            viewModel.RemoveOnAllSeries(count);
-        _epochCount -= count;
-    }
-
-    void Clear()
-    {
-        foreach (var viewModel in ChartParas.Keys)
-            viewModel.Clear();
-        _epochCount = 0;
+            foreach (var viewModel in ItemViewModels)
+                UpdateChartItemCommon(viewModel, epochData);
     }
 
     protected override void Reset()
     {
-        if (_epochCount > 0)
-            Clear();
+        if (_epochCount == 0)
+            return;
+        foreach (var viewModel in ItemViewModels)
+            viewModel.Clear();
+        _epochCount = 0;
     }
 }

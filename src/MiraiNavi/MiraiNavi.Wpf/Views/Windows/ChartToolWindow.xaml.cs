@@ -15,14 +15,14 @@ public partial class ChartToolWindow : UiWindow
     {
         InitializeComponent();
         if (AppSettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            App.TryApplyAcrylic(this);
+            AppSettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
         DataContext = this;
         ViewModel.CreateRequested += (sender, paras) =>
         {
             var page = App.Current.Services.GetRequiredService<ChartGroupPage>();
             App.Current.Services.GetRequiredService<MainWindow>().AddDocument($"图表组: {paras.Title}", page);
-            page.CreateChartPages(paras);
+            page.CreateCharts(paras);
             Close();
         };
     }

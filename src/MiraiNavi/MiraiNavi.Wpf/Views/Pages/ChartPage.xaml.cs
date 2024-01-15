@@ -19,7 +19,25 @@ public partial class ChartPage : UserControl
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
+        ViewModel.AddSeriesRequested += OnViewModelAddSeriesRequested;
     }
+
+    public void AddSeries(string label)
+    {
+        var seriesData = new ObservableCollection<ChartModel>();
+        ViewModel.SeriesDatas.Add(label, seriesData);
+        SfChart.Series.Add(new FastLineSeries()
+        {
+            Label = label,
+            ItemsSource = seriesData,
+            ShowEmptyPoints = false,
+            XBindingPath = nameof(ChartModel.TimeStamp),
+            YBindingPath = nameof(ChartModel.Value),
+            Interior = _brushes[SfChart.Series.Count % _brushes.Length],
+        });
+    }
+
+    void OnViewModelAddSeriesRequested(object? sender, string e) => AddSeries(e);
 
     public ChartPageViewModel ViewModel { get; }
 
@@ -30,27 +48,6 @@ public partial class ChartPage : UserControl
         (Brush)App.Current.Resources["MikuRedBrush"],
         (Brush)App.Current.Resources["MeaBlueBrush"],
     ];
-
-    public void CreateSeries(ChartParameters paras)
-    {
-        ViewModel.Title = paras.Title;
-        var index = 0;
-        foreach ((var label, _) in paras.LabelFuncs)
-        {
-            var seriesData = new ObservableCollection<ChartModel>();
-            ViewModel.SeriesDatas.Add(label, seriesData);
-            SfChart.Series.Add(new FastLineSeries()
-            {
-                Label = label,
-                ItemsSource = seriesData,
-                ShowEmptyPoints = false,
-                XBindingPath = nameof(ChartModel.TimeStamp),
-                YBindingPath = nameof(ChartModel.Value),
-                Interior = _brushes[index % _brushes.Length],
-            });
-            index++;
-        }
-    }
 
     private void OnSfChartMouseEnter(object sender, MouseEventArgs e)
     {

@@ -70,20 +70,6 @@ public partial class App : Application
         GMapProvider.Language = LanguageType.ChineseSimplified;
     }
 
-    public static bool TryApplyAcrylic(UiWindow window)
-    {
-        try
-        {
-            window.WindowBackdropType = BackgroundType.Acrylic;
-            return true;
-        }
-        catch (Exception)
-        {
-            window.WindowBackdropType = BackgroundType.None;
-            return false;
-        }
-    }
-
     public static void ApplyTheme()
     {
         //TODO 主题设置

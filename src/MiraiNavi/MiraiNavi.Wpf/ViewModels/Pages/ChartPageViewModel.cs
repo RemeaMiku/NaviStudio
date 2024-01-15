@@ -1,29 +1,27 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MiraiNavi.WpfApp.Models.Chart;
+using Syncfusion.UI.Xaml.Charts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class ChartPageViewModel : ObservableObject
 {
-    [ObservableProperty]
-    UtcTime _startTime;
-
-    [ObservableProperty]
-    UtcTime _endTime;
-
     public string Title { get; set; } = string.Empty;
 
     public Dictionary<string, ObservableCollection<ChartModel>> SeriesDatas { get; } = [];
+
+    public event EventHandler<string>? AddSeriesRequested;
 
     public void RemoveOnAllSeries(int count)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(count, 0);
         App.Current.Dispatcher.Invoke(() =>
         {
-            foreach (var seriesData in SeriesDatas.Values)
+            foreach ((_, var datas) in SeriesDatas)
                 for (int i = 0; i < count; i++)
-                    seriesData.RemoveAt(0);
+                    datas.RemoveAt(0);
         });
     }
 
