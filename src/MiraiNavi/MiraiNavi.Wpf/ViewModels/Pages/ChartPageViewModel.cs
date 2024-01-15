@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MiraiNavi.WpfApp.Models.Chart;
-using Syncfusion.UI.Xaml.Charts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

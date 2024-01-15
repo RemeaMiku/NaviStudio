@@ -4,14 +4,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.Shared.Models.RealTime;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Common.Messages;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
-using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
@@ -30,7 +26,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         {
             if (info.GetValue(epochData) is null)
             {
-                _messenger.Send(new Output(Title, InfoBarSeverity.Warning, $"{DisplayDescriptionManager.Descriptions[info.Name]}数据异常"));
+                _messenger.Send(new Output(Title, OutputType.Warning, $"{DisplayDescriptionManager.Descriptions[info.Name]}数据异常"));
             }
         }
     }
@@ -39,7 +35,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if (data is null)
         {
-            _messenger.Send(new Output(Title, InfoBarSeverity.Warning, "数据异常"));
+            _messenger.Send(new Output(Title, OutputType.Warning, "数据异常"));
             return;
         }
         ValidateEpochData(data);
@@ -67,13 +63,13 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (value)
         {
             _messenger.Send(new NotificationMessage(Notifications.Reset));
-            _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "解算开始"));
+            _messenger.Send(new Output(Title, OutputType.Info, "解算开始"));
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
         else
         {
             _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
-            _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "解算停止"));
+            _messenger.Send(new Output(Title, OutputType.Info, "解算停止"));
         }
     }
 
@@ -106,7 +102,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         catch (Exception ex)
         {
             Trace.TraceError(ex.Message);
-            _messenger.Send(new Output(Title, InfoBarSeverity.Error, $"出错了，实时解算中止：{Environment.NewLine}{ex.Message}", ex.StackTrace));
+            _messenger.Send(new Output(Title, OutputType.Error, $"出错了，实时解算中止：{Environment.NewLine}{ex.Message}", ex.StackTrace));
         }
         finally
         {
@@ -123,7 +119,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (!IsRealTimeStarted)
             return;
         IsRealTimeRunning = true;
-        _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "更新继续"));
+        _messenger.Send(new Output(Title, OutputType.Info, "更新继续"));
     }
 
     [RelayCommand]
@@ -132,7 +128,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (!IsRealTimeRunning)
             return;
         IsRealTimeRunning = false;
-        _messenger.Send(new Output(Title, InfoBarSeverity.Informational, "更新暂停"));
+        _messenger.Send(new Output(Title, OutputType.Info, "更新暂停"));
     }
 
     [RelayCommand]

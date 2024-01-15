@@ -21,6 +21,7 @@
             <Setter Property="IsExpanded" Value="True" />
             <Setter Property="MinWidth" Value="0" />
             <Setter Property="Padding" Value="5" />
+            <Setter Property="Background" Value="{StaticResource MikuGreenBrushAlpha}" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="ContentPadding" Value="0" />
             <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
@@ -59,7 +60,6 @@
             Title="{x:Static windows:ChartToolWindowViewModel.Title}"
             Padding="10,0"
             Background="{ui:ThemeResource}"
-            ShowHelp="True"
             ShowMinimize="False" />
         <Border
             Grid.Row="1"
@@ -134,10 +134,11 @@
                             Grid.Row="1"
                             Margin="20"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Stretch">
                             <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="最大历元数" />
                             <ui:NumberBox
                                 Margin="{StaticResource SmallSpacing}"
+                                ClearButtonEnabled="False"
                                 Maximum="100"
                                 Minimum="1"
                                 PlaceholderText="输入最大历元数..."
@@ -157,8 +158,8 @@
                             VerticalAlignment="Center"
                             Appearance="Primary"
                             Command="{Binding ViewModel.CreateChartGroupCommand, Mode=OneTime}"
-                            Content="创建"
-                            Icon="ChartMultiple24" />
+                            Content="确定"
+                            Icon="Checkmark24" />
                     </Grid>
                 </Border>
             </Grid>

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using MiraiNavi.WpfApp.Common.Settings;
-using MiraiNavi.WpfApp.Services.Contracts;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 

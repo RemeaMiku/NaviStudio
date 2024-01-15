@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using Syncfusion.UI.Xaml.Charts;

@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace MiraiNavi.WpfApp.Services.Contracts;
+﻿namespace MiraiNavi.WpfApp.Services.Contracts;
 
 public interface IEpochDatasService
 {

@@ -17,12 +17,14 @@
     <UserControl.Resources>
         <cv:StringFormatConverter x:Key="StringFormatConverter" />
         <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
-        <Thickness x:Key="SmallSpacing">1,0</Thickness>
-        <Thickness x:Key="LargeSpacing">3,0</Thickness>
+        <cv:OutputTypeToInfoBarSeverityConverter x:Key="InfoBarSeverityToOutputTypeConverter" />
+        <Thickness x:Key="SmallSpacing">2,0</Thickness>
+        <Thickness x:Key="LargeSpacing">5,0</Thickness>
         <Style
             x:Key="OutputFilterButtonStyle"
             BasedOn="{StaticResource {x:Type ui:Button}}"
             TargetType="ui:Button">
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Padding" Value="3" />
             <Setter Property="Margin" Value="{StaticResource SmallSpacing}" />
         </Style>
@@ -59,7 +61,7 @@
                     d:Content="错误 0 "
                     Appearance="{Binding ViewModel.ShowError, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Danger}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static ui:InfoBarSeverity.Error}"
+                    CommandParameter="{x:Static models:OutputType.Error}"
                     Content="{Binding ViewModel.ErrorCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='错误 {0} ', Mode=OneWay}"
                     Icon="DismissCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
@@ -68,7 +70,7 @@
                     d:Content="警告 0 "
                     Appearance="{Binding ViewModel.ShowWarning, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Caution}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static ui:InfoBarSeverity.Warning}"
+                    CommandParameter="{x:Static models:OutputType.Warning}"
                     Content="{Binding ViewModel.WarningCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='警告 {0} ', Mode=OneWay}"
                     Icon="ErrorCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
@@ -77,18 +79,9 @@
                     d:Content="消息 0 "
                     Appearance="{Binding ViewModel.ShowInformational, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Info}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static ui:InfoBarSeverity.Informational}"
+                    CommandParameter="{x:Static models:OutputType.Info}"
                     Content="{Binding ViewModel.InformationalCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='消息 {0} ', Mode=OneWay}"
                     Icon="Info24"
-                    Style="{StaticResource OutputFilterButtonStyle}" />
-                <ui:Button
-                    d:Appearance="Success"
-                    d:Content="成功 0 "
-                    Appearance="{Binding ViewModel.ShowSuccess, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Success}}"
-                    Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static ui:InfoBarSeverity.Success}"
-                    Content="{Binding ViewModel.SuccessCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='成功 {0} ', Mode=OneWay}"
-                    Icon="CheckmarkCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
                 <ui:Button
                     Margin="{StaticResource LargeSpacing}"
@@ -142,12 +135,12 @@
                 <DataTemplate DataType="models:Output">
                     <Grid HorizontalAlignment="Stretch">
                         <ui:InfoBar
-                            Title="{Binding TimeStamp, StringFormat='HH:mm:ss.fff'}"
+                            Title="{Binding TimeStamp, StringFormat='HH:mm:ss.fff', Mode=OneWay}"
                             Padding="5,3"
                             IsClosable="False"
                             IsOpen="True"
-                            Message="{Binding DisplayMessage}"
-                            Severity="{Binding Severity}" />
+                            Message="{Binding DisplayMessage, Mode=OneWay}"
+                            Severity="{Binding Type, Converter={StaticResource InfoBarSeverityToOutputTypeConverter}, Mode=OneWay}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

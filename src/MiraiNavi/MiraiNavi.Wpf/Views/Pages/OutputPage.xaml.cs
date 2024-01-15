@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Data;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
@@ -13,6 +14,8 @@ public partial class OutputPage : UserControl
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
+        ViewModel.OutputsView = CollectionViewSource.GetDefaultView(ViewModel.Outputs);
+        ViewModel.OutputsView.Filter = ViewModel.OutputsViewFilter;
         ViewModel.ScrollToBottomRequested += OnViewModelScrollToBottomRequested;
     }
 

@@ -85,4 +85,55 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <ControlTemplate x:Key="DefaultValidationErrorTemplate">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <AdornedElementPlaceholder />
+            <ItemsControl
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                ItemsSource="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Padding="3,1"
+                            Background="{StaticResource MikuRedBrushAlpha}"
+                            CornerRadius="3">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon
+                                    FontSize="{StaticResource SmallFontSize}"
+                                    Foreground="White"
+                                    Symbol="ErrorCircle24" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    MaxWidth="300"
+                                    Margin="5,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    FontSize="{StaticResource SmallFontSize}"
+                                    Foreground="White"
+                                    Text="{Binding ErrorContent}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ControlTemplate>
+
+    <Style BasedOn="{StaticResource {x:Type ui:TextBox}}" TargetType="ui:TextBox">
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource DefaultValidationErrorTemplate}" />
+    </Style>
+
+    <Style BasedOn="{StaticResource {x:Type ui:NumberBox}}" TargetType="ui:NumberBox">
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource DefaultValidationErrorTemplate}" />
+    </Style>
 </ResourceDictionary>

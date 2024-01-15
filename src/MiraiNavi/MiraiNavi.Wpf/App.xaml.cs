@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Messaging;
@@ -19,7 +16,6 @@ using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
 using Wpf.Ui.Appearance;
-using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp;
 
