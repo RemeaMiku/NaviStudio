@@ -29,6 +29,7 @@ public partial class MainWindow : UiWindow
 
     void SetPages()
     {
+        StartOptionsView.Content = App.Current.Services.GetRequiredService<StartOptionsPage>();
         MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
         SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
         PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();

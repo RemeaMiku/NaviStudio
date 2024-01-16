@@ -1,15 +1,16 @@
-﻿using System.Net.Sockets;
+﻿using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using MiraiNavi.Shared.Common.Helpers;
 using MiraiNavi.Shared.Models;
-using MiraiNavi.Shared.Models.RealTime;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.Shared.Serialization;
 using NaviSharp;
 
 using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
 using var client = new TcpClient();
-client.Connect(RealTimeSolutionOptions.DefaultEpochDataIPEndPoint);
+client.Connect(new(IPAddress.Loopback, 39831));
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
 using var writer = new BinaryWriter(stream, Encoding.UTF8);

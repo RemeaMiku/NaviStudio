@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="System.IO.Ports" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\..\..\..\..\dotnet\NaviSharp\NaviSharp\NaviSharp.csproj" />
 	</ItemGroup>
 </Project>

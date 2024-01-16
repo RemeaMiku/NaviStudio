@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using MiraiNavi.Shared.Models.RealTime;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.Shared.Serialization;
+using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;
@@ -19,14 +20,14 @@ public class TcpJsonRealTimeSolutionService() : IRealTimeSolutionService
 
     public event EventHandler<EpochData?>? EpochDataReceived;
 
-    public async Task StartAsync(RealTimeSolutionOptions options, CancellationToken token)
+    public async Task StartAsync(SolutionOptions options, CancellationToken token)
     {
         if (IsRunning)
             throw new InvalidOperationException("It's already started.");
         IsRunning = true;
         try
         {
-            using var listener = new TcpListener(options.EpochDataIPEndPoint);
+            using var listener = new TcpListener(AppSettingsManager.Settings.SolutionSettings.EpochDataEndPoint);
             listener.Start();
             var process = Process.Start(_clientPath);
             using var client = await listener.AcceptTcpClientAsync(token);

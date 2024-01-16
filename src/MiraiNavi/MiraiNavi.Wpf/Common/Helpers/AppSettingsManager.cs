@@ -58,7 +58,7 @@ public static class AppSettingsManager
         ThrowIfNotJson(filePath);
         using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
         using var writer = new StreamWriter(stream);
-        writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));
+        //writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));
     }
 
     public static bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)

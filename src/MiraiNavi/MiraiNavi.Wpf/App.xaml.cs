@@ -33,6 +33,7 @@ public partial class App : Application
 #endif
             .AddSingleton<IEpochDatasService, EpochDatasService>()
             .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+            .AddSingleton<StartOptionsPageViewModel>()
             .AddTransient<ChartPageViewModel>()
             .AddTransient<ChartGroupPageViewModel>()
             .AddSingleton<SatelliteTrackingPageViewModel>()
@@ -44,6 +45,7 @@ public partial class App : Application
             .AddSingleton<MainWindowViewModel>()
             .AddSingleton<PropertyPageViewModel>()
             .AddTransient<ChartToolWindowViewModel>()
+            .AddSingleton<StartOptionsPage>()
             .AddSingleton<SatelliteTrackingPage>()
             .AddSingleton<OutputPage>()
             .AddSingleton<DashBoardPage>()

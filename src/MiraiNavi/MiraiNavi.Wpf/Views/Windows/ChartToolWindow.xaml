@@ -21,7 +21,8 @@
             <Setter Property="IsExpanded" Value="True" />
             <Setter Property="MinWidth" Value="0" />
             <Setter Property="Padding" Value="5" />
-            <Setter Property="Background" Value="{StaticResource MikuGreenBrushAlpha}" />
+            <Setter Property="Foreground" Value="{StaticResource MikuGreenBrush}" />
+            <Setter Property="Background" Value="{ui:ThemeResource}" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="ContentPadding" Value="0" />
             <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />

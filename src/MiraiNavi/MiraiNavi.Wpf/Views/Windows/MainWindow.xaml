@@ -73,7 +73,7 @@
                                 <ui:MenuItem
                                     Click="OnViewMenuItemClicked"
                                     Header="{x:Static pages:StartOptionsPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=StartView}">
+                                    Tag="{Binding ElementName=StartOptionsView}">
                                     <ui:MenuItem.Icon>
                                         <ui:SymbolIcon Symbol="PlaySettings20" />
                                     </ui:MenuItem.Icon>
@@ -247,7 +247,7 @@
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="StartView"
+                        x:Name="StartOptionsView"
                         syncfusion:DockingManager.CanDock="False"
                         syncfusion:DockingManager.Header="{x:Static pages:StartOptionsPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"

@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MiraiNavi.Shared.Models.RealTime;
+using MiraiNavi.Shared.Models.Solution;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 
@@ -10,5 +10,5 @@ public interface IRealTimeSolutionService
 
     public event EventHandler<EpochData?>? EpochDataReceived;
     //TODO 超时处理
-    public Task StartAsync(RealTimeSolutionOptions options, CancellationToken token);
+    public Task StartAsync(SolutionOptions options, CancellationToken token);
 }

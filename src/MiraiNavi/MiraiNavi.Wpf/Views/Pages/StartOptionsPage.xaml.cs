@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
+using MiraiNavi.WpfApp.ViewModels.Pages;
 
 namespace MiraiNavi.WpfApp.Views.Pages;
 
@@ -7,8 +9,12 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class StartOptionsPage : UserControl
 {
-    public StartOptionsPage()
+    public StartOptionsPage(StartOptionsPageViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = this;
+        ViewModel = viewModel;
     }
+
+    public StartOptionsPageViewModel ViewModel { get; }
 }

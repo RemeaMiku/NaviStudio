@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.Shared.Models.RealTime;
+using MiraiNavi.Shared.Models.Solution;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Models;
 using MiraiNavi.WpfApp.Services.Contracts;
@@ -44,11 +44,11 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             _messenger.Send(new NotificationMessage(Notifications.Update));
     }
 
-    public static readonly RealTimeSolutionOptions DefaultOptions = new("默认");
+    public static readonly SolutionOptions DefaultOptions = new("默认");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
-    RealTimeSolutionOptions? _options;
+    SolutionOptions? _options;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
