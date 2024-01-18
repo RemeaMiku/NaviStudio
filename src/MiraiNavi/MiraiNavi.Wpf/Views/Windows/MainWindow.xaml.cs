@@ -20,8 +20,8 @@ public partial class MainWindow : UiWindow
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
-        if (AppSettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            AppSettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        if (App.Current.SettingsManager.Settings.AppearanceSettings.EnableAcrylic)
+            App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
         DataContext = this;
         SetPages();
@@ -29,7 +29,7 @@ public partial class MainWindow : UiWindow
 
     void SetPages()
     {
-        StartOptionsView.Content = App.Current.Services.GetRequiredService<StartOptionsPage>();
+        SolutionOptionsView.Content = App.Current.Services.GetRequiredService<SolutionOptionsPage>();
         MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
         SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
         PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();

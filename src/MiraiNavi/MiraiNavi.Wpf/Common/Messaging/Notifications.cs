@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models;
+﻿namespace MiraiNavi.WpfApp.Common.Messaging;
 
 public enum Notifications
 {

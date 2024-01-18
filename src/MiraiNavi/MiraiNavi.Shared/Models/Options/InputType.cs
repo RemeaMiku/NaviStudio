@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiraiNavi.Shared.Models.Solution;
+namespace MiraiNavi.Shared.Models.Options;
 
 public enum InputType
 {
-    TCP,
+    Tcp,
     Serial,
 }

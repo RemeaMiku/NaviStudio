@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.WpfApp.Services.Contracts;
+using MiraiNavi.WpfApp.ViewModels.Base;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

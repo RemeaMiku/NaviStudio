@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.Shared.Serialization;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
@@ -27,7 +27,7 @@ public class TcpJsonRealTimeSolutionService() : IRealTimeSolutionService
         IsRunning = true;
         try
         {
-            using var listener = new TcpListener(AppSettingsManager.Settings.SolutionSettings.EpochDataEndPoint);
+            using var listener = new TcpListener(App.Current.SettingsManager.Settings.SolutionSettings.EpochDataEndPointOptions.ToIPEndPoint());
             listener.Start();
             var process = Process.Start(_clientPath);
             using var client = await listener.AcceptTcpClientAsync(token);

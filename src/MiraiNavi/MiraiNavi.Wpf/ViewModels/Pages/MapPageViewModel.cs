@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using GMap.NET;
 using MiraiNavi.WpfApp.Common.Extensions;
 using MiraiNavi.WpfApp.Services.Contracts;
+using MiraiNavi.WpfApp.ViewModels.Base;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

@@ -6,11 +6,11 @@ using MiraiNavi.WpfApp.Common.Settings;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
-namespace MiraiNavi.WpfApp.Common.Helpers;
+namespace MiraiNavi.WpfApp.Common.Settings;
 
-public static class AppSettingsManager
+public class AppSettingsManager
 {
-    public static AppSettings Settings
+    public AppSettings Settings
     {
         get => _settings;
         private set
@@ -23,9 +23,9 @@ public static class AppSettingsManager
         }
     }
 
-    public static string FilePath { get; private set; } = string.Empty;
+    public string FilePath { get; private set; } = string.Empty;
 
-    public static AppSettings Load(string filePath, AppSettings fallback)
+    public AppSettings Load(string filePath, AppSettings fallback)
     {
         ArgumentException.ThrowIfNullOrEmpty(filePath);
         ArgumentNullException.ThrowIfNull(fallback);
@@ -45,23 +45,23 @@ public static class AppSettingsManager
         return Settings;
     }
 
-    public static AppSettings RollBack()
+    public AppSettings RollBack()
     {
         Settings = _preSettings;
         return Settings;
     }
 
-    public static void Save(string? filePath = default)
+    public void Save(string? filePath = default)
     {
         filePath ??= FilePath;
         ArgumentException.ThrowIfNullOrEmpty(filePath);
         ThrowIfNotJson(filePath);
         using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
         using var writer = new StreamWriter(stream);
-        //writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));
+        writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));
     }
 
-    public static bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)
+    public bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)
     {
         try
         {
@@ -82,8 +82,8 @@ public static class AppSettingsManager
         }
     }
 
-    static AppSettings _settings = new();
-    static AppSettings _preSettings = new();
+    AppSettings _settings = new();
+    AppSettings _preSettings = new();
 
     static readonly JsonSerializerOptions _serializerOptions = new()
     {

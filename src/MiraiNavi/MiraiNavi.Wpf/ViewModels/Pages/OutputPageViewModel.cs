@@ -4,7 +4,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Output;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

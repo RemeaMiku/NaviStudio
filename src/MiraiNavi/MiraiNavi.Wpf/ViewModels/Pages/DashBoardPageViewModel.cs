@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.Shared.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
+using MiraiNavi.WpfApp.ViewModels.Base;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

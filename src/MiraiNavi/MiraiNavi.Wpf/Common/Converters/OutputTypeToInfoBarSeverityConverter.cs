@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Models.Output;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Common.Converters;

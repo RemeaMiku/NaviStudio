@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models;
+﻿namespace MiraiNavi.WpfApp.Models.Output;
 
 public enum OutputType
 {

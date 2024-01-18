@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MiraiNavi.Shared.Models.Options;
 
 namespace MiraiNavi.WpfApp.Common.Settings;
 
 public class SolutionSettings
 {
-    public static readonly IPEndPoint DefaultEpochDataIPEndPoint = new(IPAddress.Loopback, 39831);
+    public static readonly IPEndPointOptions DefaultEpochDataIPEndPointOptions = new(IPAddress.Loopback.ToString(), 39831);
 
-    public IPEndPoint EpochDataEndPoint { get; set; } = DefaultEpochDataIPEndPoint;
+    public IPEndPointOptions EpochDataEndPointOptions { get; set; } = DefaultEpochDataIPEndPointOptions;
 }

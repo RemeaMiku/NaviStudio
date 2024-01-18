@@ -14,8 +14,8 @@ public partial class ChartToolWindow : UiWindow
     public ChartToolWindow(ChartToolWindowViewModel viewModel)
     {
         InitializeComponent();
-        if (AppSettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            AppSettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        if (App.Current.SettingsManager.Settings.AppearanceSettings.EnableAcrylic)
+            App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
         DataContext = this;
         ViewModel.CreateRequested += (sender, paras) =>

@@ -6,6 +6,7 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
+using MiraiNavi.WpfApp.Common.Settings;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
@@ -24,41 +25,6 @@ namespace MiraiNavi.WpfApp;
 /// </summary>
 public partial class App : Application
 {
-    public App()
-    {
-        Services = new ServiceCollection()
-            .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-#if DEBUG
-            .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
-#endif
-            .AddSingleton<IEpochDatasService, EpochDatasService>()
-            .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
-            .AddSingleton<StartOptionsPageViewModel>()
-            .AddTransient<ChartPageViewModel>()
-            .AddTransient<ChartGroupPageViewModel>()
-            .AddSingleton<SatelliteTrackingPageViewModel>()
-            .AddSingleton<OutputPageViewModel>()
-            .AddSingleton<MapPageViewModel>()
-            .AddSingleton<SkyMapPageViewModel>()
-            .AddSingleton<DashBoardPageViewModel>()
-            .AddSingleton<PosePageViewModel>()
-            .AddSingleton<MainWindowViewModel>()
-            .AddSingleton<PropertyPageViewModel>()
-            .AddTransient<ChartToolWindowViewModel>()
-            .AddSingleton<StartOptionsPage>()
-            .AddSingleton<SatelliteTrackingPage>()
-            .AddSingleton<OutputPage>()
-            .AddSingleton<DashBoardPage>()
-            .AddSingleton<MapPage>()
-            .AddSingleton<SkyMapPage>()
-            .AddSingleton<PosePage>()
-            .AddSingleton<MainWindow>()
-            .AddSingleton<PropertyPage>()
-            .AddTransient<ChartToolWindow>()
-            .AddTransient<ChartPage>()
-            .AddTransient<ChartGroupPage>()
-            .BuildServiceProvider();
-    }
 
     public static void SetGMap()
     {
@@ -90,8 +56,40 @@ public partial class App : Application
 
     public static new App Current => (App)Application.Current;
 
+    public IServiceProvider Services { get; } = new ServiceCollection()
+            .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
+#if DEBUG
+            .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
+#endif
+            .AddSingleton<IEpochDatasService, EpochDatasService>()
+            .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+            .AddSingleton<SolutionOptionsPageViewModel>()
+            .AddTransient<ChartPageViewModel>()
+            .AddTransient<ChartGroupPageViewModel>()
+            .AddSingleton<SatelliteTrackingPageViewModel>()
+            .AddSingleton<OutputPageViewModel>()
+            .AddSingleton<MapPageViewModel>()
+            .AddSingleton<SkyMapPageViewModel>()
+            .AddSingleton<DashBoardPageViewModel>()
+            .AddSingleton<PosePageViewModel>()
+            .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<PropertyPageViewModel>()
+            .AddTransient<ChartToolWindowViewModel>()
+            .AddSingleton<SolutionOptionsPage>()
+            .AddSingleton<SatelliteTrackingPage>()
+            .AddSingleton<OutputPage>()
+            .AddSingleton<DashBoardPage>()
+            .AddSingleton<MapPage>()
+            .AddSingleton<SkyMapPage>()
+            .AddSingleton<PosePage>()
+            .AddSingleton<MainWindow>()
+            .AddSingleton<PropertyPage>()
+            .AddTransient<ChartToolWindow>()
+            .AddTransient<ChartPage>()
+            .AddTransient<ChartGroupPage>()
+            .BuildServiceProvider();
 
-    public IServiceProvider Services { get; }
+    public AppSettingsManager SettingsManager { get; } = new();
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -99,8 +97,8 @@ public partial class App : Application
         RegisterKeys();
         ApplyTheme();
         new SplashScreen("Assets/splash-screen.png").Show(true);
-        AppSettingsManager.Load("appsettings.json", new());
-        AppSettingsManager.Save();
+        SettingsManager.Load("appsettings.json", new());
+        SettingsManager.Save();
         var mainWindow = Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
         mainWindow.WindowState = WindowState.Maximized;

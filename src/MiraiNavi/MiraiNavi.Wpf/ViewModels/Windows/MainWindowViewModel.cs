@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Common.Messaging;
+using MiraiNavi.WpfApp.Models.Output;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;

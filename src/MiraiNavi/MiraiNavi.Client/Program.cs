@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using MiraiNavi.Shared.Common.Helpers;
 using MiraiNavi.Shared.Models;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.Shared.Serialization;
 using NaviSharp;
 

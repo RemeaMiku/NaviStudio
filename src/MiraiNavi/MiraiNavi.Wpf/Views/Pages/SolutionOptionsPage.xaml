@@ -1,0 +1,225 @@
+﻿<UserControl
+    x:Class="MiraiNavi.WpfApp.Views.Pages.SolutionOptionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:MiraiNavi.WpfApp.Common.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:options="clr-namespace:MiraiNavi.Shared.Models.Options;assembly=MiraiNavi.Shared"
+    xmlns:pages="clr-namespace:MiraiNavi.WpfApp.ViewModels.Pages"
+    xmlns:port="clr-namespace:System.IO.Ports;assembly=System"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:MiraiNavi.WpfApp.ViewModels"
+    d:DataContext="{d:DesignInstance Type=local:SolutionOptionsPage}"
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <sys:Double x:Key="WrapItemWidth">200</sys:Double>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:StringFormatConverter x:Key="StringFormatConverter" />
+        <cv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
+        <cv:IPAddressToStringConverter x:Key="IPAddressToStringConverter" />
+        <Thickness x:Key="SmallSpacing">0,5</Thickness>
+        <Thickness x:Key="LargeSpacing">5,10</Thickness>
+        <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+            <Setter Property="Margin" Value="{StaticResource LargeSpacing}" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type ui:CardExpander}}" TargetType="ui:CardExpander">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Background" Value="{ui:ThemeResource}" />
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        </Style>
+        <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="InputOptionsTemplate" DataType="vm:InputOptionsViewModel">
+            <DataTemplate.Resources />
+            <StackPanel Orientation="Vertical">
+                <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
+                    <HeaderedContentControl Header="传输类型">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            SelectedValue="{Binding Type}"
+                            SelectedValuePath="Tag">
+                            <ComboBoxItem Content="TCP" Tag="{x:Static options:InputType.Tcp}" />
+                            <ComboBoxItem Content="串口" Tag="{x:Static options:InputType.Serial}" />
+                        </ComboBox>
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Header="格式">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.InputFormats}"
+                            SelectedValue="{Binding Format}" />
+                    </HeaderedContentControl>
+                </WrapPanel>
+                <ui:CardExpander ContentPadding="5" Visibility="{Binding IsTcp, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <ui:CardExpander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="CellularData124" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="TCP 选项" />
+                        </StackPanel>
+                    </ui:CardExpander.Header>
+                    <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
+                        <HeaderedContentControl Header="IP 地址">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding TcpAddress, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="端口">
+                            <ui:NumberBox
+                                Margin="{StaticResource SmallSpacing}"
+                                Maximum="65535"
+                                Minimum="0"
+                                ValidationMode="InvalidInputOverwritten"
+                                Value="{Binding TcpPort, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </HeaderedContentControl>
+                    </WrapPanel>
+                </ui:CardExpander>
+                <ui:CardExpander ContentPadding="5" Visibility="{Binding IsSerial, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <ui:CardExpander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="SerialPort24" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="串口选项" />
+                        </StackPanel>
+                    </ui:CardExpander.Header>
+                    <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
+                        <HeaderedContentControl Header="端口名">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding SerialPortName, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="串行波特率(bps)">
+                            <ComboBox
+                                Margin="{StaticResource SmallSpacing}"
+                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.BaudRates}"
+                                SelectedValue="{Binding SerialBaudRate}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="标准数据位长度">
+                            <ComboBox
+                                Margin="{StaticResource SmallSpacing}"
+                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.DataBits}"
+                                SelectedValue="{Binding SerialDataBits}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="奇偶校验协议">
+                            <ComboBox
+                                Margin="{StaticResource SmallSpacing}"
+                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.Parities}"
+                                SelectedValue="{Binding SerialParity}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="标准停止位数">
+                            <ComboBox
+                                Margin="{StaticResource SmallSpacing}"
+                                SelectedValue="{Binding SerialStopBits}"
+                                SelectedValuePath="Tag">
+                                <ComboBoxItem Content="1" Tag="{x:Static port:StopBits.One}" />
+                                <ComboBoxItem Content="1.5" Tag="{x:Static port:StopBits.OnePointFive}" />
+                                <ComboBoxItem Content="2" Tag="{x:Static port:StopBits.Two}" />
+                            </ComboBox>
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="启用 RTS 信号">
+                            <ui:ToggleSwitch Margin="0,12,0,0" IsChecked="{Binding SerialRtsEnable}" />
+                        </HeaderedContentControl>
+                    </WrapPanel>
+                </ui:CardExpander>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Border d:Background="Black">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Padding="10" Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}">
+                <ui:DynamicScrollViewer IsScrollingVertically="True" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <HeaderedContentControl Header="预设名称">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionName, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <ui:CardExpander
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Header="输入选项"
+                            Icon="SoundSource24">
+                            <TabControl
+                                Padding="0"
+                                SelectedValuePath="Header"
+                                TabStripPlacement="Top">
+                                <TabItem
+                                    Content="{Binding ViewModel.BaseOptions, Mode=OneWay}"
+                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                    FontSize="16"
+                                    Header="基准站" />
+                                <TabItem
+                                    Content="{Binding ViewModel.RoverOptions, Mode=OneWay}"
+                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                    FontSize="16"
+                                    Header="流动站" />
+                            </TabControl>
+                        </ui:CardExpander>
+                        <ui:CardExpander
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Header="输出选项"
+                            Icon="DocumentArrowRight24">
+                            <HeaderedContentControl Header="输出路径">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBox
+                                        Margin="{StaticResource SmallSpacing}"
+                                        PlaceholderText="不填则不输出"
+                                        Text="{Binding ViewModel.OutputFilePath, UpdateSourceTrigger=PropertyChanged}" />
+                                    <ui:Button
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        Appearance="Primary"
+                                        BorderThickness="0"
+                                        Command="{Binding ViewModel.SelectOuputFilePathCommand, Mode=OneTime}"
+                                        FontSize="{StaticResource MediumFontSize}"
+                                        Icon="Folder24" />
+                                </Grid>
+                            </HeaderedContentControl>
+                        </ui:CardExpander>
+                    </StackPanel>
+                </ui:DynamicScrollViewer>
+            </Border>
+            <Border Grid.Row="1" Padding="10">
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Appearance="Caution"
+                        Command="{Binding ViewModel.ReadSolutionOptionsCommand, Mode=OneTime}"
+                        Content="读取"
+                        Icon="DocumentArrowLeft24" />
+                    <ui:Button
+                        Margin="5,0,0,0"
+                        Appearance="Info"
+                        Command="{Binding ViewModel.SaveSolutionOptionsCommand, Mode=OneTime}"
+                        Content="导出"
+                        Icon="DesktopArrowRight24" />
+                    <ui:Button
+                        Margin="5,0,0,0"
+                        Appearance="Primary"
+                        Content="确认"
+                        Icon="Checkmark24" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

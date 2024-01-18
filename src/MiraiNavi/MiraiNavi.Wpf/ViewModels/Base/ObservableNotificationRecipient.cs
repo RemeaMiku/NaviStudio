@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.WpfApp.Models;
+using MiraiNavi.WpfApp.Common.Messaging;
 using MiraiNavi.WpfApp.Services.Contracts;
 
-namespace MiraiNavi.WpfApp.ViewModels;
+namespace MiraiNavi.WpfApp.ViewModels.Base;
 
 public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<NotificationMessage>
 {

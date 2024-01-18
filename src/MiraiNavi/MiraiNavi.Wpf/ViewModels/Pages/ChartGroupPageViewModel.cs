@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
+using MiraiNavi.WpfApp.ViewModels.Base;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

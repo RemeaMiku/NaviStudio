@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MiraiNavi.Shared.Models.Solution;
+using MiraiNavi.Shared.Models.Options;
 
 namespace MiraiNavi.WpfApp.Services.Contracts;
 
