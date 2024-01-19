@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using GMap.NET;
 using MiraiNavi.WpfApp.Common.Extensions;
+using MiraiNavi.WpfApp.Common.Messaging;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Base;
 
@@ -38,7 +39,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     partial void OnSelectedPointChanged(TimePointLatLng? value)
     {
         var epochData = !value.HasValue ? default : _epochDatasService.GetByTimeStamp(value.Value.Item1);
-        Messenger.Send(new ValueChangedMessage<EpochData?>(epochData), Title);
+        Messenger.Send(new ValueChangedMessage<EpochData?>(epochData), MessageTokens.ToPropertyPage);
     }
 
     [RelayCommand]

@@ -7,7 +7,6 @@ namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public static class DockingWindowHandler
 {
-    static readonly FrozenSet<Type> _documentTypes = new HashSet<Type>() { typeof(MapPage), typeof(SolutionOptionsPage) }.ToFrozenSet();
     static readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
 
     public static void RestoreDockState(ContentControl contentControl)
@@ -21,10 +20,7 @@ public static class DockingWindowHandler
     {
         if (contentControl.Content is null)
             return;
-        if (_documentTypes.Contains(contentControl.Content.GetType()))
-            _dockStatesOnClosed[contentControl] = DockState.Document;
-        else
-            _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
+        _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
     }
 
     public static void SetViewModelIsActive(ContentControl contentControl, bool isActive)

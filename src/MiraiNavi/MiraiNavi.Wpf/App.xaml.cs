@@ -59,11 +59,11 @@ public partial class App : Application
     public IServiceProvider Services { get; } = new ServiceCollection()
             .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
 #if DEBUG
-            .AddSingleton<IRealTimeSolutionService, TcpJsonRealTimeSolutionService>()
+            .AddSingleton<IRealTimeService, TcpJsonRealTimeService>()
 #endif
             .AddSingleton<IEpochDatasService, EpochDatasService>()
             .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
-            .AddSingleton<SolutionOptionsPageViewModel>()
+            .AddSingleton<RealTimeOptionsPageViewModel>()
             .AddTransient<ChartPageViewModel>()
             .AddTransient<ChartGroupPageViewModel>()
             .AddSingleton<SatelliteTrackingPageViewModel>()
@@ -75,7 +75,7 @@ public partial class App : Application
             .AddSingleton<MainWindowViewModel>()
             .AddSingleton<PropertyPageViewModel>()
             .AddTransient<ChartToolWindowViewModel>()
-            .AddSingleton<SolutionOptionsPage>()
+            .AddSingleton<RealTimeOptionsPage>()
             .AddSingleton<SatelliteTrackingPage>()
             .AddSingleton<OutputPage>()
             .AddSingleton<DashBoardPage>()
@@ -104,7 +104,7 @@ public partial class App : Application
         mainWindow.WindowState = WindowState.Maximized;
 #if DEBUG
         // TODO DEBUG
-        mainWindow.ViewModel.Options = new("Debug");
+        //mainWindow.ViewModel.Options = new("Debug");
 #endif
     }
 }

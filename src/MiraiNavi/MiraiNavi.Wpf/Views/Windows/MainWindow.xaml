@@ -72,8 +72,8 @@
                             <ui:MenuItem Header="视图(_V)">
                                 <ui:MenuItem
                                     Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:SolutionOptionsPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=SolutionOptionsView}">
+                                    Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}"
+                                    Tag="{Binding ElementName=RealTimeOptionsView}">
                                     <ui:MenuItem.Icon>
                                         <ui:SymbolIcon Symbol="PlaySettings20" />
                                     </ui:MenuItem.Icon>
@@ -112,7 +112,7 @@
                                 </ui:MenuItem>
                                 <ui:MenuItem
                                     Click="OnViewMenuItemClicked"
-                                    Header="属性(_P)"
+                                    Header="{x:Static pages:PropertyPageViewModel.MenuItemHeader}"
                                     Tag="{Binding ElementName=PropertyView}">
                                     <ui:MenuItem.Icon>
                                         <ui:SymbolIcon Symbol="Wrench24" />
@@ -185,6 +185,7 @@
                             Style="{StaticResource ToolUiButtonStyle}" />
                         <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
                         <ui:Button
+                            Click="OnRealTimeOptionsViewButtonClicked"
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="PlaySettings20"
                             Style="{StaticResource ToolUiButtonStyle}" />
@@ -247,9 +248,9 @@
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="SolutionOptionsView"
+                        x:Name="RealTimeOptionsView"
                         syncfusion:DockingManager.CanDock="False"
-                        syncfusion:DockingManager.Header="{x:Static pages:SolutionOptionsPageViewModel.Title}"
+                        syncfusion:DockingManager.Header="{x:Static pages:RealTimeOptionsPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
@@ -269,7 +270,7 @@
                         x:Name="PropertyView"
                         syncfusion:DockingManager.DesiredHeightInDockedMode="100"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
-                        syncfusion:DockingManager.Header="属性"
+                        syncfusion:DockingManager.Header="{x:Static pages:PropertyPageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Bottom"
                         syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=SkyMapView}"
                         Style="{StaticResource DefaultContentControlStyle}" />

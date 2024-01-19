@@ -12,7 +12,7 @@ using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;
 
-public class TcpJsonRealTimeSolutionService() : IRealTimeSolutionService
+public class TcpJsonRealTimeService() : IRealTimeService
 {
     protected const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
 
@@ -20,7 +20,7 @@ public class TcpJsonRealTimeSolutionService() : IRealTimeSolutionService
 
     public event EventHandler<EpochData?>? EpochDataReceived;
 
-    public async Task StartAsync(SolutionOptions options, CancellationToken token)
+    public async Task StartAsync(RealTimeOptions options, CancellationToken token)
     {
         if (IsRunning)
             throw new InvalidOperationException("It's already started.");

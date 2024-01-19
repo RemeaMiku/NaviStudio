@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using MiraiNavi.WpfApp.Models.Chart;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
-//TODO 属性验证模板
+
 public partial class ChartToolWindowViewModel : ObservableValidator
 {
     public const string Title = "创建图表组";
@@ -42,39 +42,28 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [
     ];
 
-    public ObservableCollection<string> SelectedItems { get; } = [];
+    public HashSet<string> SelectedItems { get; } = [];
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [NotifyCanExecuteChangedFor(nameof(CreateChartGroupCommand))]
-    [Range(1, 100, ErrorMessage = $"大小需在 1 到 100 之间")]
+    [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
+    [Range(3, 100, ErrorMessage = $"大小需在 3 到 100 之间")]
     int _maxEpochCount = 10;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [NotifyCanExecuteChangedFor(nameof(CreateChartGroupCommand))]
+    [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
     [Required(ErrorMessage = "不能为空")]
-    [Length(1, 20, ErrorMessage = "长度需在 1 到 20 之间")]
-    string? _chartGroupName;
+    [Length(1, 10, ErrorMessage = "长度需在 1 到 10 之间")]
+    string _chartGroupName = "未命名";
 
     [RelayCommand]
     void SelectItem(string item)
     {
-        if (!SelectedItems.Remove(item))
-            SelectedItems.Add(item);
-        ValidateAllProperties();
-        CreateChartGroupCommand.NotifyCanExecuteChanged();
-        ClearErrors();
+        if (!SelectedItems.Add(item))
+            SelectedItems.Remove(item);
+        OnPropertyChanged(nameof(CanCreateChartGroup));
     }
 
     public bool CanCreateChartGroup => SelectedItems.Count != 0 && !HasErrors;
-
-    public event EventHandler<ChartGroupParameters>? CreateRequested;
-
-    [RelayCommand(CanExecute = nameof(CanCreateChartGroup))]
-    void CreateChartGroup()
-    {
-        var paras = new ChartGroupParameters(ChartGroupName!, MaxEpochCount, SelectedItems);
-        CreateRequested?.Invoke(this, paras);
-    }
 }

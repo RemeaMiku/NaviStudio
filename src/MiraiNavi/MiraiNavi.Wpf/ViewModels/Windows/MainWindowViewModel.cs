@@ -4,20 +4,21 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Messaging;
+using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.Models.Output;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeSolutionService realTimeControlService, IMessenger messenger) : ObservableObject
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>
 {
     CancellationTokenSource? _tokenSource;
     readonly IEpochDatasService _epochDatasService = epochDatasService;
-    readonly IRealTimeSolutionService _realTimeControlService = realTimeControlService;
-    readonly IMessenger _messenger = messenger;
+    readonly IRealTimeService _realTimeControlService = realTimeControlService;
 
     public const string Title = "MiraiNavi";
 
@@ -27,7 +28,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         {
             if (info.GetValue(epochData) is null)
             {
-                _messenger.Send(new Output(Title, OutputType.Warning, $"{DisplayDescriptionManager.Descriptions[info.Name]}数据异常"));
+                Messenger.Send(new Output(Title, OutputType.Warning, $"{DisplayDescriptionManager.Descriptions[info.Name]}数据异常"));
             }
         }
     }
@@ -36,20 +37,20 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if (data is null)
         {
-            _messenger.Send(new Output(Title, OutputType.Warning, "数据异常"));
+            Messenger.Send(new Output(Title, OutputType.Warning, "数据异常"));
             return;
         }
         ValidateEpochData(data);
         _epochDatasService.Add(data);
         if (IsRealTimeRunning)
-            _messenger.Send(new NotificationMessage(Notifications.Update));
+            Messenger.Send(new NotificationMessage(Notifications.Update));
     }
 
-    public static readonly SolutionOptions DefaultOptions = new("默认");
+    public static readonly RealTimeOptions DefaultOptions = new("默认");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
-    SolutionOptions? _options;
+    RealTimeOptions? _options;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
@@ -63,21 +64,21 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if (value)
         {
-            _messenger.Send(new NotificationMessage(Notifications.Reset));
-            _messenger.Send(new Output(Title, OutputType.Info, "解算开始"));
+            Messenger.Send(new NotificationMessage(Notifications.Reset));
+            Messenger.Send(new Output(Title, OutputType.Info, "开始接收"));
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
         else
         {
             _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
-            _messenger.Send(new Output(Title, OutputType.Info, "解算停止"));
+            Messenger.Send(new Output(Title, OutputType.Info, "停止接收"));
         }
     }
 
     partial void OnIsRealTimeRunningChanged(bool value)
     {
         if (value)
-            _messenger.Send(new NotificationMessage(Notifications.Sync));
+            Messenger.Send(new NotificationMessage(Notifications.Sync));
     }
 
     public string StartOrResumeText
@@ -103,7 +104,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         catch (Exception ex)
         {
             Trace.TraceError(ex.Message);
-            _messenger.Send(new Output(Title, OutputType.Error, $"出错了，实时解算中止：{Environment.NewLine}{ex.Message}", ex.StackTrace));
+            Messenger.Send(new Output(Title, OutputType.Error, $"出错了：{Environment.NewLine}{ex.Message}", ex.StackTrace));
         }
         finally
         {
@@ -120,7 +121,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (!IsRealTimeStarted)
             return;
         IsRealTimeRunning = true;
-        _messenger.Send(new Output(Title, OutputType.Info, "更新继续"));
+        Messenger.Send(new Output(Title, OutputType.Info, "继续更新"));
     }
 
     [RelayCommand]
@@ -129,7 +130,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (!IsRealTimeRunning)
             return;
         IsRealTimeRunning = false;
-        _messenger.Send(new Output(Title, OutputType.Info, "更新暂停"));
+        Messenger.Send(new Output(Title, OutputType.Info, "暂停更新"));
     }
 
     [RelayCommand]
@@ -140,5 +141,10 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         ArgumentNullException.ThrowIfNull(_tokenSource);
         _tokenSource.Cancel();
         IsRealTimeStarted = false;
+    }
+
+    public void Receive(ValueChangedMessage<RealTimeOptions> message)
+    {
+        Options = message.Value;
     }
 }

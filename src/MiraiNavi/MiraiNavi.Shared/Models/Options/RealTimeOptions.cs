@@ -3,11 +3,11 @@ using System.Net;
 
 namespace MiraiNavi.Shared.Models.Options;
 
-public class SolutionOptions
+public class RealTimeOptions
 {
-    public SolutionOptions() { }
+    public RealTimeOptions() { }
 
-    public SolutionOptions(string name)
+    public RealTimeOptions(string name)
     {
         Name = name;
     }
@@ -17,6 +17,4 @@ public class SolutionOptions
     public InputOptions BaseOptions { get; set; } = new();
 
     public InputOptions RoverOptions { get; set; } = new();
-
-    public string OutputFilePath { get; set; } = string.Empty;
 }

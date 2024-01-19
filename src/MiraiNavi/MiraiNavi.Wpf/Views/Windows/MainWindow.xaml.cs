@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
+using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Syncfusion.Windows.Tools.Controls;
@@ -20,16 +21,16 @@ public partial class MainWindow : UiWindow
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
-        if (App.Current.SettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
+        ViewModel.IsActive = true;
         DataContext = this;
         SetPages();
     }
 
     void SetPages()
     {
-        SolutionOptionsView.Content = App.Current.Services.GetRequiredService<SolutionOptionsPage>();
+        RealTimeOptionsView.Content = App.Current.Services.GetRequiredService<RealTimeOptionsPage>();
         MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
         SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
         PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();
@@ -53,13 +54,18 @@ public partial class MainWindow : UiWindow
         DockingManager.SetHeader(contentControl, header);
     }
 
-    void OnViewMenuItemClicked(object sender, RoutedEventArgs e)
+    void RestoreAndActiveWindow(ContentControl contentControl)
     {
-        var contentControl = (ContentControl)((Wpf.Ui.Controls.MenuItem)sender).Tag;
         if (DockingManager.GetState(contentControl) == DockState.Hidden)
             DockingWindowHandler.RestoreDockState(contentControl);
         else
             DockingManagerControl.ActiveWindow = contentControl;
+    }
+
+    void OnViewMenuItemClicked(object sender, RoutedEventArgs e)
+    {
+        var contentControl = (ContentControl)((Wpf.Ui.Controls.MenuItem)sender).Tag;
+        RestoreAndActiveWindow(contentControl);
     }
 
     void OnDockingManagerNotDocumentWindowClosing(object sender, WindowClosingEventArgs e)
@@ -94,6 +100,18 @@ public partial class MainWindow : UiWindow
 
     private void OnChartToolItemClicked(object sender, RoutedEventArgs e)
     {
-        App.Current.Services.GetRequiredService<ChartToolWindow>().ShowDialog();
+        var window = App.Current.Services.GetRequiredService<ChartToolWindow>();
+        if (window.ShowDialog() == true)
+        {
+            var paras = new ChartGroupParameters(window.ViewModel.ChartGroupName!, window.ViewModel.MaxEpochCount, window.ViewModel.SelectedItems);
+            var page = App.Current.Services.GetRequiredService<ChartGroupPage>();
+            AddDocument($"图表组: {paras.Title}", page);
+            page.CreateCharts(paras);
+        }
+    }
+
+    private void OnRealTimeOptionsViewButtonClicked(object sender, RoutedEventArgs e)
+    {
+        RestoreAndActiveWindow(RealTimeOptionsView);
     }
 }

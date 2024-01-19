@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using MiraiNavi.WpfApp.ViewModels.Pages;
@@ -8,14 +9,14 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// <summary>
 /// StartPage.xaml 的交互逻辑
 /// </summary>
-public partial class SolutionOptionsPage : UserControl
+public partial class RealTimeOptionsPage : UserControl
 {
-    public SolutionOptionsPage(SolutionOptionsPageViewModel viewModel)
+    public RealTimeOptionsPage(RealTimeOptionsPageViewModel viewModel)
     {
         InitializeComponent();
         DataContext = this;
         ViewModel = viewModel;
     }
 
-    public SolutionOptionsPageViewModel ViewModel { get; }
+    public RealTimeOptionsPageViewModel ViewModel { get; }
 }

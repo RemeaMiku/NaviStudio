@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="MiraiNavi.WpfApp.Views.Pages.SolutionOptionsPage"
+    x:Class="MiraiNavi.WpfApp.Views.Pages.RealTimeOptionsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cv="clr-namespace:MiraiNavi.WpfApp.Common.Converters"
@@ -13,16 +13,15 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:MiraiNavi.WpfApp.ViewModels"
-    d:DataContext="{d:DesignInstance Type=local:SolutionOptionsPage}"
+    d:DataContext="{d:DesignInstance Type=local:RealTimeOptionsPage}"
     d:DesignHeight="800"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <sys:Double x:Key="WrapItemWidth">200</sys:Double>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <cv:StringFormatConverter x:Key="StringFormatConverter" />
         <cv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
-        <cv:IPAddressToStringConverter x:Key="IPAddressToStringConverter" />
+        <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
         <Thickness x:Key="SmallSpacing">0,5</Thickness>
         <Thickness x:Key="LargeSpacing">5,10</Thickness>
         <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
@@ -60,7 +59,7 @@
                     <HeaderedContentControl Header="格式">
                         <ComboBox
                             Margin="{StaticResource SmallSpacing}"
-                            ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.InputFormats}"
+                            ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.InputFormats}"
                             SelectedValue="{Binding Format}" />
                     </HeaderedContentControl>
                 </WrapPanel>
@@ -105,19 +104,19 @@
                         <HeaderedContentControl Header="串行波特率(bps)">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
-                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.BaudRates}"
+                                ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.BaudRates}"
                                 SelectedValue="{Binding SerialBaudRate}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="标准数据位长度">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
-                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.DataBits}"
+                                ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.DataBits}"
                                 SelectedValue="{Binding SerialDataBits}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="奇偶校验协议">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
-                                ItemsSource="{x:Static pages:SolutionOptionsPageViewModel.Parities}"
+                                ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.Parities}"
                                 SelectedValue="{Binding SerialParity}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="标准停止位数">
@@ -150,74 +149,45 @@
                         <HeaderedContentControl Header="预设名称">
                             <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionName, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
-                        <ui:CardExpander
-                            FontSize="{StaticResource MediumFontSize}"
-                            Foreground="{StaticResource MikuGreenBrush}"
-                            Header="输入选项"
-                            Icon="SoundSource24">
-                            <TabControl
-                                Padding="0"
-                                SelectedValuePath="Header"
-                                TabStripPlacement="Top">
-                                <TabItem
-                                    Content="{Binding ViewModel.BaseOptions, Mode=OneWay}"
-                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
-                                    FontSize="16"
-                                    Header="基准站" />
-                                <TabItem
-                                    Content="{Binding ViewModel.RoverOptions, Mode=OneWay}"
-                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
-                                    FontSize="16"
-                                    Header="流动站" />
-                            </TabControl>
-                        </ui:CardExpander>
-                        <ui:CardExpander
-                            FontSize="{StaticResource MediumFontSize}"
-                            Foreground="{StaticResource MikuGreenBrush}"
-                            Header="输出选项"
-                            Icon="DocumentArrowRight24">
-                            <HeaderedContentControl Header="输出路径">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <ui:TextBox
-                                        Margin="{StaticResource SmallSpacing}"
-                                        PlaceholderText="不填则不输出"
-                                        Text="{Binding ViewModel.OutputFilePath, UpdateSourceTrigger=PropertyChanged}" />
-                                    <ui:Button
-                                        Grid.Column="1"
-                                        Margin="10,0,0,0"
-                                        Appearance="Primary"
-                                        BorderThickness="0"
-                                        Command="{Binding ViewModel.SelectOuputFilePathCommand, Mode=OneTime}"
-                                        FontSize="{StaticResource MediumFontSize}"
-                                        Icon="Folder24" />
-                                </Grid>
-                            </HeaderedContentControl>
-                        </ui:CardExpander>
+                        <TabControl
+                            Padding="0"
+                            SelectedValuePath="Header"
+                            TabStripPlacement="Top">
+                            <TabItem
+                                Content="{Binding ViewModel.BaseOptions, Mode=OneWay}"
+                                ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                FontSize="16"
+                                Header="基准站" />
+                            <TabItem
+                                Content="{Binding ViewModel.RoverOptions, Mode=OneWay}"
+                                ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                FontSize="16"
+                                Header="流动站" />
+                        </TabControl>
                     </StackPanel>
                 </ui:DynamicScrollViewer>
             </Border>
             <Border Grid.Row="1" Padding="10">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <ui:Button
                         Appearance="Caution"
-                        Command="{Binding ViewModel.ReadSolutionOptionsCommand, Mode=OneTime}"
+                        Command="{Binding ViewModel.ReadCommand, Mode=OneTime}"
                         Content="读取"
                         Icon="DocumentArrowLeft24" />
                     <ui:Button
                         Margin="5,0,0,0"
                         Appearance="Info"
-                        Command="{Binding ViewModel.SaveSolutionOptionsCommand, Mode=OneTime}"
+                        Command="{Binding ViewModel.SaveCommand, Mode=OneTime}"
                         Content="导出"
-                        Icon="DesktopArrowRight24" />
+                        Icon="DesktopArrowRight24"
+                        IsEnabled="{Binding ViewModel.HasErrors, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}" />
                     <ui:Button
                         Margin="5,0,0,0"
                         Appearance="Primary"
+                        Command="{Binding ViewModel.ConfirmCommand, Mode=OneTime}"
                         Content="确认"
-                        Icon="Checkmark24" />
+                        Icon="CheckmarkCircle24"
+                        IsEnabled="{Binding ViewModel.HasErrors, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}" />
                 </StackPanel>
             </Border>
         </Grid>

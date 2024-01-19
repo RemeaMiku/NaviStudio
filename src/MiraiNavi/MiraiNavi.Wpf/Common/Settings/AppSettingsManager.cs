@@ -63,6 +63,8 @@ public class AppSettingsManager
 
     public bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)
     {
+        if (!Settings.AppearanceSettings.EnableAcrylic)
+            return false;
         try
         {
             window.WindowBackdropType = BackgroundType.Acrylic;

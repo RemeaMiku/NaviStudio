@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
+using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Wpf.Ui.Controls;
@@ -14,19 +15,16 @@ public partial class ChartToolWindow : UiWindow
     public ChartToolWindow(ChartToolWindowViewModel viewModel)
     {
         InitializeComponent();
-        if (App.Current.SettingsManager.Settings.AppearanceSettings.EnableAcrylic)
-            App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
         ViewModel = viewModel;
         DataContext = this;
-        ViewModel.CreateRequested += (sender, paras) =>
-        {
-            var page = App.Current.Services.GetRequiredService<ChartGroupPage>();
-            App.Current.Services.GetRequiredService<MainWindow>().AddDocument($"图表组: {paras.Title}", page);
-            page.CreateCharts(paras);
-            Close();
-        };
     }
 
     public ChartToolWindowViewModel ViewModel { get; }
 
+    private void OnConfirmButtonClicked(object sender, System.Windows.RoutedEventArgs e)
+    {
+        DialogResult = true;
+        Close();
+    }
 }
