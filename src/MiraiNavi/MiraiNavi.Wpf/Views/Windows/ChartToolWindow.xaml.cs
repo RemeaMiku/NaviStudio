@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Wpf.Ui.Controls;

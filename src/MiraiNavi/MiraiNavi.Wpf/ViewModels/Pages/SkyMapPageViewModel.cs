@@ -21,7 +21,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     [NotifyPropertyChangedFor(nameof(EnabledPositions))]
     double _minElevation = 5;
 
-    readonly List<SatelliteSystems> _enabledSystems = new(Enum.GetValues<SatelliteSystems>());
+    readonly HashSet<SatelliteSystems> _enabledSystems = new(Enum.GetValues<SatelliteSystems>());
 
     protected override void Update(EpochData message)
     {

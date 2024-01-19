@@ -2,8 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.Shared.Models.Chart;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Models.Chart;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using MiraiNavi.WpfApp.Views.Pages;
 using Syncfusion.Windows.Tools.Controls;
@@ -11,7 +11,7 @@ using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Views.Windows;
 
-//TODO 关闭子窗口时，不激活子窗口ViewModel；关闭时保存子窗口布局
+//TODO 关闭时保存子窗口布局
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

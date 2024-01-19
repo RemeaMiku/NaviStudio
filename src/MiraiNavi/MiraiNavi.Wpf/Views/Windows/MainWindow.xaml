@@ -24,6 +24,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
         <cv:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+        <cv:SeverityTypeToInfoBarSeverityConverter x:Key="SeverityTypeToInfoBarSeverityConverter" />
         <Style
             x:Key="ToolUiButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
@@ -195,7 +196,7 @@
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="Play24"
                             IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"
-                            Style="{StaticResource BorderlessTransparentUiButtonStyle}"
+                            Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
                             Visibility="{Binding ViewModel.Options, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock
@@ -296,15 +297,17 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <ui:InfoBar
+                        Title="{Binding ViewModel.StatusContent, Mode=OneWay}"
                         Padding="3"
                         IsClosable="False"
-                        IsOpen="True" />
+                        IsOpen="True"
+                        Severity="{Binding ViewModel.StatusSeverityType, Mode=OneWay, Converter={StaticResource SeverityTypeToInfoBarSeverityConverter}}" />
                     <ProgressBar
                         Grid.Column="1"
                         Width="300"
                         Height="20"
                         Margin="10,0,0,0"
-                        IsIndeterminate="True" />
+                        IsIndeterminate="{Binding ViewModel.StatusIsProcessing, Mode=OneWay}" />
                 </Grid>
             </Grid>
         </Border>

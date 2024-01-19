@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:output="clr-namespace:MiraiNavi.WpfApp.Models.Output"
+    xmlns:models="clr-namespace:MiraiNavi.Shared.Models;assembly=MiraiNavi.Shared"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Padding="5"
     d:Background="Black"
@@ -17,7 +17,7 @@
     <UserControl.Resources>
         <cv:StringFormatConverter x:Key="StringFormatConverter" />
         <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
-        <cv:OutputTypeToInfoBarSeverityConverter x:Key="InfoBarSeverityToOutputTypeConverter" />
+        <cv:SeverityTypeToInfoBarSeverityConverter x:Key="SeverityTypeToInfoBarSeverityConverter" />
         <Thickness x:Key="SmallSpacing">2,0</Thickness>
         <Thickness x:Key="LargeSpacing">5,0</Thickness>
         <Style
@@ -61,7 +61,7 @@
                     d:Content="错误 0 "
                     Appearance="{Binding ViewModel.ShowError, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Danger}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static output:OutputType.Error}"
+                    CommandParameter="{x:Static models:SeverityType.Error}"
                     Content="{Binding ViewModel.ErrorCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='错误 {0} ', Mode=OneWay}"
                     Icon="DismissCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
@@ -70,7 +70,7 @@
                     d:Content="警告 0 "
                     Appearance="{Binding ViewModel.ShowWarning, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Caution}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static output:OutputType.Warning}"
+                    CommandParameter="{x:Static models:SeverityType.Warning}"
                     Content="{Binding ViewModel.WarningCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='警告 {0} ', Mode=OneWay}"
                     Icon="ErrorCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
@@ -79,7 +79,7 @@
                     d:Content="消息 0 "
                     Appearance="{Binding ViewModel.ShowInformational, Converter={StaticResource BooleanToControlAppearanceConverter}, ConverterParameter={x:Static ui:ControlAppearance.Info}}"
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
-                    CommandParameter="{x:Static output:OutputType.Info}"
+                    CommandParameter="{x:Static models:SeverityType.Info}"
                     Content="{Binding ViewModel.InformationalCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='消息 {0} ', Mode=OneWay}"
                     Icon="Info24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
@@ -132,7 +132,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate DataType="output:Output">
+                <DataTemplate DataType="models:Output">
                     <Grid HorizontalAlignment="Stretch">
                         <ui:InfoBar
                             Title="{Binding TimeStamp, StringFormat='HH:mm:ss.fff', Mode=OneWay}"
@@ -140,7 +140,7 @@
                             IsClosable="False"
                             IsOpen="True"
                             Message="{Binding DisplayMessage, Mode=OneWay}"
-                            Severity="{Binding Type, Converter={StaticResource InfoBarSeverityToOutputTypeConverter}, Mode=OneWay}" />
+                            Severity="{Binding Type, Converter={StaticResource SeverityTypeToInfoBarSeverityConverter}, Mode=OneWay}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

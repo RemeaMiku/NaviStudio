@@ -1,20 +1,20 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
-using MiraiNavi.WpfApp.Models.Output;
 using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.Common.Converters;
 
-[ValueConversion(typeof(OutputType), typeof(InfoBarSeverity))]
-public class OutputTypeToInfoBarSeverityConverter : IValueConverter
+[ValueConversion(typeof(SeverityType), typeof(InfoBarSeverity))]
+public class SeverityTypeToInfoBarSeverityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return value switch
         {
-            OutputType.Info => InfoBarSeverity.Informational,
-            OutputType.Warning => InfoBarSeverity.Warning,
-            OutputType.Error => InfoBarSeverity.Error,
+            SeverityType.Info => InfoBarSeverity.Informational,
+            SeverityType.Warning => InfoBarSeverity.Warning,
+            SeverityType.Error => InfoBarSeverity.Error,
+            SeverityType.Success => InfoBarSeverity.Success,
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         };
     }

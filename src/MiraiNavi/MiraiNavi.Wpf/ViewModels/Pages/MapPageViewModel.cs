@@ -39,7 +39,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     partial void OnSelectedPointChanged(TimePointLatLng? value)
     {
         var epochData = !value.HasValue ? default : _epochDatasService.GetByTimeStamp(value.Value.Item1);
-        Messenger.Send(new ValueChangedMessage<EpochData?>(epochData), MessageTokens.ToPropertyPage);
+        Messenger.Send(new ValueChangedMessage<EpochData?>(epochData), MessageTokens.MapPageToPropertyPage);
     }
 
     [RelayCommand]

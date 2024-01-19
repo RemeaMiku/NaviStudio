@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models.Chart;
+﻿namespace MiraiNavi.Shared.Models.Chart;
 
 public static class ChartItems
 {

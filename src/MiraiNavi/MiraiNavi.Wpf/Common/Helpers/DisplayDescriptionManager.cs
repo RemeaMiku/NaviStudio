@@ -1,7 +1,6 @@
 ﻿using System.Collections.Frozen;
 using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
-using MiraiNavi.WpfApp.Models;
 using NaviSharp;
 using NaviSharp.Time;
 using NaviSharp.SpatialReference;

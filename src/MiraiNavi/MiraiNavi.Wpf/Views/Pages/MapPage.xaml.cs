@@ -98,5 +98,5 @@ public partial class MapPage : UserControl
     {
         ViewModel.KeepCenter = false;
     }
-    
+
 }

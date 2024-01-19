@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MiraiNavi.WpfApp.Common.Messaging;
+using MiraiNavi.WpfApp.Common.Messaging.Messages;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.ViewModels.Base;
 
-public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<NotificationMessage>
+public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<RealTimeNotification>
 {
     protected override void OnActivated()
     {
@@ -15,22 +16,14 @@ public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpo
 
     protected readonly IEpochDatasService _epochDatasService = epochDatasService;
 
-    public virtual void Receive(NotificationMessage message)
+    public virtual void Receive(RealTimeNotification message)
     {
-        switch (message.Value)
-        {
-            case Notifications.Reset:
-                Reset();
-                break;
-            case Notifications.Sync:
-                Sync();
-                break;
-            case Notifications.Update:
-                Update(_epochDatasService.Last);
-                break;
-            default:
-                break;
-        }
+        if (message == RealTimeNotification.Update)
+            Update(_epochDatasService.Last);
+        else if (message == RealTimeNotification.Sync)
+            Sync();
+        else if (message == RealTimeNotification.Reset)
+            Reset();
     }
 
     protected abstract void Reset();

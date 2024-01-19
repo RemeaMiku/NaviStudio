@@ -1,4 +1,4 @@
-﻿namespace MiraiNavi.WpfApp.Models;
+﻿namespace MiraiNavi.Shared.Models;
 
 public class DisplayDescription()
 {

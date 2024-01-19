@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MiraiNavi.WpfApp.Models.Chart;
+using MiraiNavi.Shared.Models.Chart;
 
 namespace MiraiNavi.WpfApp.ViewModels.Windows;
 

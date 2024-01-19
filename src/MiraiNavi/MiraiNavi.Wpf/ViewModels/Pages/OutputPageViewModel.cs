@@ -4,7 +4,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.WpfApp.Models.Output;
+using MiraiNavi.WpfApp.Common;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
@@ -20,49 +20,49 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     [ObservableProperty]
     string _selectedSender = _allSenders;
 
-    public bool ShowError => _severityFlags[OutputType.Error];
+    public bool ShowError => _SeverityTypeFlags[SeverityType.Error];
 
-    public int ErrorCount => _severityCounts[OutputType.Error];
+    public int ErrorCount => _SeverityTypeCounts[SeverityType.Error];
 
-    public bool ShowWarning => _severityFlags[OutputType.Warning];
+    public bool ShowWarning => _SeverityTypeFlags[SeverityType.Warning];
 
-    public int WarningCount => _severityCounts[OutputType.Warning];
+    public int WarningCount => _SeverityTypeCounts[SeverityType.Warning];
 
-    public bool ShowInformational => _severityFlags[OutputType.Info];
+    public bool ShowInformational => _SeverityTypeFlags[SeverityType.Info];
 
-    public int InformationalCount => _severityCounts[OutputType.Info];
+    public int InformationalCount => _SeverityTypeCounts[SeverityType.Info];
 
-    readonly Dictionary<OutputType, bool> _severityFlags = [];
+    readonly Dictionary<SeverityType, bool> _SeverityTypeFlags = [];
 
-    readonly Dictionary<OutputType, int> _severityCounts = [];
+    readonly Dictionary<SeverityType, int> _SeverityTypeCounts = [];
 
     public OutputPageViewModel(IMessenger messenger)
     {
         _messenger = messenger;
         _messenger.RegisterAll(this);
-        _severityFlags.Add(OutputType.Error, true);
-        _severityFlags.Add(OutputType.Warning, true);
-        _severityFlags.Add(OutputType.Info, true);
-        _severityCounts.Add(OutputType.Error, default);
-        _severityCounts.Add(OutputType.Warning, default);
-        _severityCounts.Add(OutputType.Info, default);
+        _SeverityTypeFlags.Add(SeverityType.Error, true);
+        _SeverityTypeFlags.Add(SeverityType.Warning, true);
+        _SeverityTypeFlags.Add(SeverityType.Info, true);
+        _SeverityTypeCounts.Add(SeverityType.Error, default);
+        _SeverityTypeCounts.Add(SeverityType.Warning, default);
+        _SeverityTypeCounts.Add(SeverityType.Info, default);
     }
 
     public bool OutputsViewFilter(object item)
     {
         var output = (Output)item;
-        var severityFlag = _severityFlags[output.Type];
+        var SeverityTypeFlag = _SeverityTypeFlags[output.Type];
         var senderFlag = SelectedSender == _allSenders || output.SenderName == SelectedSender;
-        var accepted = severityFlag && senderFlag && output.DisplayMessage.Contains(SearchKeyword);
+        var accepted = SeverityTypeFlag && senderFlag && output.DisplayMessage.Contains(SearchKeyword);
         if (accepted)
-            _severityCounts[output.Type]++;
+            _SeverityTypeCounts[output.Type]++;
         return accepted;
     }
 
     void Refresh()
     {
-        foreach (var severity in _severityCounts.Keys)
-            _severityCounts[severity] = default;
+        foreach (var SeverityType in _SeverityTypeCounts.Keys)
+            _SeverityTypeCounts[SeverityType] = default;
         OutputsView?.Refresh();
         OnPropertyChanged(string.Empty);
     }
@@ -89,20 +89,20 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     }
 
     [RelayCommand]
-    void SwitchVisibility(OutputType severity)
+    void SwitchVisibility(SeverityType SeverityType)
     {
-        _severityFlags[severity] = !_severityFlags[severity];
+        _SeverityTypeFlags[SeverityType] = !_SeverityTypeFlags[SeverityType];
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }
 
-    public bool Filtered => _severityFlags.Values.Any(f => !f);
+    public bool Filtered => _SeverityTypeFlags.Values.Any(f => !f);
 
     [RelayCommand(CanExecute = nameof(Filtered))]
     void ClearFilter()
     {
-        foreach (var severity in _severityFlags.Keys)
-            _severityFlags[severity] = true;
+        foreach (var SeverityType in _SeverityTypeFlags.Keys)
+            _SeverityTypeFlags[SeverityType] = true;
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }

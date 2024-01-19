@@ -8,5 +8,5 @@ namespace MiraiNavi.WpfApp.Common.Messaging;
 
 public static class MessageTokens
 {
-    public const string ToPropertyPage = nameof(ToPropertyPage);
+    public const string MapPageToPropertyPage = nameof(MapPageToPropertyPage);
 }
