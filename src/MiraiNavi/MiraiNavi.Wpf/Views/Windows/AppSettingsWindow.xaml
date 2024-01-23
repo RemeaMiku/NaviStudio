@@ -1,0 +1,118 @@
+﻿<ui:UiWindow
+    x:Class="MiraiNavi.WpfApp.Views.Windows.AppSettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:MiraiNavi.WpfApp.ViewModels.Windows"
+    Title="{x:Static windows:AppSettingsWindowViewModel.Title}"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=local:AppSettingsWindow}"
+    ExtendsContentIntoTitleBar="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <ui:UiWindow.Resources>
+        <Thickness x:Key="SmallSpacing">0,5</Thickness>
+        <Thickness x:Key="LargeSpacing">5,10</Thickness>
+        <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
+            <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+            <Setter Property="Margin" Value="{StaticResource LargeSpacing}" />
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type ui:CardExpander}}" TargetType="ui:CardExpander">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="ContentPadding" Value="0" />
+            <Setter Property="Background" Value="{ui:ThemeResource}" />
+            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+            <Setter Property="Foreground" Value="{StaticResource MikuGreenBrush}" />
+        </Style>
+    </ui:UiWindow.Resources>
+    <Grid d:Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ui:TitleBar Background="{ui:ThemeResource}" ShowMinimize="False">
+            <ui:TitleBar.Header>
+                <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="Settings24" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{x:Static windows:AppSettingsWindowViewModel.Title}" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+        <Border Grid.Row="1" Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border Padding="5" Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}">
+                    <StackPanel Orientation="Vertical">
+                        <ui:CardExpander
+                            Background="{ui:ThemeResource}"
+                            Header="外观"
+                            Icon="PaintBrush24">
+                            <Border Padding="10">
+                                <HeaderedContentControl Header="亚克力效果">
+                                    <StackPanel>
+                                        <ui:ToggleSwitch Margin="{StaticResource SmallSpacing}" IsChecked="{Binding ViewModel.IsAcrylicEnabled, Mode=TwoWay}" />
+                                        <ui:InfoBar
+                                            Title="注意"
+                                            Margin="{StaticResource SmallSpacing}"
+                                            Padding="10"
+                                            IsOpen="True"
+                                            Message="亚克力效果仅支持 Windows 10 22523 build 及更高版本"
+                                            Severity="Informational" />
+                                    </StackPanel>
+                                </HeaderedContentControl>
+                            </Border>
+                        </ui:CardExpander>
+                        <ui:CardExpander Header="解算" Icon="MathSymbols24">
+                            <Border Padding="10">
+                                <HeaderedContentControl Header="用于获取历元解算结果数据的 TCP 选项">
+                                    <StackPanel Orientation="Horizontal">
+                                        <HeaderedContentControl Width="200" Header="IP 地址">
+                                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionEpochDataTcpAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        </HeaderedContentControl>
+                                        <HeaderedContentControl Width="200" Header="端口">
+                                            <ui:NumberBox
+                                                Margin="{StaticResource SmallSpacing}"
+                                                Maximum="65535"
+                                                Minimum="0"
+                                                ValidationMode="InvalidInputOverwritten"
+                                                Value="{Binding ViewModel.SolutionEpochDataTcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        </HeaderedContentControl>
+                                    </StackPanel>
+                                </HeaderedContentControl>
+                            </Border>
+                        </ui:CardExpander>
+                    </StackPanel>
+                </Border>
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="{StaticResource LargeSpacing}"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <ui:Button
+                        Appearance="Primary"
+                        Click="OnButtonClicked"
+                        Command="{Binding ViewModel.SaveCommand, Mode=OneTime}"
+                        Content="确定"
+                        Icon="Checkmark24" />
+                    <ui:Button
+                        Margin="10,0,0,0"
+                        Click="OnButtonClicked"
+                        Content="取消"
+                        Icon="Dismiss24" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:UiWindow>

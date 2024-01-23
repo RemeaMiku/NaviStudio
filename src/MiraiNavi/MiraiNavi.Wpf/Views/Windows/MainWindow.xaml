@@ -54,99 +54,97 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ui:TitleBar Grid.Column="1">
-                <ui:TitleBar.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="30"
-                            Margin="10,0,0,0"
-                            Source="{StaticResource NaviStudioLogoDrawingImage}" />
-                        <Menu
-                            HorizontalAlignment="Left"
-                            d:Foreground="White"
-                            Background="{ui:ThemeResource}"
-                            FontSize="{StaticResource SmallFontSize}">
-                            <ui:MenuItem Header="文件(_F)">
-                                <ui:MenuItem Header="导入(_I)" />
-                                <ui:MenuItem Header="导出(_O)" />
-                            </ui:MenuItem>
-                            <ui:MenuItem Header="视图(_V)">
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=RealTimeOptionsView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="PlaySettings20" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:MapPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=MapView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="Map24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:PosePageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=PoseView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="Location24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:SkyMapPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=SkyMapView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="Target24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:SatelliteTrackingPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=SatelliteTrackingView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="List24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:PropertyPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=PropertyView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="Wrench24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:DashBoardPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=DashBoardView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="TopSpeed24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                                <ui:MenuItem
-                                    Click="OnViewMenuItemClicked"
-                                    Header="{x:Static pages:OutputPageViewModel.MenuItemHeader}"
-                                    Tag="{Binding ElementName=OutputView}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="ArrowExit20" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                            </ui:MenuItem>
-                            <ui:MenuItem Header="工具(_T)">
-                                <ui:MenuItem Click="OnChartToolItemClicked" Header="{x:Static windows:ChartToolWindowViewModel.MenuItemHeader}">
-                                    <ui:MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="ChartMultiple24" />
-                                    </ui:MenuItem.Icon>
-                                </ui:MenuItem>
-                            </ui:MenuItem>
-                        </Menu>
-                    </StackPanel>
-                </ui:TitleBar.Header>
-            </ui:TitleBar>
+            <StackPanel Orientation="Horizontal">
+                <Image
+                    Width="30"
+                    Margin="10,0,0,0"
+                    Source="{StaticResource NaviStudioLogoDrawingImage}" />
+                <Menu
+                    HorizontalAlignment="Left"
+                    d:Foreground="White"
+                    Background="{ui:ThemeResource}"
+                    FontSize="{StaticResource SmallFontSize}">
+                    <ui:MenuItem Header="文件(_F)">
+                        <ui:MenuItem Header="导入(_I)" />
+                        <ui:MenuItem Header="导出(_O)" />
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="视图(_V)">
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=RealTimeOptionsView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="PlaySettings20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:MapPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=MapView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Map24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:PosePageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=PoseView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Location24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:SkyMapPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=SkyMapView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Radar20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:SatelliteTrackingPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=SatelliteTrackingView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="List24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:PropertyPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=PropertyView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Wrench24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:DashBoardPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=DashBoardView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Gauge24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:OutputPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=OutputView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="ArrowExit20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="工具(_T)">
+                        <ui:MenuItem Click="OnChartToolItemClicked" Header="{x:Static windows:ChartToolWindowViewModel.MenuItemHeader}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="ChartMultiple24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Click="OnAppSettingsItemClicked" Header="{x:Static windows:AppSettingsWindowViewModel.MenuItemHeader}" />
+                </Menu>
+            </StackPanel>
+            <ui:TitleBar Grid.Column="1" />
         </Grid>
         <Border
             Grid.Row="1"

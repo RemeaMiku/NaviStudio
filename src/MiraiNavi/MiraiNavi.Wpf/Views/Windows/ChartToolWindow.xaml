@@ -57,11 +57,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ui:TitleBar
-            Title="{x:Static windows:ChartToolWindowViewModel.Title}"
-            Padding="10,0"
-            Background="{ui:ThemeResource}"
-            ShowMinimize="False" />
+        <ui:TitleBar Background="{ui:ThemeResource}" ShowMinimize="False">
+            <ui:TitleBar.Header>
+                <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="ChartMultiple24" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{x:Static windows:ChartToolWindowViewModel.Title}" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
         <Border
             Grid.Row="1"
             Padding="10"

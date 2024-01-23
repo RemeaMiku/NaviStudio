@@ -12,5 +12,5 @@ public class SolutionSettings
 {
     public static readonly IPEndPointOptions DefaultEpochDataIPEndPointOptions = new(IPAddress.Loopback.ToString(), 39831);
 
-    public IPEndPointOptions EpochDataEndPointOptions { get; set; } = DefaultEpochDataIPEndPointOptions;
+    public IPEndPointOptions EpochDataTcpOptions { get; set; } = DefaultEpochDataIPEndPointOptions;
 }

@@ -17,6 +17,7 @@ using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp;
 
@@ -46,6 +47,15 @@ public partial class App : Application
         });
     }
 
+    public bool TryApplyAcrylicToAllWindowsIfIsEnabled()
+    {
+        var flag = true;
+        foreach (var window in Windows)
+            if (window is UiWindow uiWindow)
+                flag = flag && SettingsManager.TryApplyAcrylicIfIsEnabled(uiWindow);
+        return flag;
+    }
+
     static void RegisterKeys()
     {
         var syncKey = "Mjk5OTQ4MEAzMjM0MmUzMDJlMzBoZlRQNFJpUC8xNXNBM09RUTUxa2tWYzdweUNtYUhJMDZiVXV0NlpSR1ZvPQ==";
@@ -63,6 +73,7 @@ public partial class App : Application
 #endif
             .AddSingleton<IEpochDatasService, EpochDatasService>()
             .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
+            .AddTransient<AppSettingsWindowViewModel>()
             .AddSingleton<RealTimeOptionsPageViewModel>()
             .AddTransient<ChartPageViewModel>()
             .AddTransient<ChartGroupPageViewModel>()
@@ -87,6 +98,7 @@ public partial class App : Application
             .AddTransient<ChartToolWindow>()
             .AddTransient<ChartPage>()
             .AddTransient<ChartGroupPage>()
+            .AddTransient<AppSettingsWindow>()
             .BuildServiceProvider();
 
     public AppSettingsManager SettingsManager { get; } = new();

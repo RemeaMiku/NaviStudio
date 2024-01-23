@@ -17,4 +17,6 @@ public class RealTimeOptions
     public InputOptions BaseOptions { get; set; } = new();
 
     public InputOptions RoverOptions { get; set; } = new();
+
+    public string OutputFolder { get; set; } = string.Empty;
 }

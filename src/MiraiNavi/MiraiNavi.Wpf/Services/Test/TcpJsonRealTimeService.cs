@@ -14,7 +14,7 @@ namespace MiraiNavi.WpfApp.Services;
 
 public class TcpJsonRealTimeService() : IRealTimeService
 {
-    protected const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
+    const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
 
     public bool IsRunning { get; private set; }
 
@@ -27,13 +27,19 @@ public class TcpJsonRealTimeService() : IRealTimeService
         IsRunning = true;
         try
         {
-            using var listener = new TcpListener(App.Current.SettingsManager.Settings.SolutionSettings.EpochDataEndPointOptions.ToIPEndPoint());
+            using var listener = new TcpListener(App.Current.SettingsManager.Settings.SolutionSettings.EpochDataTcpOptions.ToIPEndPoint());
             listener.Start();
             var process = Process.Start(_clientPath);
             using var client = await listener.AcceptTcpClientAsync(token);
-            using var stream = client.GetStream();
-            using var reader = new BinaryReader(stream, Encoding.UTF8);
-            var jsonOptions = new JsonSerializerOptions();
+            using var tcpStream = client.GetStream();
+            using var fileStream = string.IsNullOrEmpty(options.OutputFolder) ? default : new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}.mnedf"), FileMode.Create, FileAccess.Write, FileShare.Read);
+            using var writer = fileStream is null ? default : new Utf8JsonWriter(fileStream);
+            writer?.WriteStartArray();
+            using var reader = new BinaryReader(tcpStream, Encoding.UTF8);
+            var jsonOptions = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+            };
             jsonOptions.Converters.Add(new UtcTimeJsonConverter());
             await Task.Run(() =>
             {
@@ -43,11 +49,14 @@ public class TcpJsonRealTimeService() : IRealTimeService
                     if (string.IsNullOrEmpty(message))
                         continue;
                     var epochData = JsonSerializer.Deserialize<EpochData>(message, jsonOptions);
+                    writer?.WriteRawValue(JsonSerializer.Serialize(epochData, jsonOptions));
+                    writer?.Flush();
                     EpochDataReceived?.Invoke(this, epochData);
                 }
             }, token);
             process.Kill();
             listener.Stop();
+            writer?.WriteEndArray();
         }
         catch (TaskCanceledException) { }
         catch (OperationCanceledException) { }

@@ -12,10 +12,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Win32;
 using MiraiNavi.Shared.Models.Options;
+using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
-public partial class RealTimeOptionsPageViewModel : ObservableValidator
+public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<RealTimeOptions>
 {
     public const string Title = "实时选项";
     public const string MenuItemHeader = $"{Title}(_S)";
@@ -25,6 +26,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator
     public RealTimeOptionsPageViewModel(IMessenger messenger)
     {
         _messenger = messenger;
+        _messenger.Register(this);
         BaseOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
         RoverOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
     }
@@ -40,6 +42,14 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator
 
     [ObservableProperty]
     InputOptionsViewModel _roverOptions = new();
+
+    [ObservableProperty]
+    [RegularExpression(@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.]+)+\\?$", ErrorMessage = "非法目录")]
+    [NotifyDataErrorInfo]
+    string _outputFolder = string.Empty;
+
+    [ObservableProperty]
+    bool _isEditable = true;
 
     partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
     {
@@ -69,6 +79,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator
             Name = SolutionName,
             BaseOptions = BaseOptions.GetInputOptions(),
             RoverOptions = RoverOptions.GetInputOptions(),
+            OutputFolder = OutputFolder,
         };
     }
 
@@ -88,6 +99,18 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator
         SolutionName = options.Name;
         BaseOptions = new InputOptionsViewModel(options.BaseOptions);
         RoverOptions = new InputOptionsViewModel(options.RoverOptions);
+    }
+
+    [RelayCommand]
+    void SelectOuputFolder()
+    {
+        var dialog = new OpenFolderDialog()
+        {
+            Title = "输出历元数据文件至",
+            Multiselect = false,
+        };
+        if (dialog.ShowDialog() == true)
+            OutputFolder = dialog.FolderName;
     }
 
     [RelayCommand]
@@ -141,6 +164,12 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator
     void Confirm()
     {
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
+    }
+
+    public void Receive(RealTimeOptions message)
+    {
+        IsEditable = !IsEditable;
+        SetOptions(message);
     }
 
     readonly static JsonSerializerOptions _jsonSerializerOptions = new()

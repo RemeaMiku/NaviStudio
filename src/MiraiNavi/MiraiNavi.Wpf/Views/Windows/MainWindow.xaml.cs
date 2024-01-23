@@ -114,4 +114,9 @@ public partial class MainWindow : UiWindow
     {
         RestoreAndActiveWindow(RealTimeOptionsView);
     }
+
+    private void OnAppSettingsItemClicked(object sender, RoutedEventArgs e)
+    {
+        App.Current.Services.GetRequiredService<AppSettingsWindow>().ShowDialog();
+    }
 }

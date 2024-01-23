@@ -72,12 +72,14 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         {
             Messenger.Send(RealTimeNotification.Reset);
             Messenger.Send(new Output(Title, SeverityType.Info, "开始接收"));
+            Messenger.Send(Options!);
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
         else
         {
             _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
             Messenger.Send(new Output(Title, SeverityType.Info, "停止接收"));
+            Messenger.Send(Options!);
         }
     }
 
@@ -86,9 +88,11 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if (value)
         {
             Messenger.Send(RealTimeNotification.Sync);
-            StatusSeverityType = SeverityType.Info;
             if (_epochDatasService.HasData)
+            {
+                StatusSeverityType = SeverityType.Info;
                 StatusContent = $"历元 {_epochDatasService.Last.TimeStamp:yyyy/MM/dd HH:mm:ss.fff} 已更新";
+            }
             StatusIsProcessing = true;
         }
         else

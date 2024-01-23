@@ -25,7 +25,7 @@
         <Thickness x:Key="SmallSpacing">0,5</Thickness>
         <Thickness x:Key="LargeSpacing">5,10</Thickness>
         <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
             <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
             <Setter Property="Margin" Value="{StaticResource LargeSpacing}" />
         </Style>
@@ -44,7 +44,20 @@
             </Setter>
         </Style>
         <DataTemplate x:Key="InputOptionsTemplate" DataType="vm:InputOptionsViewModel">
-            <DataTemplate.Resources />
+            <DataTemplate.Resources>
+                <Style BasedOn="{StaticResource {x:Type ui:TextBox}}" TargetType="ui:TextBox">
+                    <Setter Property="IsEnabled" Value="{Binding ViewModel.IsEditable, RelativeSource={RelativeSource AncestorType=local:RealTimeOptionsPage}, Mode=OneWay}" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type ui:NumberBox}}" TargetType="ui:NumberBox">
+                    <Setter Property="IsEnabled" Value="{Binding ViewModel.IsEditable, RelativeSource={RelativeSource AncestorType=local:RealTimeOptionsPage}, Mode=OneWay}" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                    <Setter Property="IsEnabled" Value="{Binding ViewModel.IsEditable, RelativeSource={RelativeSource AncestorType=local:RealTimeOptionsPage}, Mode=OneWay}" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type ui:ToggleSwitch}}" TargetType="ui:ToggleSwitch">
+                    <Setter Property="IsEnabled" Value="{Binding ViewModel.IsEditable, RelativeSource={RelativeSource AncestorType=local:RealTimeOptionsPage}, Mode=OneWay}" />
+                </Style>
+            </DataTemplate.Resources>
             <StackPanel Orientation="Vertical">
                 <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
                     <HeaderedContentControl Header="传输类型">
@@ -146,29 +159,66 @@
             <Border Padding="10" Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}">
                 <ui:DynamicScrollViewer IsScrollingVertically="True" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
-                        <HeaderedContentControl Header="预设名称">
+                        <HeaderedContentControl Header="预设名称" IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}">
                             <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionName, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
-                        <TabControl
-                            Padding="0"
-                            SelectedValuePath="Header"
-                            TabStripPlacement="Top">
-                            <TabItem
-                                Content="{Binding ViewModel.BaseOptions, Mode=OneWay}"
-                                ContentTemplate="{StaticResource InputOptionsTemplate}"
-                                FontSize="16"
-                                Header="基准站" />
-                            <TabItem
-                                Content="{Binding ViewModel.RoverOptions, Mode=OneWay}"
-                                ContentTemplate="{StaticResource InputOptionsTemplate}"
-                                FontSize="16"
-                                Header="流动站" />
-                        </TabControl>
+                        <ui:CardExpander
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Header="输入选项"
+                            Icon="SoundSource24">
+                            <TabControl
+                                Padding="0"
+                                SelectedValuePath="Header"
+                                TabStripPlacement="Top">
+                                <TabItem
+                                    Content="{Binding ViewModel.BaseOptions, Mode=OneWay}"
+                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                    FontSize="16"
+                                    Header="基准站" />
+                                <TabItem
+                                    Content="{Binding ViewModel.RoverOptions, Mode=OneWay}"
+                                    ContentTemplate="{StaticResource InputOptionsTemplate}"
+                                    FontSize="16"
+                                    Header="流动站" />
+                            </TabControl>
+                        </ui:CardExpander>
+                        <ui:CardExpander
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Header="输出选项"
+                            Icon="DocumentArrowRight24">
+                            <HeaderedContentControl Header="输出目录">
+                                <Grid IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="67*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBox
+                                        Grid.ColumnSpan="2"
+                                        Margin="0,5,0,5"
+                                        PlaceholderText="不填则不输出"
+                                        Text="{Binding ViewModel.OutputFolder, UpdateSourceTrigger=PropertyChanged}" />
+                                    <ui:Button
+                                        Grid.Column="2"
+                                        Margin="10,0,0,0"
+                                        Appearance="Primary"
+                                        BorderThickness="0"
+                                        Command="{Binding ViewModel.SelectOuputFolderCommand, Mode=OneTime}"
+                                        FontSize="{StaticResource MediumFontSize}"
+                                        Icon="Folder24" />
+                                </Grid>
+                            </HeaderedContentControl>
+                        </ui:CardExpander>
                     </StackPanel>
                 </ui:DynamicScrollViewer>
             </Border>
             <Border Grid.Row="1" Padding="10">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}"
+                    Orientation="Horizontal">
                     <ui:Button
                         Appearance="Caution"
                         Command="{Binding ViewModel.ReadCommand, Mode=OneTime}"
