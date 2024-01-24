@@ -7,13 +7,14 @@
     xmlns:gmaps="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
     xmlns:local="clr-namespace:MiraiNavi.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MiraiNavi.Shared.Models;assembly=MiraiNavi.Shared"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance local:MapPage}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <cv:StringToGMapProviderConverter x:Key="StringToGMapProviderConverter" />
+        <cv:MapTypeToGMapProviderConverter x:Key="MapTypeToGMapProviderConverter" />
         <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
         <ui:SymbolIcon
             x:Key="SelectedPointMarkerShape"
@@ -32,20 +33,37 @@
                     Color="{StaticResource MikuRedAlpha}" />
             </ui:SymbolIcon.Effect>
         </ui:SymbolIcon>
+        <Thickness x:Key="SmallSpacing">0,3</Thickness>
+        <Thickness x:Key="LargeSpacing">0,5</Thickness>
+        <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
+            <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="SelectedIndex" Value="0" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
+                        <Setter Property="Padding" Value="5" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid d:Background="White" Cursor="Cross">
         <gmaps:GMapControl
             x:Name="GMap"
             CanDragMap="True"
             IgnoreMarkerOnMouseWheel="True"
-            MapProvider="{Binding Text, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource StringToGMapProviderConverter}}"
+            MapProvider="{Binding SelectedValue, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource MapTypeToGMapProviderConverter}}"
             MaxZoom="20"
             MinZoom="3"
             MouseLeftButtonDown="OnGMapMouseLeftButtonDown"
             OnMapDrag="OnGMapDrag"
             OnPositionChanged="OnGMapOnPositionChanged"
             Zoom="3" />
-        <Border Padding="5">
+        <!--<Border Padding="5">
             <Grid>
                 <ComboBox
                     x:Name="MapTypeBox"
@@ -95,81 +113,86 @@
                             Value="{Binding Zoom, ElementName=GMap}" />
                     </StackPanel>
                 </Border>
-                <!--<TextBlock
-                    x:Name="Test"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    d:Text="Test"
-                    FontSize="{StaticResource MediumFontSize}"
-                    Foreground="White" />-->
-                <!--<Border
-                    x:Name="ReplayPanel"
-                    Padding="10,3"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
-                    CornerRadius="5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal">
-                            <ui:Button
-                                Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
-                                Padding="0"
-                                Command="{Binding ViewModel.ReplayCommand, Mode=OneTime}"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Icon="Play24"
-                                IconFilled="True"
-                                Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
-                            <ui:Button
-                                Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
-                                Margin="10,0,0,0"
-                                Padding="0"
-                                Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
-                                FontSize="14"
-                                Icon="Stop24"
-                                IconFilled="True"
-                                Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
-                            <ComboBox
-                                Width="65"
-                                Margin="10,0,0,0"
-                                Padding="3"
-                                SelectedIndex="1"
-                                Style="{StaticResource DefaultComboBoxStyle}">
-                                <ComboBoxItem
-                                    Padding="3"
-                                    Content="0.5x"
-                                    Style="{StaticResource DefaultComboBoxItemStyle}" />
-                                <ComboBoxItem
-                                    Padding="3"
-                                    Content="1x"
-                                    Style="{StaticResource DefaultComboBoxItemStyle}" />
-                                <ComboBoxItem
-                                    Padding="3"
-                                    Content="2x"
-                                    Style="{StaticResource DefaultComboBoxItemStyle}" />
-                                <ComboBoxItem
-                                    Padding="3"
-                                    Content="5x"
-                                    Style="{StaticResource DefaultComboBoxItemStyle}" />
-                                <ComboBoxItem
-                                    Padding="3"
-                                    Content="10x"
-                                    Style="{StaticResource DefaultComboBoxItemStyle}" />
-                            </ComboBox>
-                        </StackPanel>
-                        <Slider
-                            Grid.Column="1"
-                            Width="500"
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            Minimum="0"
-                            TickFrequency="1" />
-                    </Grid>
-                </Border>-->
             </Grid>
-        </Border>
+        </Border>-->
+
+        <ui:CardExpander
+            Margin="5"
+            Padding="5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            d:IsExpanded="True"
+            Background="{StaticResource MikuGreenBrush}"
+            BorderBrush="Transparent"
+            ContentPadding="0">
+            <Border
+                Padding="10"
+                Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                CornerRadius="0,0,3,3">
+                <StackPanel Orientation="Vertical">
+                    <HeaderedContentControl Header="数据源">
+                        <ComboBox
+                            x:Name="MapTypeBox"
+                            Margin="{StaticResource SmallSpacing}"
+                            SelectedValuePath="Tag">
+                            <ComboBoxItem Content="OSM-交通" Tag="{x:Static models:MapType.Traffic}" />
+                            <ComboBoxItem Content="OSM" Tag="{x:Static models:MapType.Topographic}" />
+                            <ComboBoxItem Content="Bing-卫星" Tag="{x:Static models:MapType.Satellite}" />
+                            <ComboBoxItem Content="无" Tag="{x:Static models:MapType.None}" />
+                        </ComboBox>
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Margin="{StaticResource LargeSpacing}" Header="导航标志">
+                        <ComboBox Margin="{StaticResource SmallSpacing}">
+                            <ComboBoxItem Content="圆点" />
+                            <ComboBoxItem Content="箭头" />
+                            <ComboBoxItem Content="汽车" />
+                            <ComboBoxItem Content="飞机" />
+                        </ComboBox>
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Margin="{StaticResource LargeSpacing}" Header="随路线旋转地图">
+                        <ui:ToggleSwitch Margin="{StaticResource LargeSpacing}" Background="{StaticResource MikuGreenBrush}" />
+                    </HeaderedContentControl>
+                </StackPanel>
+            </Border>
+        </ui:CardExpander>
+
+        <StackPanel
+            Margin="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Vertical">
+            <Border
+                HorizontalAlignment="Center"
+                Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                CornerRadius="5">
+                <ToggleButton
+                    Width="30"
+                    Height="30"
+                    Padding="5"
+                    HorizontalAlignment="Center"
+                    BorderThickness="0"
+                    Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
+                    IsChecked="{Binding ViewModel.KeepCenter}"
+                    Style="{StaticResource DefaultToggleButtonStyle}">
+                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="MyLocation24" />
+                </ToggleButton>
+            </Border>
+            <Border
+                Margin="5"
+                Padding="0,3"
+                Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                CornerRadius="5">
+                <Slider
+                    Height="150"
+                    HorizontalAlignment="Center"
+                    IsMoveToPointEnabled="True"
+                    IsSnapToTickEnabled="True"
+                    Maximum="{Binding MaxZoom, ElementName=GMap, Mode=OneTime}"
+                    Minimum="{Binding MinZoom, ElementName=GMap, Mode=OneTime}"
+                    Orientation="Vertical"
+                    TickFrequency="1"
+                    Value="{Binding Zoom, ElementName=GMap}" />
+            </Border>
+        </StackPanel>
     </Grid>
 </UserControl>

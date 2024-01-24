@@ -10,12 +10,12 @@ public class ReversedBooleanToVisibilityConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var booleanValue = (bool)value;
-        return booleanValue ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        return booleanValue ? Visibility.Collapsed : Visibility.Visible;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        var visibilityValue = (System.Windows.Visibility)value;
-        return visibilityValue == System.Windows.Visibility.Collapsed;
+        var visibilityValue = (Visibility)value;
+        return visibilityValue == Visibility.Collapsed;
     }
 }

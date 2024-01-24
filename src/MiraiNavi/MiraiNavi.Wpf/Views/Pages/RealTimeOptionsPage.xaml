@@ -20,7 +20,6 @@
     <UserControl.Resources>
         <sys:Double x:Key="WrapItemWidth">200</sys:Double>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <cv:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
         <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
         <Thickness x:Key="SmallSpacing">0,5</Thickness>
         <Thickness x:Key="LargeSpacing">5,10</Thickness>
