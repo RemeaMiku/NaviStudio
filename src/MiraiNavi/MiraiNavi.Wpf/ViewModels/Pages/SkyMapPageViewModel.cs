@@ -10,18 +10,20 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
+    #region Public Fields
+
     public const string Title = "卫星天空图";
     public const string MenuItemHeader = $"{Title}(_P)";
 
+    #endregion Public Fields
+
+    #region Public Properties
+
     public IEnumerable<SatelliteSkyPosition>? EnabledPositions => _positions?.Where(p => p.Elevation.Degrees >= MinElevation && _enabledSystems.Contains(p.Satellite.System));
 
-    List<SatelliteSkyPosition>? _positions = default;
+    #endregion Public Properties
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(EnabledPositions))]
-    double _minElevation = 5;
-
-    readonly HashSet<SatelliteSystems> _enabledSystems = new(Enum.GetValues<SatelliteSystems>());
+    #region Protected Methods
 
     protected override void Update(EpochData message)
     {
@@ -40,6 +42,22 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
         OnPropertyChanged(nameof(EnabledPositions));
     }
 
+    #endregion Protected Methods
+
+    #region Private Fields
+
+    readonly HashSet<SatelliteSystems> _enabledSystems = new(Enum.GetValues<SatelliteSystems>());
+
+    List<SatelliteSkyPosition>? _positions = default;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EnabledPositions))]
+    double _minElevation = 5;
+
+    #endregion Private Fields
+
+    #region Private Methods
+
     [RelayCommand]
     void EnableOrDisableSystem(SatelliteSystems systems)
     {
@@ -47,4 +65,6 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
             _enabledSystems.Add(systems);
         OnPropertyChanged(nameof(EnabledPositions));
     }
+
+    #endregion Private Methods
 }

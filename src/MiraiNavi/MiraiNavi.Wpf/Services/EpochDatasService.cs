@@ -6,7 +6,7 @@ namespace MiraiNavi.WpfApp.Services;
 public class EpochDatasService : IEpochDatasService
 {
 
-    readonly Dictionary<UtcTime, EpochData> _datas = [];
+    #region Public Properties
 
     public EpochData? LastestData => _datas.Values.LastOrDefault();
 
@@ -15,6 +15,10 @@ public class EpochDatasService : IEpochDatasService
     public int EpochCount => _datas.Count;
 
     public EpochData Last => _datas.Values.Last();
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void Clear()
     {
@@ -28,4 +32,12 @@ public class EpochDatasService : IEpochDatasService
 
     public EpochData? GetByTimeStamp(UtcTime timeStamp)
         => _datas.GetValueOrDefault(timeStamp);
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    readonly Dictionary<UtcTime, EpochData> _datas = [];
+
+    #endregion Private Fields
 }

@@ -12,8 +12,14 @@ namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
 public partial class AppSettingsWindowViewModel : ObservableValidator
 {
+    #region Public Fields
+
     public const string Title = "设置";
     public const string MenuItemHeader = $"{Title}(_S)";
+
+    #endregion Public Fields
+
+    #region Public Constructors
 
     public AppSettingsWindowViewModel()
     {
@@ -24,6 +30,16 @@ public partial class AppSettingsWindowViewModel : ObservableValidator
         SolutionEpochDataTcpAddress = solutionSettings.EpochDataTcpOptions.Address;
         SolutionEpochDataTcpPort = solutionSettings.EpochDataTcpOptions.Port;
     }
+
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public bool HasNoErrors => !HasErrors;
+
+    #endregion Public Properties
+
+    #region Private Fields
 
     [ObservableProperty]
     bool _isAcrylicEnabled;
@@ -42,7 +58,9 @@ public partial class AppSettingsWindowViewModel : ObservableValidator
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     int _solutionEpochDataTcpPort;
 
-    public bool HasNoErrors => !HasErrors;
+    #endregion Private Fields
+
+    #region Private Methods
 
     [RelayCommand(CanExecute = nameof(HasNoErrors))]
     void Save()
@@ -56,4 +74,6 @@ public partial class AppSettingsWindowViewModel : ObservableValidator
         App.Current.SettingsManager.Save();
         App.Current.TryApplyAcrylicToAllWindowsIfIsEnabled();
     }
+
+    #endregion Private Methods
 }

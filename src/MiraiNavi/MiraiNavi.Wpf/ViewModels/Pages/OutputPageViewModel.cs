@@ -4,37 +4,19 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MiraiNavi.WpfApp.Common;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 {
+    #region Public Fields
+
     public const string Title = "输出";
     public const string MenuItemHeader = $"{Title}(_O)";
 
-    readonly IMessenger _messenger;
+    #endregion Public Fields
 
-    const string _allSenders = "全部";
-
-    [ObservableProperty]
-    string _selectedSender = _allSenders;
-
-    public bool ShowError => _SeverityTypeFlags[SeverityType.Error];
-
-    public int ErrorCount => _SeverityTypeCounts[SeverityType.Error];
-
-    public bool ShowWarning => _SeverityTypeFlags[SeverityType.Warning];
-
-    public int WarningCount => _SeverityTypeCounts[SeverityType.Warning];
-
-    public bool ShowInformational => _SeverityTypeFlags[SeverityType.Info];
-
-    public int InformationalCount => _SeverityTypeCounts[SeverityType.Info];
-
-    readonly Dictionary<SeverityType, bool> _SeverityTypeFlags = [];
-
-    readonly Dictionary<SeverityType, int> _SeverityTypeCounts = [];
+    #region Public Constructors
 
     public OutputPageViewModel(IMessenger messenger)
     {
@@ -48,6 +30,40 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
         _SeverityTypeCounts.Add(SeverityType.Info, default);
     }
 
+    #endregion Public Constructors
+
+    #region Public Events
+
+    public event EventHandler<EventArgs>? ScrollToBottomRequested;
+
+    #endregion Public Events
+
+    #region Public Properties
+
+    public bool ShowError => _SeverityTypeFlags[SeverityType.Error];
+
+    public int ErrorCount => _SeverityTypeCounts[SeverityType.Error];
+
+    public bool ShowWarning => _SeverityTypeFlags[SeverityType.Warning];
+
+    public int WarningCount => _SeverityTypeCounts[SeverityType.Warning];
+
+    public bool ShowInformational => _SeverityTypeFlags[SeverityType.Info];
+
+    public int InformationalCount => _SeverityTypeCounts[SeverityType.Info];
+
+    public ObservableCollection<string> Senders { get; } = [_allSenders];
+
+    public ObservableCollection<Output> Outputs { get; } = [];
+
+    public ICollectionView? OutputsView { get; set; }
+
+    public bool Filtered => _SeverityTypeFlags.Values.Any(f => !f);
+
+    #endregion Public Properties
+
+    #region Public Methods
+
     public bool OutputsViewFilter(object item)
     {
         var output = (Output)item;
@@ -58,22 +74,6 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
             _SeverityTypeCounts[output.Type]++;
         return accepted;
     }
-
-    void Refresh()
-    {
-        foreach (var SeverityType in _SeverityTypeCounts.Keys)
-            _SeverityTypeCounts[SeverityType] = default;
-        OutputsView?.Refresh();
-        OnPropertyChanged(string.Empty);
-    }
-
-    partial void OnSelectedSenderChanged(string value) => Refresh();
-
-    public ObservableCollection<string> Senders { get; } = [_allSenders];
-
-    public ObservableCollection<Output> Outputs { get; } = [];
-
-    public ICollectionView? OutputsView { get; set; }
 
     public void Receive(Output message)
     {
@@ -88,6 +88,38 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
     }
 
+    #endregion Public Methods
+
+    #region Private Fields
+
+    const string _allSenders = "全部";
+
+    readonly IMessenger _messenger;
+    readonly Dictionary<SeverityType, bool> _SeverityTypeFlags = [];
+
+    readonly Dictionary<SeverityType, int> _SeverityTypeCounts = [];
+
+    [ObservableProperty]
+    string _selectedSender = _allSenders;
+    [ObservableProperty]
+    string _searchKeyword = string.Empty;
+
+    [ObservableProperty]
+    bool _keepBottom;
+
+    #endregion Private Fields
+
+    #region Private Methods
+
+    void Refresh()
+    {
+        foreach (var SeverityType in _SeverityTypeCounts.Keys)
+            _SeverityTypeCounts[SeverityType] = default;
+        OutputsView?.Refresh();
+        OnPropertyChanged(string.Empty);
+    }
+
+    partial void OnSelectedSenderChanged(string value) => Refresh();
     [RelayCommand]
     void SwitchVisibility(SeverityType SeverityType)
     {
@@ -95,9 +127,6 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }
-
-    public bool Filtered => _SeverityTypeFlags.Values.Any(f => !f);
-
     [RelayCommand(CanExecute = nameof(Filtered))]
     void ClearFilter()
     {
@@ -106,10 +135,6 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }
-
-    [ObservableProperty]
-    string _searchKeyword = string.Empty;
-
     partial void OnSearchKeywordChanged(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -118,15 +143,11 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 
     [RelayCommand]
     void Search() => Refresh();
-
-    [ObservableProperty]
-    bool _keepBottom;
-
-    public event EventHandler<EventArgs>? ScrollToBottomRequested;
-
     partial void OnKeepBottomChanged(bool value)
     {
         if (value)
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
     }
+
+    #endregion Private Methods
 }

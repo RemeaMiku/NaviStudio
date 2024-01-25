@@ -6,5 +6,5 @@ public enum SatelliteSystems
     Beidou = 'C',
     GLONASS = 'R',
     Galileo = 'E',
-    Others = -1
+    Others = '?'
 }

@@ -8,6 +8,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class PosePage : UserControl
 {
+    #region Public Constructors
+
     public PosePage(PosePageViewModel viewModel)
     {
         InitializeComponent();
@@ -15,5 +17,11 @@ public partial class PosePage : UserControl
         DataContext = this;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public PosePageViewModel ViewModel { get; }
+
+    #endregion Public Properties
 }

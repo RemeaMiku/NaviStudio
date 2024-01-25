@@ -5,6 +5,8 @@ namespace MiraiNavi.Shared.Models.Navi;
 
 public class NaviResult
 {
+    #region Public Properties
+
     public Xyz EcefCoord { get; set; }
 
     public GeodeticCoord GeodeticCoord { get; set; }
@@ -14,5 +16,7 @@ public class NaviResult
     public Enu LocalCoord { get; set; }
 
     public EulerAngles Attitude { get; set; }
+
+    #endregion Public Properties
 
 }

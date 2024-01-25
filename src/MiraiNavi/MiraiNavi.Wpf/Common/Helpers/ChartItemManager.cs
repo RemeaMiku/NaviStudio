@@ -5,12 +5,22 @@ namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public static class ChartItemManager
 {
+    #region Public Constructors
+
     static ChartItemManager()
     {
         ChartItemFuncs = GetDefaultChartItemFuncs();
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public static FrozenDictionary<string, Dictionary<string, Func<EpochData, double?>>> ChartItemFuncs { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     static FrozenDictionary<string, Dictionary<string, Func<EpochData, double?>>> GetDefaultChartItemFuncs()
     {
@@ -92,4 +102,6 @@ public static class ChartItemManager
             },
         }.ToFrozenDictionary();
     }
+
+    #endregion Private Methods
 }

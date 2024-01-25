@@ -7,6 +7,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(bool), typeof(ControlAppearance))]
 public class BooleanToControlAppearanceConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is bool flag)
@@ -18,4 +20,6 @@ public class BooleanToControlAppearanceConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+
+    #endregion Public Methods
 }

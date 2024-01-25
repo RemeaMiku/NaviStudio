@@ -9,6 +9,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class OutputPage : UserControl
 {
+    #region Public Constructors
+
     public OutputPage(OutputPageViewModel viewModel)
     {
         InitializeComponent();
@@ -19,6 +21,16 @@ public partial class OutputPage : UserControl
         ViewModel.ScrollToBottomRequested += OnViewModelScrollToBottomRequested;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public OutputPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
+
     private void OnViewModelScrollToBottomRequested(object? sender, EventArgs e)
     {
         App.Current.Dispatcher.Invoke(() =>
@@ -28,5 +40,5 @@ public partial class OutputPage : UserControl
         });
     }
 
-    public OutputPageViewModel ViewModel { get; }
+    #endregion Private Methods
 }

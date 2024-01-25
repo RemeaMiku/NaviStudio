@@ -6,6 +6,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(bool), typeof(bool))]
 public class BooleanToReversedBooleanConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var booleanValue = (bool)value;
@@ -17,4 +19,6 @@ public class BooleanToReversedBooleanConverter : IValueConverter
         var booleanValue = (bool)value;
         return !booleanValue;
     }
+
+    #endregion Public Methods
 }

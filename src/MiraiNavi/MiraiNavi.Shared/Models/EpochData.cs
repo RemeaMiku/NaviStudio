@@ -6,6 +6,8 @@ namespace MiraiNavi.Shared.Models;
 
 public class EpochData
 {
+    #region Public Properties
+
     public UtcTime TimeStamp { get; set; }
 
     public string DisplayTimeStamp => TimeStamp.ToString(@"yyyy\/MM\/dd HH:mm:ss.fff", null);
@@ -21,4 +23,6 @@ public class EpochData
     public List<SatelliteSkyPosition>? SatelliteSkyPositions { get; set; }
 
     public List<SatelliteTracking>? SatelliteTrackings { get; set; }
+
+    #endregion Public Properties
 }

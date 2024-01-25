@@ -6,6 +6,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(double), typeof(double))]
 public class OppositeNumberConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var number = (double)value;
@@ -17,4 +19,6 @@ public class OppositeNumberConverter : IValueConverter
         var number = (double)value;
         return -number;
     }
+
+    #endregion Public Methods
 }

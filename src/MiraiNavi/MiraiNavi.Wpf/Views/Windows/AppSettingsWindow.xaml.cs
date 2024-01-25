@@ -10,6 +10,8 @@ namespace MiraiNavi.WpfApp.Views.Windows;
 /// </summary>
 public partial class AppSettingsWindow : UiWindow
 {
+    #region Public Constructors
+
     public AppSettingsWindow(AppSettingsWindowViewModel viewModel)
     {
         InitializeComponent();
@@ -18,10 +20,20 @@ public partial class AppSettingsWindow : UiWindow
         DataContext = this;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public AppSettingsWindowViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     private void OnButtonClicked(object sender, RoutedEventArgs e)
     {
         Close();
     }
+
+    #endregion Private Methods
 }

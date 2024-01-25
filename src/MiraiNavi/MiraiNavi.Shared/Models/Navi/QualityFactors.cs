@@ -2,6 +2,8 @@
 
 public class QualityFactors
 {
+    #region Public Properties
+
     public double AmbFixedRatio { get; set; }
 
     public double HDop { get; set; }
@@ -11,6 +13,8 @@ public class QualityFactors
     public double PDop { get; set; }
 
     public double GDop { get; set; }
+
+    #endregion Public Properties
 
     //public int VisibleSalliteCount { get; set; }
 }

@@ -11,6 +11,8 @@ namespace MiraiNavi.WpfApp.Views.Windows;
 /// </summary>
 public partial class ChartToolWindow : UiWindow
 {
+    #region Public Constructors
+
     public ChartToolWindow(ChartToolWindowViewModel viewModel)
     {
         InitializeComponent();
@@ -19,11 +21,21 @@ public partial class ChartToolWindow : UiWindow
         DataContext = this;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public ChartToolWindowViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     private void OnConfirmButtonClicked(object sender, System.Windows.RoutedEventArgs e)
     {
         DialogResult = true;
         Close();
     }
+
+    #endregion Private Methods
 }

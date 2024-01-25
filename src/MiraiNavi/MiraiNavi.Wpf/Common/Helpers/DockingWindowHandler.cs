@@ -1,13 +1,11 @@
-﻿using System.Collections.Frozen;
-using System.Windows.Controls;
-using MiraiNavi.WpfApp.Views.Pages;
+﻿using System.Windows.Controls;
 using Syncfusion.Windows.Tools.Controls;
 
 namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public static class DockingWindowHandler
 {
-    static readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
+    #region Public Methods
 
     public static void RestoreDockState(ContentControl contentControl)
     {
@@ -28,4 +26,12 @@ public static class DockingWindowHandler
         var viewModel = contentControl.Content?.GetType()?.GetProperty("ViewModel")?.GetValue(contentControl.Content);
         viewModel?.GetType()?.GetProperty("IsActive")?.SetValue(viewModel, isActive);
     }
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    static readonly Dictionary<ContentControl, DockState> _dockStatesOnClosed = [];
+
+    #endregion Private Fields
 }

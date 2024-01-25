@@ -1,18 +1,30 @@
 ﻿using System.Collections.Frozen;
-using MiraiNavi.Shared.Models.Satellites;
 using MiraiNavi.Shared.Models.Navi;
+using MiraiNavi.Shared.Models.Satellites;
 using NaviSharp;
-using NaviSharp.Time;
 using NaviSharp.SpatialReference;
+using NaviSharp.Time;
 
 namespace MiraiNavi.WpfApp.Common.Helpers;
 
 public static class DisplayDescriptionManager
 {
+    #region Public Constructors
+
     static DisplayDescriptionManager()
     {
         Descriptions = GetDefaultDescriptions();
     }
+
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public static FrozenDictionary<string, DisplayDescription> Descriptions { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     static FrozenDictionary<string, DisplayDescription> GetDefaultDescriptions()
     {
@@ -348,5 +360,5 @@ public static class DisplayDescriptionManager
         }.ToFrozenDictionary();
     }
 
-    public static FrozenDictionary<string, DisplayDescription> Descriptions { get; }
+    #endregion Private Methods
 }

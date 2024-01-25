@@ -7,6 +7,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(SeverityType), typeof(InfoBarSeverity))]
 public class SeverityTypeToInfoBarSeverityConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return value switch
@@ -23,4 +25,6 @@ public class SeverityTypeToInfoBarSeverityConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+
+    #endregion Public Methods
 }

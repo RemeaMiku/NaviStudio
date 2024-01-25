@@ -7,18 +7,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.Shared.Serialization;
-using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Services.Contracts;
 
 namespace MiraiNavi.WpfApp.Services;
 
 public class TcpJsonRealTimeService() : IRealTimeService
 {
-    const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
+    #region Public Events
+
+    public event EventHandler<EpochData?>? EpochDataReceived;
+
+    #endregion Public Events
+
+    #region Public Properties
 
     public bool IsRunning { get; private set; }
 
-    public event EventHandler<EpochData?>? EpochDataReceived;
+    #endregion Public Properties
+
+    #region Public Methods
 
     public async Task StartAsync(RealTimeOptions options, CancellationToken token)
     {
@@ -65,4 +72,12 @@ public class TcpJsonRealTimeService() : IRealTimeService
             IsRunning = false;
         }
     }
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
+
+    #endregion Private Fields
 }

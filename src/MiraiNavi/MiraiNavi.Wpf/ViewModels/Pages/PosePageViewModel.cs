@@ -7,41 +7,14 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
+    #region Public Fields
+
     public const string Title = "位姿";
     public const string MenuItemHeader = $"{Title}(_P)";
 
-    [ObservableProperty]
-    UtcTime _timeStamp;
+    #endregion Public Fields
 
-    [ObservableProperty]
-    double _latitude;
-
-    [ObservableProperty]
-    double _longitude;
-
-    [ObservableProperty]
-    double _altitude;
-
-    [ObservableProperty]
-    double _yaw;
-
-    [ObservableProperty]
-    double _pitch;
-
-    [ObservableProperty]
-    double _roll;
-
-    [ObservableProperty]
-    double _velocity;
-
-    [ObservableProperty]
-    double _eastVelocity;
-
-    [ObservableProperty]
-    double _northVelocity;
-
-    [ObservableProperty]
-    double _upVelocity;
+    #region Protected Methods
 
     protected override void Reset()
     {
@@ -77,4 +50,43 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         NorthVelocity = data.Result.Velocity.N;
         UpVelocity = data.Result.Velocity.U;
     }
+
+    #endregion Protected Methods
+
+    #region Private Fields
+
+    [ObservableProperty]
+    UtcTime _timeStamp;
+
+    [ObservableProperty]
+    double _latitude;
+
+    [ObservableProperty]
+    double _longitude;
+
+    [ObservableProperty]
+    double _altitude;
+
+    [ObservableProperty]
+    double _yaw;
+
+    [ObservableProperty]
+    double _pitch;
+
+    [ObservableProperty]
+    double _roll;
+
+    [ObservableProperty]
+    double _velocity;
+
+    [ObservableProperty]
+    double _eastVelocity;
+
+    [ObservableProperty]
+    double _northVelocity;
+
+    [ObservableProperty]
+    double _upVelocity;
+
+    #endregion Private Fields
 }

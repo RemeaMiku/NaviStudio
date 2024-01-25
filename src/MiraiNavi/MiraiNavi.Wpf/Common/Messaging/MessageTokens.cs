@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MiraiNavi.WpfApp.Common.Messaging;
+﻿namespace MiraiNavi.WpfApp.Common.Messaging;
 
 public static class MessageTokens
 {
+    #region Public Fields
+
     public const string MapPageToPropertyPage = nameof(MapPageToPropertyPage);
+
+    #endregion Public Fields
 }

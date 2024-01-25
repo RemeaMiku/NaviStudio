@@ -18,6 +18,8 @@ namespace MiraiNavi.WpfApp.Views.Windows;
 /// </summary>
 public partial class MainWindow : UiWindow
 {
+    #region Public Constructors
+
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
@@ -28,19 +30,15 @@ public partial class MainWindow : UiWindow
         SetPages();
     }
 
-    void SetPages()
-    {
-        RealTimeOptionsView.Content = App.Current.Services.GetRequiredService<RealTimeOptionsPage>();
-        MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
-        SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
-        PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();
-        DashBoardView.Content = App.Current.Services.GetRequiredService<DashBoardPage>();
-        OutputView.Content = App.Current.Services.GetRequiredService<OutputPage>();
-        SatelliteTrackingView.Content = App.Current.Services.GetRequiredService<SatelliteTrackingPage>();
-        PropertyView.Content = App.Current.Services.GetRequiredService<PropertyPage>();
-    }
+    #endregion Public Constructors
+
+    #region Public Properties
 
     public MainWindowViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void AddDocument(string header, object content)
     {
@@ -54,6 +52,21 @@ public partial class MainWindow : UiWindow
         DockingManager.SetHeader(contentControl, header);
     }
 
+    #endregion Public Methods
+
+    #region Private Methods
+
+    void SetPages()
+    {
+        RealTimeOptionsView.Content = App.Current.Services.GetRequiredService<RealTimeOptionsPage>();
+        MapView.Content = App.Current.Services.GetRequiredService<MapPage>();
+        SkyMapView.Content = App.Current.Services.GetRequiredService<SkyMapPage>();
+        PoseView.Content = App.Current.Services.GetRequiredService<PosePage>();
+        DashBoardView.Content = App.Current.Services.GetRequiredService<DashBoardPage>();
+        OutputView.Content = App.Current.Services.GetRequiredService<OutputPage>();
+        SatelliteTrackingView.Content = App.Current.Services.GetRequiredService<SatelliteTrackingPage>();
+        PropertyView.Content = App.Current.Services.GetRequiredService<PropertyPage>();
+    }
     void RestoreAndActiveWindow(ContentControl contentControl)
     {
         if (DockingManager.GetState(contentControl) == DockState.Hidden)
@@ -119,4 +132,6 @@ public partial class MainWindow : UiWindow
     {
         App.Current.Services.GetRequiredService<AppSettingsWindow>().ShowDialog();
     }
+
+    #endregion Private Methods
 }

@@ -11,6 +11,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class RealTimeOptionsPage : UserControl
 {
+    #region Public Constructors
+
     public RealTimeOptionsPage(RealTimeOptionsPageViewModel viewModel)
     {
         InitializeComponent();
@@ -18,5 +20,11 @@ public partial class RealTimeOptionsPage : UserControl
         ViewModel = viewModel;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public RealTimeOptionsPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
 }

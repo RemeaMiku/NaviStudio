@@ -15,24 +15,24 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <cv:SatelliteSystemTypeToBrushConverter x:Key="SatelliteSystemTypeToBrushConverter" />
-        <sys:Double x:Key="SymbolSize">20</sys:Double>
+        <cv:SatelliteSystemsToImageSourceConverter x:Key="SatelliteSystemsToImageSourceConverter" />
+        <sys:Double x:Key="SymbolSize">25</sys:Double>
         <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="IsChecked" Value="True" />
             <Setter Property="Padding" Value="1" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Width" Value="50" />
             <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
             <Setter Property="Margin" Value="1" />
             <Setter Property="Command" Value="{Binding ViewModel.EnableOrDisableSystemCommand, Mode=OneTime}" />
             <Setter Property="CommandParameter" Value="{Binding Tag, RelativeSource={RelativeSource Mode=Self}, Mode=OneWay}" />
-            <Style.Triggers>
+            <!--<Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{Binding Tag, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource SatelliteSystemTypeToBrushConverter}, Mode=OneWay}" />
+                    <Setter Property="Background" Value="{StaticResource MikuGreenBrush}" />
                 </Trigger>
-            </Style.Triggers>
+            </Style.Triggers>-->
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -70,10 +70,10 @@
                             <sfcharts:ChartAdornmentInfo.LabelTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <Ellipse
+                                        <Image
                                             Width="{StaticResource SymbolSize}"
                                             Height="{StaticResource SymbolSize}"
-                                            Fill="{Binding Item.Satellite.System, Converter={StaticResource SatelliteSystemTypeToBrushConverter}, Mode=OneTime}" />
+                                            Source="{Binding Item.Satellite.System, Converter={StaticResource SatelliteSystemsToImageSourceConverter}, Mode=OneTime}" />
                                         <TextBlock
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"

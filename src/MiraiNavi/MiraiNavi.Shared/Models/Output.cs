@@ -2,6 +2,8 @@
 
 public class Output(string senderName, SeverityType type, string message, string? details = default)
 {
+    #region Public Properties
+
     public UtcTime TimeStamp { get; } = UtcTime.Now;
 
     public string SenderName { get; init; } = senderName;
@@ -13,4 +15,6 @@ public class Output(string senderName, SeverityType type, string message, string
     public string DisplayMessage => $"[{SenderName}] {Message}";
 
     public string? Details { get; init; } = details;
+
+    #endregion Public Properties
 }

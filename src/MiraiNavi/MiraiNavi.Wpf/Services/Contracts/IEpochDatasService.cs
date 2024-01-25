@@ -2,11 +2,19 @@
 
 public interface IEpochDatasService
 {
+    #region Public Properties
+
     public IEnumerable<EpochData> Datas { get; }
 
     public int EpochCount { get; }
 
     public bool HasData => EpochCount > 0;
+
+    public EpochData Last { get; }
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void Add(EpochData epochData);
 
@@ -14,5 +22,5 @@ public interface IEpochDatasService
 
     public void Clear();
 
-    public EpochData Last { get; }
+    #endregion Public Methods
 }

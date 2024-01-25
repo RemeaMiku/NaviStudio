@@ -10,15 +10,13 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
 
-    [ObservableProperty]
-    string _title = string.Empty;
-
-    [ObservableProperty]
-    int _maxEpochCount;
-
-    int _epochCount;
+    #region Public Properties
 
     public HashSet<ChartPageViewModel> ItemViewModels { get; } = [];
+
+    #endregion Public Properties
+
+    #region Protected Methods
 
     protected override void Update(EpochData epochData)
     {
@@ -32,13 +30,6 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 
         }
         _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
-    }
-
-    static void UpdateChartItemCommon(ChartPageViewModel viewModel, EpochData epochData)
-    {
-        var funcs = ChartItemManager.ChartItemFuncs[viewModel.Title];
-        foreach ((var label, var func) in funcs)
-            viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
     }
 
     protected override void Sync()
@@ -60,4 +51,29 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
             viewModel.Clear();
         _epochCount = 0;
     }
+
+    #endregion Protected Methods
+
+    #region Private Fields
+
+    [ObservableProperty]
+    string _title = string.Empty;
+
+    [ObservableProperty]
+    int _maxEpochCount;
+
+    int _epochCount;
+
+    #endregion Private Fields
+
+    #region Private Methods
+
+    static void UpdateChartItemCommon(ChartPageViewModel viewModel, EpochData epochData)
+    {
+        var funcs = ChartItemManager.ChartItemFuncs[viewModel.Title];
+        foreach ((var label, var func) in funcs)
+            viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
+    }
+
+    #endregion Private Methods
 }

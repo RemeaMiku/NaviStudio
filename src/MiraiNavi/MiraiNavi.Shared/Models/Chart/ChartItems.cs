@@ -2,6 +2,8 @@
 
 public static class ChartItems
 {
+    #region Public Fields
+
     public const string LongitudeAndLatitude = "经纬度(°)";
 
     public const string LocalCoord = "本地坐标(m)";
@@ -33,4 +35,6 @@ public static class ChartItems
     public const string VisibleSatelliteCount = "可视卫星数量";
 
     public const string SatelliteVisibility = "卫星可视性";
+
+    #endregion Public Fields
 }

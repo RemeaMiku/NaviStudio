@@ -8,26 +8,22 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
+    #region Public Fields
+
     public const string Title = "仪表盘";
     public const string MenuItemHeader = $"{Title}(_D)";
 
-    [ObservableProperty]
-    double _speed;
+    #endregion Public Fields
 
-    [ObservableProperty]
-    double _yaw;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HorizonOffset))]
-    [NotifyPropertyChangedFor(nameof(PitchTranslateY))]
-    double _pitch;
-
-    [ObservableProperty]
-    double _roll;
+    #region Public Properties
 
     public double PitchTranslateY => 5 * Pitch;
 
     public double HorizonOffset => Math.Clamp(0.5 + Pitch / 35.7142857142857, 0, 1);
+
+    #endregion Public Properties
+
+    #region Protected Methods
 
     protected override void OnActivated()
     {
@@ -55,4 +51,24 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Pitch = data.Result.Attitude.Pitch.Degrees;
         Roll = data.Result.Attitude.Roll.Degrees;
     }
+
+    #endregion Protected Methods
+
+    #region Private Fields
+
+    [ObservableProperty]
+    double _speed;
+
+    [ObservableProperty]
+    double _yaw;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HorizonOffset))]
+    [NotifyPropertyChangedFor(nameof(PitchTranslateY))]
+    double _pitch;
+
+    [ObservableProperty]
+    double _roll;
+
+    #endregion Private Fields
 }

@@ -8,6 +8,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class DashBoardPage : UserControl
 {
+    #region Public Constructors
+
     public DashBoardPage(DashBoardPageViewModel viewModel)
     {
         InitializeComponent();
@@ -15,7 +17,15 @@ public partial class DashBoardPage : UserControl
         ViewModel = viewModel;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public DashBoardPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     private void OnCompassLabelCreated(object sender, Syncfusion.UI.Xaml.Gauges.LabelCreatedEventArgs e)
     {
@@ -28,4 +38,6 @@ public partial class DashBoardPage : UserControl
             _ => e.LabelText
         };
     }
+
+    #endregion Private Methods
 }

@@ -5,13 +5,15 @@ namespace MiraiNavi.Shared.Common.Helpers;
 
 public static class RandomDataGenerator
 {
+    #region Public Methods
+
     public static IEnumerable<Satellite> GetSatellites(int count)
     {
         var random = new Random();
-        var systems = new char[] { 'G', 'C', 'R', 'E' };
+        var systems = Enum.GetValues<SatelliteSystems>();
         for (int i = 0; i < count; i++)
         {
-            var system = systems[random.Next(0, systems.Length)];
+            var system = (char)systems[random.Next(0, systems.Length)];
             var number = random.Next(1, 33);
             yield return $"{system}{number:00}";
         }
@@ -54,4 +56,6 @@ public static class RandomDataGenerator
             yield return GetSatelliteTracking(satellite);
         }
     }
+
+    #endregion Public Methods
 }

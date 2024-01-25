@@ -16,6 +16,8 @@ namespace MiraiNavi.WpfApp.ViewModels;
 
 public partial class InputOptionsViewModel() : ObservableValidator
 {
+    #region Public Constructors
+
     public InputOptionsViewModel(InputOptions options) : this()
     {
         Type = options.Type;
@@ -31,50 +33,86 @@ public partial class InputOptionsViewModel() : ObservableValidator
         Validate();
     }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsTcp))]
-    [NotifyPropertyChangedFor(nameof(IsSerial))]
-    InputType _type = InputType.Tcp;
+    #endregion Public Constructors
 
-    const string _defaultTcpAddress = "0.0.0.0";
-    const int _defaultTcpPort = 0;
-    const string _defaultSerialPortName = "COM1";
-    const int _defaultSerialBaudRate = 9600;
-    const int _defaultSerialDataBits = 8;
-
-    partial void OnTypeChanged(InputType value)
-    {
-        var errors = GetErrors().ToArray();
-        foreach (var error in errors)
-        {
-            switch (error.MemberNames.First())
-            {
-                case nameof(TcpAddress):
-                    TcpAddress = _defaultTcpAddress;
-                    break;
-                case nameof(TcpPort):
-                    TcpPort = _defaultTcpPort;
-                    break;
-                case nameof(SerialPortName):
-                    SerialPortName = _defaultSerialPortName;
-                    break;
-                case nameof(SerialBaudRate):
-                    SerialBaudRate = _defaultSerialBaudRate;
-                    break;
-                case nameof(SerialDataBits):
-                    SerialDataBits = _defaultSerialDataBits;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        Validate();
-    }
+    #region Public Properties
 
     public bool IsTcp => Type == InputType.Tcp;
 
     public bool IsSerial => Type == InputType.Serial;
 
+    #endregion Public Properties
+
+    #region Public Methods
+
+    public void Validate()
+    {
+        ClearErrors();
+        switch (Type)
+        {
+            case InputType.Tcp:
+                ValidateTcp();
+                break;
+            case InputType.Serial:
+                ValidateSerial();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public InputOptions GetInputOptions()
+    {
+        return new()
+        {
+            Type = Type,
+            Format = Format,
+            TcpOptions = new IPEndPointOptions()
+            {
+                Address = TcpAddress,
+                Port = TcpPort,
+            },
+            SerialOptions = new SerialPortOptions()
+            {
+                BaudRate = SerialBaudRate,
+                DataBits = SerialDataBits,
+                Parity = SerialParity,
+                PortName = SerialPortName,
+                RtsEnable = SerialRtsEnable,
+                StopBits = SerialStopBits
+            }
+        };
+    }
+
+    public bool TryGetInputOptions([NotNullWhen(true)] out InputOptions? options)
+    {
+        if (HasErrors)
+        {
+            options = default;
+            return false;
+        }
+        options = GetInputOptions();
+        return true;
+    }
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    const string _defaultTcpAddress = "0.0.0.0";
+
+    const int _defaultTcpPort = 0;
+
+    const string _defaultSerialPortName = "COM1";
+
+    const int _defaultSerialBaudRate = 9600;
+
+    const int _defaultSerialDataBits = 8;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsTcp))]
+    [NotifyPropertyChangedFor(nameof(IsSerial))]
+    InputType _type = InputType.Tcp;
     [ObservableProperty]
     InputFormat _format = InputFormat.RTCM3;
 
@@ -115,22 +153,38 @@ public partial class InputOptionsViewModel() : ObservableValidator
     [ObservableProperty]
     bool _serialRtsEnable = false;
 
-    public void Validate()
-    {
-        ClearErrors();
-        switch (Type)
-        {
-            case InputType.Tcp:
-                ValidateTcp();
-                break;
-            case InputType.Serial:
-                ValidateSerial();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
+    #endregion Private Fields
 
+    #region Private Methods
+
+    partial void OnTypeChanged(InputType value)
+    {
+        var errors = GetErrors().ToArray();
+        foreach (var error in errors)
+        {
+            switch (error.MemberNames.First())
+            {
+                case nameof(TcpAddress):
+                    TcpAddress = _defaultTcpAddress;
+                    break;
+                case nameof(TcpPort):
+                    TcpPort = _defaultTcpPort;
+                    break;
+                case nameof(SerialPortName):
+                    SerialPortName = _defaultSerialPortName;
+                    break;
+                case nameof(SerialBaudRate):
+                    SerialBaudRate = _defaultSerialBaudRate;
+                    break;
+                case nameof(SerialDataBits):
+                    SerialDataBits = _defaultSerialDataBits;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        Validate();
+    }
     void ValidateSerial()
     {
         ValidateProperty(SerialPortName, nameof(SerialPortName));
@@ -144,37 +198,5 @@ public partial class InputOptionsViewModel() : ObservableValidator
         ValidateProperty(TcpPort, nameof(TcpPort));
     }
 
-    public InputOptions GetInputOptions()
-    {
-        return new()
-        {
-            Type = Type,
-            Format = Format,
-            TcpOptions = new IPEndPointOptions()
-            {
-                Address = TcpAddress,
-                Port = TcpPort,
-            },
-            SerialOptions = new SerialPortOptions()
-            {
-                BaudRate = SerialBaudRate,
-                DataBits = SerialDataBits,
-                Parity = SerialParity,
-                PortName = SerialPortName,
-                RtsEnable = SerialRtsEnable,
-                StopBits = SerialStopBits
-            }
-        };
-    }
-
-    public bool TryGetInputOptions([NotNullWhen(true)] out InputOptions? options)
-    {
-        if (HasErrors)
-        {
-            options = default;
-            return false;
-        }
-        options = GetInputOptions();
-        return true;
-    }
+    #endregion Private Methods
 }

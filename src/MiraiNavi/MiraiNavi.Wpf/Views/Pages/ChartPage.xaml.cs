@@ -13,6 +13,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class ChartPage : UserControl
 {
+    #region Public Constructors
+
     public ChartPage(ChartPageViewModel viewModel)
     {
         InitializeComponent();
@@ -20,6 +22,16 @@ public partial class ChartPage : UserControl
         DataContext = this;
         ViewModel.AddSeriesRequested += OnViewModelAddSeriesRequested;
     }
+
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public ChartPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void AddSeries(string label)
     {
@@ -36,9 +48,9 @@ public partial class ChartPage : UserControl
         });
     }
 
-    void OnViewModelAddSeriesRequested(object? sender, string e) => AddSeries(e);
+    #endregion Public Methods
 
-    public ChartPageViewModel ViewModel { get; }
+    #region Private Fields
 
     static readonly Brush[] _brushes =
     [
@@ -48,6 +60,11 @@ public partial class ChartPage : UserControl
         (Brush)App.Current.Resources["MeaBlueBrush"],
     ];
 
+    #endregion Private Fields
+
+    #region Private Methods
+
+    void OnViewModelAddSeriesRequested(object? sender, string e) => AddSeries(e);
     private void OnSfChartMouseEnter(object sender, MouseEventArgs e)
     {
         ChartZoomPanBehavior.EnableZoomingToolBar = true;
@@ -57,4 +74,6 @@ public partial class ChartPage : UserControl
     {
         ChartZoomPanBehavior.EnableZoomingToolBar = false;
     }
+
+    #endregion Private Methods
 }

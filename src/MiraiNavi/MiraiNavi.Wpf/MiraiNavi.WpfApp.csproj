@@ -20,10 +20,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Assets\Map\car.png" />
+	  <None Remove="Assets\Map\default.png" />
+	  <None Remove="Assets\Map\ellipse.png" />
+	  <None Remove="Assets\Map\plane.png" />
+	  <None Remove="Assets\Satellites\beidou.png" />
+	  <None Remove="Assets\Satellites\galileo.png" />
+	  <None Remove="Assets\Satellites\glonass.png" />
+	  <None Remove="Assets\Satellites\gps.png" />
+	  <None Remove="Assets\Satellites\others.png" />
 	  <None Remove="Assets\splash-screen.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Assets\Map\ellipse.png" />
 		<Resource Include="Assets\mirainavi-logo.ico" />
 	</ItemGroup>
 
@@ -47,6 +57,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Assets\Map\car.png" />
+	  <Resource Include="Assets\Map\plane.png" />
+	  <Resource Include="Assets\Map\default.png" />
+	  <Resource Include="Assets\Satellites\beidou.png" />
+	  <Resource Include="Assets\Satellites\galileo.png" />
+	  <Resource Include="Assets\Satellites\glonass.png" />
+	  <Resource Include="Assets\Satellites\gps.png" />
+	  <Resource Include="Assets\Satellites\others.png" />
 	  <Resource Include="Assets\splash-screen.png" />
 	</ItemGroup>
 

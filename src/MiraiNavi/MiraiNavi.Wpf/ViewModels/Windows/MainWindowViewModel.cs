@@ -16,11 +16,75 @@ namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
 public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>, IRecipient<StatusNotification>
 {
-    CancellationTokenSource? _tokenSource;
-    readonly IEpochDatasService _epochDatasService = epochDatasService;
-    readonly IRealTimeService _realTimeControlService = realTimeControlService;
+    #region Public Fields
 
     public const string Title = "MiraiNavi";
+
+    public static readonly RealTimeOptions DefaultOptions = new("默认");
+
+    #endregion Public Fields
+
+    #region Public Properties
+
+    public string StartOrResumeText
+        => IsRealTimeStarted ? "继续" : Options is null ? string.Empty : Options.Name;
+
+    public IRelayCommand StartOrResumeCommand
+        => IsRealTimeStarted ? ResumeCommand : StartCommand;
+
+    #endregion Public Properties
+
+    #region Public Methods
+
+    public void Receive(ValueChangedMessage<RealTimeOptions> message)
+    {
+        Options = message.Value;
+    }
+
+    public void Receive(StatusNotification message)
+    {
+        StatusSeverityType = message.Type;
+        StatusContent = message.Content;
+        StatusIsProcessing = message.IsProcessing;
+    }
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    const string _optionsNullStatusContent = "等待确认实时选项";
+
+    const string _optionsReadyStatusContent = "就绪";
+
+    readonly IEpochDatasService _epochDatasService = epochDatasService;
+
+    readonly IRealTimeService _realTimeControlService = realTimeControlService;
+
+    CancellationTokenSource? _tokenSource;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
+    RealTimeOptions? _options;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
+    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
+    bool _isRealTimeStarted;
+
+    [ObservableProperty]
+    bool _isRealTimeRunning;
+
+    [ObservableProperty]
+    SeverityType _statusSeverityType = SeverityType.Info;
+
+    [ObservableProperty]
+    string _statusContent = _optionsNullStatusContent;
+
+    [ObservableProperty]
+    bool _statusIsProcessing = false;
+
+    #endregion Private Fields
+
+    #region Private Methods
 
     void ValidateEpochData(EpochData epochData)
     {
@@ -51,21 +115,6 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             StatusContent = $"历元 {data.TimeStamp:yyyy/MM/dd HH:mm:ss.fff} 已更新";
         }
     }
-
-    public static readonly RealTimeOptions DefaultOptions = new("默认");
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
-    RealTimeOptions? _options;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StartOrResumeCommand))]
-    [NotifyPropertyChangedFor(nameof(StartOrResumeText))]
-    bool _isRealTimeStarted;
-
-    [ObservableProperty]
-    bool _isRealTimeRunning;
-
     partial void OnIsRealTimeStartedChanged(bool value)
     {
         if (value)
@@ -98,13 +147,6 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         else
             StatusIsProcessing = false;
     }
-
-    public string StartOrResumeText
-        => IsRealTimeStarted ? "继续" : Options is null ? string.Empty : Options.Name;
-
-    public IRelayCommand StartOrResumeCommand
-        => IsRealTimeStarted ? ResumeCommand : StartCommand;
-
     [RelayCommand]
     async Task StartAsync()
     {
@@ -160,12 +202,6 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         _tokenSource.Cancel();
         IsRealTimeStarted = false;
     }
-
-    public void Receive(ValueChangedMessage<RealTimeOptions> message)
-    {
-        Options = message.Value;
-    }
-
     partial void OnOptionsChanged(RealTimeOptions? value)
     {
         if (value is null)
@@ -180,22 +216,5 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         }
     }
 
-    const string _optionsNullStatusContent = "等待确认实时选项";
-    const string _optionsReadyStatusContent = "就绪";
-
-    [ObservableProperty]
-    SeverityType _statusSeverityType = SeverityType.Info;
-
-    [ObservableProperty]
-    string _statusContent = _optionsNullStatusContent;
-
-    [ObservableProperty]
-    bool _statusIsProcessing = false;
-
-    public void Receive(StatusNotification message)
-    {
-        StatusSeverityType = message.Type;
-        StatusContent = message.Content;
-        StatusIsProcessing = message.IsProcessing;
-    }
+    #endregion Private Methods
 }

@@ -11,6 +11,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class PropertyPage : UserControl
 {
+    #region Public Constructors
+
     public PropertyPage(PropertyPageViewModel viewModel)
     {
         InitializeComponent();
@@ -18,7 +20,15 @@ public partial class PropertyPage : UserControl
         ViewModel = viewModel;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public PropertyPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Methods
 
     private void OnPropertyGridAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
@@ -36,4 +46,6 @@ public partial class PropertyPage : UserControl
     {
         e.IsReadonly = true;
     }
+
+    #endregion Private Methods
 }

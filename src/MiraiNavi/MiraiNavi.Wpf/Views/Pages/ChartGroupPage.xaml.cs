@@ -13,12 +13,24 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class ChartGroupPage : UserControl
 {
+    #region Public Constructors
+
     public ChartGroupPage(ChartGroupPageViewModel viewModel)
     {
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
     }
+
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public ChartGroupPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void CreateCharts(ChartGroupParameters groupParas)
     {
@@ -41,10 +53,14 @@ public partial class ChartGroupPage : UserControl
         }
     }
 
-    public ChartGroupPageViewModel ViewModel { get; }
+    #endregion Public Methods
+
+    #region Private Methods
 
     private void OnLayoutButtonClicked(object sender, RoutedEventArgs e)
     {
         DocumentContainerControl.SetLayout((MDILayout)((Button)sender).Tag);
     }
+
+    #endregion Private Methods
 }

@@ -18,10 +18,14 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<RealTimeOptions>
 {
+    #region Public Fields
+
     public const string Title = "实时选项";
     public const string MenuItemHeader = $"{Title}(_S)";
 
-    readonly IMessenger _messenger;
+    #endregion Public Fields
+
+    #region Public Constructors
 
     public RealTimeOptionsPageViewModel(IMessenger messenger)
     {
@@ -31,36 +35,9 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         RoverOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
     }
 
-    [ObservableProperty]
-    [Required(ErrorMessage = "不能为空")]
-    [Length(1, 20, ErrorMessage = "长度需在 1 到 20 之间")]
-    [NotifyDataErrorInfo]
-    string _solutionName = "未命名";
+    #endregion Public Constructors
 
-    [ObservableProperty]
-    InputOptionsViewModel _baseOptions = new();
-
-    [ObservableProperty]
-    InputOptionsViewModel _roverOptions = new();
-
-    [ObservableProperty]
-    [RegularExpression(@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.]+)+\\?$", ErrorMessage = "非法目录")]
-    [NotifyDataErrorInfo]
-    string _outputFolder = string.Empty;
-
-    [ObservableProperty]
-    bool _isEditable = true;
-
-    partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
-    {
-        OnPropertyChanged(nameof(HasErrors));
-        if (oldValue is not null)
-            oldValue.ErrorsChanged -= (_, _) => OnPropertyChanged(nameof(HasErrors));
-        newValue.ErrorsChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
-    }
-
-    partial void OnRoverOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
-        => OnBaseOptionsChanged(oldValue, newValue);
+    #region Public Properties
 
     public static Array Parities { get; } = Enum.GetValues(typeof(Parity));
 
@@ -71,6 +48,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     public static IEnumerable<int> BaudRates { get; } = [2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600];
 
     public new bool HasErrors => base.HasErrors || BaseOptions.HasErrors || RoverOptions.HasErrors;
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public RealTimeOptions GetOptions()
     {
@@ -94,6 +75,66 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         return true;
     }
 
+    public void Receive(RealTimeOptions message)
+    {
+        IsEditable = !IsEditable;
+        SetOptions(message);
+    }
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    readonly static JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true,
+        PropertyNameCaseInsensitive = false,
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
+        PreferredObjectCreationHandling = JsonObjectCreationHandling.Populate,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        Converters =
+        {
+            new JsonStringEnumConverter(),
+        }
+    };
+
+    readonly IMessenger _messenger;
+    [ObservableProperty]
+    [Required(ErrorMessage = "不能为空")]
+    [Length(1, 20, ErrorMessage = "长度需在 1 到 20 之间")]
+    [NotifyDataErrorInfo]
+    string _solutionName = "未命名";
+
+    [ObservableProperty]
+    InputOptionsViewModel _baseOptions = new();
+
+    [ObservableProperty]
+    InputOptionsViewModel _roverOptions = new();
+
+    [ObservableProperty]
+    [RegularExpression(@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.]+)+\\?$", ErrorMessage = "非法目录")]
+    [NotifyDataErrorInfo]
+    string _outputFolder = string.Empty;
+
+    [ObservableProperty]
+    bool _isEditable = true;
+
+    #endregion Private Fields
+
+    #region Private Methods
+
+    partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
+    {
+        OnPropertyChanged(nameof(HasErrors));
+        if (oldValue is not null)
+            oldValue.ErrorsChanged -= (_, _) => OnPropertyChanged(nameof(HasErrors));
+        newValue.ErrorsChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
+    }
+
+    partial void OnRoverOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
+        => OnBaseOptionsChanged(oldValue, newValue);
     void SetOptions(RealTimeOptions options)
     {
         SolutionName = options.Name;
@@ -166,24 +207,5 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
     }
 
-    public void Receive(RealTimeOptions message)
-    {
-        IsEditable = !IsEditable;
-        SetOptions(message);
-    }
-
-    readonly static JsonSerializerOptions _jsonSerializerOptions = new()
-    {
-        WriteIndented = true,
-        ReadCommentHandling = JsonCommentHandling.Skip,
-        AllowTrailingCommas = true,
-        PropertyNameCaseInsensitive = false,
-        UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
-        PreferredObjectCreationHandling = JsonObjectCreationHandling.Populate,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        Converters =
-        {
-            new JsonStringEnumConverter(),
-        }
-    };
+    #endregion Private Methods
 }

@@ -3,10 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Extensions.DependencyInjection;
+using MiraiNavi.Shared.Models.Map;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 
@@ -17,6 +20,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class MapPage : UserControl
 {
+    #region Public Constructors
+
     public MapPage(MapPageViewModel viewModel)
     {
         InitializeComponent();
@@ -34,6 +39,22 @@ public partial class MapPage : UserControl
         //GMap.OnMapZoomChanged += () => Test.Text = GMap.MapProvider.Projection.GetGroundResolution((int)GMap.Zoom, GMap.Position.Lat).ToString();
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
+    public MapPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
+
+    #region Private Fields
+
+    readonly GMapMarker _selectedPointMarker;
+
+    #endregion Private Fields
+
+    #region Private Methods
+
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ViewModel.MapCenter))
@@ -43,33 +64,12 @@ public partial class MapPage : UserControl
             GMap.MouseWheelZoomType = ViewModel.KeepCenter ? MouseWheelZoomType.ViewCenter : MouseWheelZoomType.MousePositionWithoutCenter;
         }
     }
-
-    public MapPageViewModel ViewModel { get; }
-
     private void InitializeGMap()
     {
-        var shape = new Ellipse
-        {
-            Stroke = Brushes.White,
-            StrokeThickness = 3,
-            Width = 15,
-            Height = 15,
-            Fill = (Brush)App.Current.Resources["MikuMeaRedBlueGreenHorizontalBrush"],
-        };
-        var marker = new GMapMarker(new PointLatLng(0, 0))
-        {
-            Shape = shape,
-            Offset = new(-shape.Width / 2, -shape.Height / 2)
-        };
-        App.Current.Services.GetRequiredService<IGMapRouteDisplayService>()
-            .RegisterGMapControl(GMap)
-            .RegisterPositionMarker(marker);
+        App.Current.Services.GetRequiredService<IGMapRouteDisplayService>().RegisterGMapControl(GMap);
         GMap.ShowCenter = false;
         GMap.DragButton = MouseButton.Right;
     }
-
-    readonly GMapMarker _selectedPointMarker;
-
     private void OnGMapMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         GMap.Markers.Remove(_selectedPointMarker);
@@ -99,4 +99,5 @@ public partial class MapPage : UserControl
         ViewModel.KeepCenter = false;
     }
 
+    #endregion Private Methods
 }

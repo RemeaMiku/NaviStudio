@@ -6,6 +6,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(bool), typeof(string))]
 public class BooleanToStringConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is not bool b)
@@ -19,4 +21,6 @@ public class BooleanToStringConverter : IValueConverter
             throw new ArgumentException("Value must be a string", nameof(value));
         return s == "是";
     }
+
+    #endregion Public Methods
 }

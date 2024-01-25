@@ -6,11 +6,21 @@ namespace MiraiNavi.WpfApp.ViewModels.Pages;
 
 public partial class ChartPageViewModel : ObservableObject
 {
+    #region Public Events
+
+    public event EventHandler<string>? AddSeriesRequested;
+
+    #endregion Public Events
+
+    #region Public Properties
+
     public string Title { get; set; } = string.Empty;
 
     public Dictionary<string, ObservableCollection<ChartModel>> SeriesDatas { get; } = [];
 
-    public event EventHandler<string>? AddSeriesRequested;
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void RemoveOnAllSeries(int count)
     {
@@ -34,4 +44,6 @@ public partial class ChartPageViewModel : ObservableObject
                 datas.Clear();
         });
     }
+
+    #endregion Public Methods
 }

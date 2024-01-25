@@ -9,6 +9,8 @@ namespace MiraiNavi.WpfApp.Views.Pages;
 /// </summary>
 public partial class SkyMapPage : UserControl
 {
+    #region Public Constructors
+
     public SkyMapPage(SkyMapPageViewModel viewModel)
     {
         InitializeComponent();
@@ -16,11 +18,17 @@ public partial class SkyMapPage : UserControl
         ViewModel = viewModel;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public static string XBindingPath => nameof(SatelliteSkyPosition.AzimuthDegrees);
 
 
     public static string YBindingPath => nameof(SatelliteSkyPosition.ElevationDegrees);
 
     public SkyMapPageViewModel ViewModel { get; }
+
+    #endregion Public Properties
 
 }

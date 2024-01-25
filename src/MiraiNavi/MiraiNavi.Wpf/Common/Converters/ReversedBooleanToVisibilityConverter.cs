@@ -7,6 +7,8 @@ namespace MiraiNavi.WpfApp.Common.Converters;
 [ValueConversion(typeof(bool), typeof(Visibility))]
 public class ReversedBooleanToVisibilityConverter : IValueConverter
 {
+    #region Public Methods
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var booleanValue = (bool)value;
@@ -18,4 +20,6 @@ public class ReversedBooleanToVisibilityConverter : IValueConverter
         var visibilityValue = (Visibility)value;
         return visibilityValue == Visibility.Collapsed;
     }
+
+    #endregion Public Methods
 }

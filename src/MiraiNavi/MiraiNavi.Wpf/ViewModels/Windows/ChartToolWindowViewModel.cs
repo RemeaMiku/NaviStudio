@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MiraiNavi.Shared.Models.Chart;
@@ -8,8 +7,14 @@ namespace MiraiNavi.WpfApp.ViewModels.Windows;
 
 public partial class ChartToolWindowViewModel : ObservableValidator
 {
+    #region Public Fields
+
     public const string Title = "创建图表组";
     public const string MenuItemHeader = $"{Title}(_C)";
+
+    #endregion Public Fields
+
+    #region Public Properties
 
     public static List<string> EstimatedResultItems { get; } =
     [
@@ -44,6 +49,12 @@ public partial class ChartToolWindowViewModel : ObservableValidator
 
     public HashSet<string> SelectedItems { get; } = [];
 
+    public bool CanCreateChartGroup => SelectedItems.Count != 0 && !HasErrors;
+
+    #endregion Public Properties
+
+    #region Private Fields
+
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
@@ -57,6 +68,10 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [Length(1, 10, ErrorMessage = "长度需在 1 到 10 之间")]
     string _chartGroupName = "未命名";
 
+    #endregion Private Fields
+
+    #region Private Methods
+
     [RelayCommand]
     void SelectItem(string item)
     {
@@ -65,5 +80,5 @@ public partial class ChartToolWindowViewModel : ObservableValidator
         OnPropertyChanged(nameof(CanCreateChartGroup));
     }
 
-    public bool CanCreateChartGroup => SelectedItems.Count != 0 && !HasErrors;
+    #endregion Private Methods
 }

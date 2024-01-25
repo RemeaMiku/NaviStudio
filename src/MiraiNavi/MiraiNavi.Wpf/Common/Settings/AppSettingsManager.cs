@@ -2,7 +2,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MiraiNavi.WpfApp.Common.Settings;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -10,6 +9,8 @@ namespace MiraiNavi.WpfApp.Common.Settings;
 
 public class AppSettingsManager
 {
+    #region Public Properties
+
     public AppSettings Settings
     {
         get => _settings;
@@ -24,6 +25,10 @@ public class AppSettingsManager
     }
 
     public string FilePath { get; private set; } = string.Empty;
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public AppSettings Load(string filePath, AppSettings fallback)
     {
@@ -87,8 +92,9 @@ public class AppSettingsManager
         }
     }
 
-    AppSettings _settings = new();
-    AppSettings _preSettings = new();
+    #endregion Public Methods
+
+    #region Private Fields
 
     static readonly JsonSerializerOptions _serializerOptions = new()
     {
@@ -98,9 +104,18 @@ public class AppSettingsManager
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip
     };
 
+    AppSettings _settings = new();
+    AppSettings _preSettings = new();
+
+    #endregion Private Fields
+
+    #region Private Methods
+
     static void ThrowIfNotJson(string filePath)
     {
         if (!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
             throw new ArgumentException("File path not legal.");
     }
+
+    #endregion Private Methods
 }

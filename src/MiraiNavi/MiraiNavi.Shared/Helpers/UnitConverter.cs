@@ -2,7 +2,7 @@
 
 public static class UnitConverter
 {
-    const double _degreesToRadians = Math.PI / 180.0;
+    #region Public Methods
 
     public static double MetersPerSecondToKilometersPerHour(double meterPerSecond)
         => meterPerSecond * 3.6;
@@ -22,4 +22,12 @@ public static class UnitConverter
     /// <returns>The value from <paramref name="radians"/> in degrees.</returns>
     public static double RadiansToDegrees(double radians) =>
         radians / _degreesToRadians;
+
+    #endregion Public Methods
+
+    #region Private Fields
+
+    const double _degreesToRadians = Math.PI / 180.0;
+
+    #endregion Private Fields
 }
