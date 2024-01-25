@@ -10,7 +10,7 @@ public static class GMapMarkerExtensions
     public static GMapMarker SetShape(this GMapMarker marker, FrameworkElement shape)
     {
         marker.Shape = shape;
-        marker.Offset = new(-shape.ActualWidth / 2, -shape.ActualHeight / 2);
+        marker.Offset = new(-shape.Width / 2, -shape.Height / 2);
         return marker;
     }
 

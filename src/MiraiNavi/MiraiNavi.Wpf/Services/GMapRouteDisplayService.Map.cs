@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using MiraiNavi.Shared.Models.Map;
 using System.Windows.Controls;
 using GMap.NET;
+using MiraiNavi.WpfApp.Common.Extensions;
 
 namespace MiraiNavi.WpfApp.Services;
 
@@ -146,8 +147,7 @@ partial class GMapRouteDisplayService
             },
             RenderTransform = _positionMarkerRotateTransform
         };
-        _positionMarker.Shape = shape;
-        _positionMarker.Offset = new(-shape.Width / 2, -shape.Height / 2);
+        _positionMarker.SetShape(shape);
     }
 
     void UpdatePositionMarker(PointLatLng point)

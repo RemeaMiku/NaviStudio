@@ -173,7 +173,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
     readonly HashSet<GMapMarker> _disabledMarkers = [];
 
     GMapControl? _gMapControl;
-    GMapMarker _positionMarker = new(new());
+    readonly GMapMarker _positionMarker = new(new());
     int _positionIndex = -1;
     bool _isRunning = false;
     double _groundResolution;
