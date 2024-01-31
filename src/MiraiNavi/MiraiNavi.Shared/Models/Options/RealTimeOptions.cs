@@ -1,7 +1,4 @@
-﻿using System.IO.Ports;
-using System.Net;
-
-namespace MiraiNavi.Shared.Models.Options;
+﻿namespace MiraiNavi.Shared.Models.Options;
 
 public class RealTimeOptions
 {

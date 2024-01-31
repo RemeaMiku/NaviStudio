@@ -6,9 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using MiraiNavi.Shared.Models.Options;
-using MiraiNavi.WpfApp.Common;
 using MiraiNavi.WpfApp.Common.Helpers;
-using MiraiNavi.WpfApp.Common.Messaging;
 using MiraiNavi.WpfApp.Common.Messaging.Messages;
 using MiraiNavi.WpfApp.Services.Contracts;
 

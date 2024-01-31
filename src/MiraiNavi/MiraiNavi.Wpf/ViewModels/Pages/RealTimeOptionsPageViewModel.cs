@@ -12,7 +12,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Win32;
 using MiraiNavi.Shared.Models.Options;
-using Wpf.Ui.Controls;
 
 namespace MiraiNavi.WpfApp.ViewModels.Pages;
 

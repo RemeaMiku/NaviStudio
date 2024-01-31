@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0022: 使用表达式主体来表示方法
+dotnet_diagnostic.IDE0022.severity = silent

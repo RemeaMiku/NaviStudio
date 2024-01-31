@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using MiraiNavi.WpfApp.ViewModels.Windows;
 using Wpf.Ui.Controls;
 

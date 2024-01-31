@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
-using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.Common.Settings;
 using MiraiNavi.WpfApp.Services;
 using MiraiNavi.WpfApp.Services.Contracts;

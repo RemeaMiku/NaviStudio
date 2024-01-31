@@ -125,6 +125,8 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     void ReturnToPosition()
     {
         KeepCenter = true;
+        if (_gMapRouteDisplayService.CurrentPosition.HasValue)
+            MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 
     #endregion Private Methods

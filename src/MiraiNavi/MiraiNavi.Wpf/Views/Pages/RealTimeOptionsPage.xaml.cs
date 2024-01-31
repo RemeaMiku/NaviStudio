@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Win32;
+﻿using System.Windows.Controls;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 
 namespace MiraiNavi.WpfApp.Views.Pages;

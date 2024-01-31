@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using MiraiNavi.Shared.Models.Options;
 using MiraiNavi.WpfApp.Common.Helpers;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 using Syncfusion.Windows.PropertyGrid;

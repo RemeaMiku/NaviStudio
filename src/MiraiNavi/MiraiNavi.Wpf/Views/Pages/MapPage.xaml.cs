@@ -3,13 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Extensions.DependencyInjection;
-using MiraiNavi.Shared.Models.Map;
 using MiraiNavi.WpfApp.Services.Contracts;
 using MiraiNavi.WpfApp.ViewModels.Pages;
 
@@ -99,5 +96,22 @@ public partial class MapPage : UserControl
         ViewModel.KeepCenter = false;
     }
 
+    private void OnGMapZoomChanged()
+    {
+        if (ViewModel.KeepCenter)
+            ViewModel.ReturnToPositionCommand.Execute(default);
+    }
+
+    private void OnZoomAddButtonClicked(object sender, RoutedEventArgs e)
+    {
+        GMap.Zoom++;
+    }
+
+    private void OnZoomSubButtonClicked(object sender, RoutedEventArgs e)
+    {
+        GMap.Zoom--;
+    }
     #endregion Private Methods
+
+
 }
