@@ -1,0 +1,313 @@
+﻿<ui:UiWindow
+    x:Class="NaviStudio.WpfApp.Views.Windows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:NaviStudio.WpfApp.Common.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notification="clr-namespace:Syncfusion.Windows.Controls.Notification;assembly=Syncfusion.SfBusyIndicator.WPF"
+    xmlns:pages="clr-namespace:NaviStudio.WpfApp.ViewModels.Pages"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:NaviStudio.WpfApp.ViewModels.Windows"
+    Title="{x:Static windows:MainWindowViewModel.Title}"
+    Width="1250"
+    Height="700"
+    d:DataContext="{d:DesignInstance local:MainWindow}"
+    ExtendsContentIntoTitleBar="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <ui:UiWindow.Resources>
+        <cv:ReversedBooleanToVisibilityConverter x:Key="ReversedBooleanToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
+        <cv:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+        <cv:SeverityTypeToInfoBarSeverityConverter x:Key="SeverityTypeToInfoBarSeverityConverter" />
+        <Style
+            x:Key="ToolUiButtonStyle"
+            BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
+            TargetType="ui:Button">
+            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style x:Key="DefaultContentControlStyle" TargetType="ContentControl">
+            <Setter Property="syncfusion:DockingManager.CanClose" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanMinimizeFloat" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanFloatMaximize" Value="True" />
+            <Setter Property="syncfusion:DockingManager.MinimizeButtonEnabled" Value="True" />
+            <Setter Property="syncfusion:DockingManager.MaximizeMode" Value="FullScreen" />
+            <Setter Property="syncfusion:DockingManager.CanMaximize" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanMinimize" Value="True" />
+            <Setter Property="syncfusion:DockingManager.CanFloat" Value="True" />
+            <Setter Property="syncfusion:DockingManager.AllowsTransparencyForFloatWindow" Value="True" />
+        </Style>
+    </ui:UiWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Background="{ui:ThemeResource}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Image
+                    Width="30"
+                    Margin="10,0,0,0"
+                    Source="{StaticResource NaviStudioLogoDrawingImage}" />
+                <Menu
+                    HorizontalAlignment="Left"
+                    d:Foreground="White"
+                    Background="{ui:ThemeResource}"
+                    FontSize="{StaticResource SmallFontSize}">
+                    <ui:MenuItem Header="文件(_F)">
+                        <ui:MenuItem Header="导入(_I)" />
+                        <ui:MenuItem Header="导出(_O)" />
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="视图(_V)">
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=RealTimeOptionsView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="PlaySettings20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:MapPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=MapView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Map24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:PosePageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=PoseView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Location24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:SkyMapPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=SkyMapView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Radar20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:SatelliteTrackingPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=SatelliteTrackingView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="List24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:PropertyPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=PropertyView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Wrench24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:DashBoardPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=DashBoardView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Gauge24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnViewMenuItemClicked"
+                            Header="{x:Static pages:OutputPageViewModel.MenuItemHeader}"
+                            Tag="{Binding ElementName=OutputView}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="ArrowExit20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="工具(_T)">
+                        <ui:MenuItem Click="OnChartToolItemClicked" Header="{x:Static windows:ChartToolWindowViewModel.MenuItemHeader}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="ChartMultiple24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Click="OnAppSettingsItemClicked" Header="{x:Static windows:AppSettingsWindowViewModel.MenuItemHeader}" />
+                </Menu>
+            </StackPanel>
+            <ui:TitleBar Grid.Column="1" />
+        </Grid>
+        <Border
+            Grid.Row="1"
+            Padding="3"
+            d:Background="{ui:ThemeResource}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid Margin="5,0">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button
+                            Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
+                            Icon="Pause24"
+                            IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay}"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ui:Button
+                            Command="{Binding ViewModel.StopCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MikuRedBrush}"
+                            Icon="Stop24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="ChevronCircleLeft24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="ChevronCircleRight24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Foreground="{StaticResource MeaYellowBrush}"
+                            Icon="FolderOpen24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Click="OnRealTimeOptionsViewButtonClicked"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Icon="PlaySettings20"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
+                            Command="{Binding ViewModel.StartOrResumeCommand, Mode=OneWay}"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Foreground="{StaticResource MikuGreenBrush}"
+                            Icon="Play24"
+                            IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
+                            Visibility="{Binding ViewModel.Options, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock
+                                MaxWidth="390"
+                                FontSize="{StaticResource SmallFontSize}"
+                                Style="{StaticResource DynamicForegroundTextBlock}"
+                                Text="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis" />
+                        </ui:Button>
+                    </StackPanel>
+                    <notification:SfBusyIndicator
+                        HorizontalAlignment="Right"
+                        d:IsBusy="True"
+                        AnimationType="ArrowTrack"
+                        Foreground="White"
+                        IsBusy="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay}"
+                        ViewboxHeight="30" />
+                </Grid>
+                <syncfusion:DockingManager
+                    x:Name="DockingManagerControl"
+                    Grid.Row="1"
+                    Margin="0,3,0,0"
+                    d:Background="Black"
+                    syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
+                    Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                    ChildrenCollectionChanged="OnDockingManagerChildrenCollectionChanged"
+                    CloseButtonClick="OnDockingManagerDocumentWindowClosed"
+                    ContainerMode="TDI"
+                    DocumentCloseButtonType="Individual"
+                    Loaded="DockingManagerControl_Loaded"
+                    MaximizeButtonEnabled="True"
+                    MinimizeButtonEnabled="True"
+                    PersistState="True"
+                    ShowFloatWindowInTaskbar="True"
+                    SwitchMode="QuickTabs"
+                    UseDocumentContainer="True"
+                    UseNativeFloatWindow="True"
+                    WindowClosing="OnDockingManagerNotDocumentWindowClosing">
+                    <ContentControl
+                        x:Name="DashBoardView"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.Header="{x:Static pages:DashBoardPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Left"
+                        syncfusion:DockingManager.State="Dock"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="MapView"
+                        syncfusion:DockingManager.CanDock="False"
+                        syncfusion:DockingManager.Header="{x:Static pages:MapPageViewModel.Title}"
+                        syncfusion:DockingManager.State="Document"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="RealTimeOptionsView"
+                        syncfusion:DockingManager.CanDock="False"
+                        syncfusion:DockingManager.Header="{x:Static pages:RealTimeOptionsPageViewModel.Title}"
+                        syncfusion:DockingManager.State="Document"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="SkyMapView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="120"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="300"
+                        syncfusion:DockingManager.Header="{x:Static pages:SkyMapPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Right"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="SatelliteTrackingView"
+                        syncfusion:DockingManager.Header="{x:Static pages:SatelliteTrackingPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=SkyMapView}"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="PropertyView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="100"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.Header="{x:Static pages:PropertyPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Bottom"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=SkyMapView}"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="PoseView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="150"
+                        syncfusion:DockingManager.Header="{x:Static pages:PosePageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Bottom"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="OutputView"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
+                        syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                        syncfusion:DockingManager.Header="{x:Static pages:OutputPageViewModel.Title}"
+                        syncfusion:DockingManager.SideInDockedMode="Left"
+                        syncfusion:DockingManager.TargetNameInDockedMode="{Binding Name, ElementName=PoseView}"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                </syncfusion:DockingManager>
+                <Grid Grid.Row="2" Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ui:InfoBar
+                        Title="{Binding ViewModel.StatusContent, Mode=OneWay}"
+                        Padding="3"
+                        IsClosable="False"
+                        IsOpen="True"
+                        Severity="{Binding ViewModel.StatusSeverityType, Mode=OneWay, Converter={StaticResource SeverityTypeToInfoBarSeverityConverter}}" />
+                    <ProgressBar
+                        Grid.Column="1"
+                        Width="300"
+                        Height="20"
+                        Margin="10,0,0,0"
+                        IsIndeterminate="{Binding ViewModel.StatusIsProcessing, Mode=OneWay}" />
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:UiWindow>

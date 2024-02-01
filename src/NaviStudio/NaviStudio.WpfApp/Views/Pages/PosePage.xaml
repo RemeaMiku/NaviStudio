@@ -1,0 +1,84 @@
+﻿<UserControl
+    x:Class="NaviStudio.WpfApp.Views.Pages.PosePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Pages"
+    d:DataContext="{d:DesignInstance local:PosePage}"
+    d:DesignHeight="320"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Thickness x:Key="SmallSpacing">0,-3,0,0</Thickness>
+        <Thickness x:Key="LargeSpacing">0,5,0,0</Thickness>
+    </UserControl.Resources>
+    <Border Padding="10" d:Background="Black">
+        <ui:DynamicScrollViewer
+            HorizontalScrollBarVisibility="Auto"
+            IsScrollingHorizontally="True"
+            IsScrollingVertically="True"
+            VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="UTC : " />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    d:Text="2023/08/31 11:45:14.831"
+                    FontSize="{StaticResource LargeFontSize}"
+                    Text="{Binding ViewModel.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', Mode=OneWay}" />
+                <TextBlock
+                    Margin="{StaticResource LargeSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="位置 : 纬度(°), 经度(°), 椭球高(m)" />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run d:Text="39.114514" Text="{Binding ViewModel.Latitude, StringFormat='{}{0:F6}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="114.114514" Text="{Binding ViewModel.Longitude, StringFormat='{}{0:F6}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="39.114" Text="{Binding ViewModel.Altitude, StringFormat='{}{0:F3}', Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock
+                    Margin="{StaticResource LargeSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="速度 : 大小(m/s), E(m/s), N(m/s), U(m/s)" />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run d:Text="14.0" Text="{Binding ViewModel.Velocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="1.0" Text="{Binding ViewModel.EastVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="2.0" Text="{Binding ViewModel.NorthVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="3.0" Text="{Binding ViewModel.UpVelocity, StringFormat='{}{0:F1}', Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock
+                    Margin="{StaticResource LargeSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="姿态：航向(°), 俯仰(°)，横滚(°)" />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource LargeFontSize}">
+                    <Run d:Text="39.114" Text="{Binding ViewModel.Yaw, StringFormat='{}{0:F3}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="39.114" Text="{Binding ViewModel.Pitch, StringFormat='{}{0:F3}', Mode=OneWay}" />
+                    <Run Text="," />
+                    <Run d:Text="39.114" Text="{Binding ViewModel.Roll, StringFormat='{}{0:F3}', Mode=OneWay}" />
+                </TextBlock>
+            </StackPanel>
+        </ui:DynamicScrollViewer>
+    </Border>
+</UserControl>
