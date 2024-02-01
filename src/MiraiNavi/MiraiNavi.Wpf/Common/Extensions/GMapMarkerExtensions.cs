@@ -14,5 +14,14 @@ public static class GMapMarkerExtensions
         return marker;
     }
 
+    public static bool IsVisible(this GMapMarker marker, GMapControl map)
+    {
+        var projection = map.MapProvider.Projection;
+        var centerPosition = projection.FromLatLngToPixel(map.CenterPosition, (int)map.Zoom);
+        var markerPosition = projection.FromLatLngToPixel(marker.Position, (int)map.Zoom);
+        var size = Math.Max(marker.Map.ActualWidth, marker.Map.ActualHeight);
+        return Math.Abs(markerPosition.X - centerPosition.X) <= size / 2 && Math.Abs(markerPosition.Y - centerPosition.Y) <= size / 2;
+    }
+
     #endregion Public Methods
 }

@@ -148,25 +148,6 @@
                     TickFrequency="1"
                     Value="{Binding Zoom, ElementName=GMap}" />
             </Border>
-            <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                <ui:Button
-                    Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                    Padding="3"
-                    HorizontalAlignment="Center"
-                    Appearance="Dark"
-                    Click="OnZoomAddButtonClicked"
-                    FontSize="{StaticResource MediumFontSize}"
-                    Icon="Add24" />
-                <ui:Button
-                    Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                    Margin="{StaticResource SmallSpacing}"
-                    Padding="3"
-                    HorizontalAlignment="Center"
-                    Appearance="Dark"
-                    Click="OnZoomSubButtonClicked"
-                    FontSize="{StaticResource MediumFontSize}"
-                    Icon="Subtract24" />
-            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

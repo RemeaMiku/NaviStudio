@@ -54,9 +54,9 @@ public partial class MapPage : UserControl
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ViewModel.MapCenter))
+        if(e.PropertyName == nameof(ViewModel.MapCenter))
             App.Current.Dispatcher.Invoke(() => GMap.CenterPosition = ViewModel.MapCenter);
-        else if (e.PropertyName == nameof(ViewModel.KeepCenter))
+        else if(e.PropertyName == nameof(ViewModel.KeepCenter))
         {
             GMap.MouseWheelZoomType = ViewModel.KeepCenter ? MouseWheelZoomType.ViewCenter : MouseWheelZoomType.MousePositionWithoutCenter;
         }
@@ -75,7 +75,7 @@ public partial class MapPage : UserControl
         var location = GMap.FromLocalToLatLng((int)mousePosition.X, (int)mousePosition.Y);
         VisualTreeHelper.HitTest(GMap, null, (r) =>
         {
-            if (r.VisualHit is Ellipse e && e.Tag is not null)
+            if(r.VisualHit is Ellipse e && e.Tag is not null)
             {
                 ViewModel.SelectedPoint = (TimePointLatLng)e.Tag;
                 _selectedPointMarker.Position = ViewModel.SelectedPoint.Value.Item2;
@@ -98,18 +98,8 @@ public partial class MapPage : UserControl
 
     private void OnGMapZoomChanged()
     {
-        if (ViewModel.KeepCenter)
+        if(ViewModel.KeepCenter)
             ViewModel.ReturnToPositionCommand.Execute(default);
-    }
-
-    private void OnZoomAddButtonClicked(object sender, RoutedEventArgs e)
-    {
-        GMap.Zoom++;
-    }
-
-    private void OnZoomSubButtonClicked(object sender, RoutedEventArgs e)
-    {
-        GMap.Zoom--;
     }
     #endregion Private Methods
 
