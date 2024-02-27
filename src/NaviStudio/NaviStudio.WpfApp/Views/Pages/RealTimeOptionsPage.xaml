@@ -157,7 +157,7 @@
             <Border Padding="10" Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}">
                 <ui:DynamicScrollViewer IsScrollingVertically="True" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
-                        <HeaderedContentControl Header="预设名称" IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}">
+                        <HeaderedContentControl Header="配置名称" IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}">
                             <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionName, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <ui:CardExpander
@@ -220,7 +220,7 @@
                     <ui:Button
                         Appearance="Caution"
                         Command="{Binding ViewModel.ReadCommand, Mode=OneTime}"
-                        Content="读取"
+                        Content="导入"
                         Icon="DocumentArrowLeft24" />
                     <ui:Button
                         Margin="5,0,0,0"

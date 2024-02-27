@@ -77,7 +77,7 @@
                                         <TextBlock
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            FontSize="{StaticResource SmallFontSize}"
+                                            FontSize="10"
                                             FontWeight="Bold"
                                             Style="{StaticResource DynamicForegroundTextBlock}"
                                             Text="{Binding Item.Satellite.Number, StringFormat=' {0:D2} ', Mode=OneTime}" />

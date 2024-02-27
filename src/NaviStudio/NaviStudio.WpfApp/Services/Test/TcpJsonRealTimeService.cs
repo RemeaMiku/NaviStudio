@@ -29,7 +29,7 @@ public class TcpJsonRealTimeService() : IRealTimeService
 
     public async Task StartAsync(RealTimeOptions options, CancellationToken token)
     {
-        if (IsRunning)
+        if(IsRunning)
             throw new InvalidOperationException("It's already started.");
         IsRunning = true;
         try
@@ -50,10 +50,10 @@ public class TcpJsonRealTimeService() : IRealTimeService
             jsonOptions.Converters.Add(new UtcTimeJsonConverter());
             await Task.Run(() =>
             {
-                while (!token.IsCancellationRequested)
+                while(!token.IsCancellationRequested)
                 {
                     var message = reader.ReadString();
-                    if (string.IsNullOrEmpty(message))
+                    if(string.IsNullOrEmpty(message))
                         continue;
                     var epochData = JsonSerializer.Deserialize<EpochData>(message, jsonOptions);
                     writer?.WriteRawValue(JsonSerializer.Serialize(epochData, jsonOptions));
@@ -65,8 +65,8 @@ public class TcpJsonRealTimeService() : IRealTimeService
             listener.Stop();
             writer?.WriteEndArray();
         }
-        catch (TaskCanceledException) { }
-        catch (OperationCanceledException) { }
+        catch(TaskCanceledException) { }
+        catch(OperationCanceledException) { }
         finally
         {
             IsRunning = false;
@@ -77,7 +77,7 @@ public class TcpJsonRealTimeService() : IRealTimeService
 
     #region Private Fields
 
-    const string _clientPath = "D:\\RemeaMiku study\\course in progress\\Graduation\\projects\\src\\MiraiNavi\\MiraiNavi.Client\\bin\\Debug\\net8.0\\MiraiNavi.Client.exe";
+    const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Client\bin\Debug\net8.0\MiraiNavi.Client.exe";
 
     #endregion Private Fields
 }

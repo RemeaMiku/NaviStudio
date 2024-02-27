@@ -11,4 +11,10 @@
     <ProjectReference Include="..\NaviStudio.Shared\NaviStudio.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NaviSharp">
+      <HintPath>..\libraries\NaviSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -19,8 +19,9 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 {
     #region Public Fields
 
-    public const string Title = "实时选项";
+    public const string Title = "实时解算配置";
     public const string MenuItemHeader = $"{Title}(_S)";
+    public const string RealTimeOptionsFileExtension = ".nsrto";
 
     #endregion Public Fields
 
@@ -32,6 +33,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         _messenger.Register(this);
         BaseOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
         RoverOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
+        PropertyChanged += (_, _) => _hasChanged = true;
     }
 
     #endregion Public Constructors
@@ -65,7 +67,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 
     public bool TryGetSolutionOptions([NotNullWhen(true)] out RealTimeOptions? options)
     {
-        if (HasErrors)
+        if(HasErrors)
         {
             options = default;
             return false;
@@ -83,6 +85,8 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     #endregion Public Methods
 
     #region Private Fields
+
+    bool _hasChanged = true;
 
     readonly static JsonSerializerOptions _jsonSerializerOptions = new()
     {
@@ -127,13 +131,14 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
     {
         OnPropertyChanged(nameof(HasErrors));
-        if (oldValue is not null)
+        if(oldValue is not null)
             oldValue.ErrorsChanged -= (_, _) => OnPropertyChanged(nameof(HasErrors));
         newValue.ErrorsChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
     }
 
     partial void OnRoverOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
         => OnBaseOptionsChanged(oldValue, newValue);
+
     void SetOptions(RealTimeOptions options)
     {
         SolutionName = options.Name;
@@ -146,10 +151,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     {
         var dialog = new OpenFolderDialog()
         {
-            Title = "输出历元数据文件至",
+            Title = "选择输出目录",
             Multiselect = false,
         };
-        if (dialog.ShowDialog() == true)
+        if(dialog.ShowDialog() == true)
             OutputFolder = dialog.FolderName;
     }
 
@@ -158,22 +163,22 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     {
         var dialog = new OpenFileDialog()
         {
-            Title = "选择解算选项预设文件",
-            Filter = "MiraiNavi 解算预设文件|*.mnso|所有文件|*.*",
+            Title = "打开解算配置文件",
+            Filter = $"MiraiNavi 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
             RestoreDirectory = true,
             CheckPathExists = true,
         };
-        if (dialog.ShowDialog() != true)
+        if(dialog.ShowDialog() != true)
             return;
         var content = File.ReadAllText(dialog.FileName, Encoding.UTF8);
         try
         {
             var options = JsonSerializer.Deserialize<RealTimeOptions>(content, _jsonSerializerOptions);
-            if (options is null)
+            if(options is null)
                 return;
             SetOptions(options);
         }
-        catch (Exception)
+        catch(Exception)
         {
             // TODO 异常处理
         }
@@ -183,18 +188,18 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     void Save()
     {
         var builder = new StringBuilder(SolutionName);
-        foreach (var ch in Path.GetInvalidFileNameChars())
+        foreach(var ch in Path.GetInvalidFileNameChars())
             builder.Replace(ch, '_');
-        var fileName = $"{builder}.mnso";
+        var fileName = $"{builder}.{RealTimeOptionsFileExtension}";
         var dialog = new SaveFileDialog()
         {
-            Title = "保存解算选项预设至",
-            Filter = "MiraiNavi 解算预设文件|*.mnso|所有文件|*.*",
+            Title = "保存解算配置文件至",
+            Filter = $"MiraiNavi 解算预设文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
             FileName = fileName,
             RestoreDirectory = true,
             CheckPathExists = true,
         };
-        if (dialog.ShowDialog() != true)
+        if(dialog.ShowDialog() != true)
             return;
         var content = JsonSerializer.Serialize(GetOptions(), _jsonSerializerOptions);
         File.WriteAllText(dialog.FileName, content, Encoding.UTF8);
@@ -203,7 +208,11 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     [RelayCommand]
     void Confirm()
     {
+        if(!_hasChanged)
+            return;
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
+        _messenger.Send(new Output(Title, SeverityType.Info, "实时解算配置已更新"));
+        _hasChanged = false;
     }
 
     #endregion Private Methods
