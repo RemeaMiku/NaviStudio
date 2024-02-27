@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using Microsoft.Extensions.DependencyInjection;
+using NaviStudio.WpfApp.Common.Extensions;
 using NaviStudio.WpfApp.Common.Settings;
 using NaviStudio.WpfApp.Services;
 using NaviStudio.WpfApp.Services.Contracts;
@@ -49,8 +50,8 @@ public partial class App : Application
     public bool TryApplyAcrylicToAllWindowsIfIsEnabled()
     {
         var flag = true;
-        foreach (var window in Windows)
-            if (window is UiWindow uiWindow)
+        foreach(var window in Windows)
+            if(window is UiWindow uiWindow)
                 flag = flag && SettingsManager.TryApplyAcrylicIfIsEnabled(uiWindow);
         return flag;
     }
@@ -66,38 +67,9 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider Services { get; } = new ServiceCollection()
-            .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-#if DEBUG
-            .AddSingleton<IRealTimeService, TcpJsonRealTimeService>()
-#endif
-            .AddSingleton<IEpochDatasService, EpochDatasService>()
-            .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>()
-            .AddTransient<AppSettingsWindowViewModel>()
-            .AddSingleton<RealTimeOptionsPageViewModel>()
-            .AddTransient<ChartPageViewModel>()
-            .AddTransient<ChartGroupPageViewModel>()
-            .AddSingleton<SatelliteTrackingPageViewModel>()
-            .AddSingleton<OutputPageViewModel>()
-            .AddSingleton<MapPageViewModel>()
-            .AddSingleton<SkyMapPageViewModel>()
-            .AddSingleton<DashBoardPageViewModel>()
-            .AddSingleton<PosePageViewModel>()
-            .AddSingleton<MainWindowViewModel>()
-            .AddSingleton<PropertyPageViewModel>()
-            .AddTransient<ChartToolWindowViewModel>()
-            .AddSingleton<RealTimeOptionsPage>()
-            .AddSingleton<SatelliteTrackingPage>()
-            .AddSingleton<OutputPage>()
-            .AddSingleton<DashBoardPage>()
-            .AddSingleton<MapPage>()
-            .AddSingleton<SkyMapPage>()
-            .AddSingleton<PosePage>()
-            .AddSingleton<MainWindow>()
-            .AddSingleton<PropertyPage>()
-            .AddTransient<ChartToolWindow>()
-            .AddTransient<ChartPage>()
-            .AddTransient<ChartGroupPage>()
-            .AddTransient<AppSettingsWindow>()
+            .AddViews()
+            .AddViewModels()
+            .AddServices()
             .BuildServiceProvider();
 
     public AppSettingsManager SettingsManager { get; } = new();

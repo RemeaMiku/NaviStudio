@@ -8,6 +8,8 @@ using NaviStudio.WpfApp.ViewModels.Windows;
 using NaviStudio.WpfApp.Views.Pages;
 using Syncfusion.Windows.Tools.Controls;
 using Wpf.Ui.Controls;
+using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui.Mvvm.Services;
 
 namespace NaviStudio.WpfApp.Views.Windows;
 
@@ -24,6 +26,7 @@ public partial class MainWindow : UiWindow
     {
         InitializeComponent();
         App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.Services.GetRequiredService<ISnackbarService>().SetSnackbarControl(Snackbar);
         ViewModel = viewModel;
         ViewModel.IsActive = true;
         DataContext = this;
@@ -69,7 +72,7 @@ public partial class MainWindow : UiWindow
     }
     void RestoreAndActiveWindow(ContentControl contentControl)
     {
-        if (DockingManager.GetState(contentControl) == DockState.Hidden)
+        if(DockingManager.GetState(contentControl) == DockState.Hidden)
             DockingWindowHandler.RestoreDockState(contentControl);
         else
             DockingManagerControl.ActiveWindow = contentControl;
@@ -97,11 +100,11 @@ public partial class MainWindow : UiWindow
 
     void OnDockingManagerChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        if(e.Action == NotifyCollectionChangedAction.Add)
         {
-            if (e.NewItems is null)
+            if(e.NewItems is null)
                 return;
-            foreach (ContentControl item in e.NewItems)
+            foreach(ContentControl item in e.NewItems)
                 DockingWindowHandler.SetViewModelIsActive(item, true);
         }
     }
@@ -114,7 +117,7 @@ public partial class MainWindow : UiWindow
     private void OnChartToolItemClicked(object sender, RoutedEventArgs e)
     {
         var window = App.Current.Services.GetRequiredService<ChartToolWindow>();
-        if (window.ShowDialog() == true)
+        if(window.ShowDialog() == true)
         {
             var paras = new ChartGroupParameters(window.ViewModel.ChartGroupName!, window.ViewModel.MaxEpochCount, window.ViewModel.SelectedItems);
             var page = App.Current.Services.GetRequiredService<ChartGroupPage>();

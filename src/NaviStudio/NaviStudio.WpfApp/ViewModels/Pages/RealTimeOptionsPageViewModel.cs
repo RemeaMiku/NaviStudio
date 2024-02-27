@@ -12,6 +12,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Win32;
 using NaviStudio.Shared.Models.Options;
+using NaviStudio.WpfApp.Common.Extensions;
+using Wpf.Ui.Mvvm.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
@@ -27,9 +29,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 
     #region Public Constructors
 
-    public RealTimeOptionsPageViewModel(IMessenger messenger)
+    public RealTimeOptionsPageViewModel(IMessenger messenger, ISnackbarService snackbarService)
     {
         _messenger = messenger;
+        _snackbarService = snackbarService;
         _messenger.Register(this);
         BaseOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
         RoverOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
@@ -104,6 +107,8 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     };
 
     readonly IMessenger _messenger;
+    readonly ISnackbarService _snackbarService;
+
     [ObservableProperty]
     [Required(ErrorMessage = "不能为空")]
     [Length(1, 20, ErrorMessage = "长度需在 1 到 20 之间")]
@@ -164,23 +169,27 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         var dialog = new OpenFileDialog()
         {
             Title = "打开解算配置文件",
-            Filter = $"MiraiNavi 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
+            Filter = $"NaviStudio 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
             RestoreDirectory = true,
             CheckPathExists = true,
         };
         if(dialog.ShowDialog() != true)
             return;
-        var content = File.ReadAllText(dialog.FileName, Encoding.UTF8);
         try
         {
+            var content = File.ReadAllText(dialog.FileName, Encoding.UTF8);
             var options = JsonSerializer.Deserialize<RealTimeOptions>(content, _jsonSerializerOptions);
             if(options is null)
                 return;
             SetOptions(options);
         }
-        catch(Exception)
+        catch(JsonException)
         {
-            // TODO 异常处理
+            _snackbarService.ShowError("读取出错", $"{dialog.FileName} 不是有效的解算配置文件。");
+        }
+        catch(Exception e)
+        {
+            _snackbarService.ShowError("读取出错", e.Message);
         }
     }
 
@@ -194,15 +203,22 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         var dialog = new SaveFileDialog()
         {
             Title = "保存解算配置文件至",
-            Filter = $"MiraiNavi 解算预设文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
+            Filter = $"NaviStudio 解算预设文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
             FileName = fileName,
             RestoreDirectory = true,
             CheckPathExists = true,
         };
         if(dialog.ShowDialog() != true)
             return;
-        var content = JsonSerializer.Serialize(GetOptions(), _jsonSerializerOptions);
-        File.WriteAllText(dialog.FileName, content, Encoding.UTF8);
+        try
+        {
+            var content = JsonSerializer.Serialize(GetOptions(), _jsonSerializerOptions);
+            File.WriteAllText(dialog.FileName, content, Encoding.UTF8);
+        }
+        catch(Exception e)
+        {
+            _snackbarService.ShowError("保存出错", e.Message);
+        }
     }
 
     [RelayCommand]

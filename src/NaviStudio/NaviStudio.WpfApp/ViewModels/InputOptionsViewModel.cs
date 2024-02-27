@@ -8,11 +8,13 @@ using NaviStudio.Shared.Models.Options;
 
 namespace NaviStudio.WpfApp.ViewModels;
 
-public partial class InputOptionsViewModel() : ObservableValidator
+public partial class InputOptionsViewModel : ObservableValidator
 {
     #region Public Constructors
 
-    public InputOptionsViewModel(InputOptions options) : this()
+    public InputOptionsViewModel() { }
+
+    public InputOptionsViewModel(InputOptions options)
     {
         Type = options.Type;
         Format = options.Format;
@@ -42,7 +44,7 @@ public partial class InputOptionsViewModel() : ObservableValidator
     public void Validate()
     {
         ClearErrors();
-        switch (Type)
+        switch(Type)
         {
             case InputType.Tcp:
                 ValidateTcp();
@@ -80,7 +82,7 @@ public partial class InputOptionsViewModel() : ObservableValidator
 
     public bool TryGetInputOptions([NotNullWhen(true)] out InputOptions? options)
     {
-        if (HasErrors)
+        if(HasErrors)
         {
             options = default;
             return false;
@@ -154,9 +156,9 @@ public partial class InputOptionsViewModel() : ObservableValidator
     partial void OnTypeChanged(InputType value)
     {
         var errors = GetErrors().ToArray();
-        foreach (var error in errors)
+        foreach(var error in errors)
         {
-            switch (error.MemberNames.First())
+            switch(error.MemberNames.First())
             {
                 case nameof(TcpAddress):
                     TcpAddress = _defaultTcpAddress;
