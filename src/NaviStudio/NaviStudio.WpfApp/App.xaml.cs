@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -77,6 +79,9 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        DispatcherUnhandledException += OnAppDispatcherUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
         SetGMap();
         RegisterKeys();
         ApplyTheme();
@@ -92,6 +97,39 @@ public partial class App : Application
             {
                 Services.GetRequiredService<RealTimeOptionsPageViewModel>().ReadCommand.Execute(e.Args[0]);
             }
+        }
+    }
+
+    private void OnTaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        ExceptionWindow.Show(e.Exception);
+        e.SetObserved();
+        Shutdown();
+    }
+
+    private void OnCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        if(e.ExceptionObject is Exception exception)
+            ExceptionWindow.Show(exception);
+        else if(e.ExceptionObject is null)
+            ExceptionWindow.Show(string.Empty);
+        else
+            ExceptionWindow.Show(e.ExceptionObject.ToString() ?? string.Empty);
+        if(e.IsTerminating)
+            Shutdown();
+    }
+
+    private void OnAppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        try
+        {
+            ExceptionWindow.Show(e.Exception);
+            e.Handled = true;
+        }
+        catch(Exception ex)
+        {
+            ExceptionWindow.Show(ex);
+            Shutdown();
         }
     }
 }
