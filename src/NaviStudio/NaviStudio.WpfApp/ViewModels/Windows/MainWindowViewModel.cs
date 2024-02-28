@@ -50,7 +50,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
 
     #region Private Fields
 
-    const string _optionsNullStatusContent = "等待确认实时选项";
+    const string _optionsNullStatusContent = "未创建实时解算配置";
 
     const string _optionsReadyStatusContent = "就绪";
 

@@ -9,6 +9,8 @@ namespace NaviStudio.WpfApp.Common.Settings;
 
 public class AppSettingsManager
 {
+    public const string DefaultFileName = "appsettings.json";
+
     #region Public Properties
 
     public AppSettings Settings
@@ -16,7 +18,7 @@ public class AppSettingsManager
         get => _settings;
         private set
         {
-            if (value != _settings)
+            if(value != _settings)
             {
                 _preSettings = _settings;
                 _settings = value;
@@ -30,24 +32,31 @@ public class AppSettingsManager
 
     #region Public Methods
 
-    public AppSettings Load(string filePath, AppSettings fallback)
+    public AppSettings Load(string? filePath = default, AppSettings? fallback = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(filePath);
-        ArgumentNullException.ThrowIfNull(fallback);
+        if(string.IsNullOrEmpty(filePath))
+        {
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Miraisoft", "NaviStudio");
+            Directory.CreateDirectory(dir);
+            filePath = Path.Combine(dir, DefaultFileName);
+        }
         ThrowIfNotJson(filePath);
+        fallback ??= new();
         FilePath = filePath;
-        Settings = fallback;
+        AppSettings? settings;
+        using var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read);
+        using var reader = new StreamReader(stream);
         try
         {
-            AppSettings? settings;
-            using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            using var reader = new StreamReader(stream);
             settings = JsonSerializer.Deserialize<AppSettings>(reader.ReadToEnd(), _serializerOptions);
-            if (settings is not null && settings.TryValidate())
+            if(settings is not null && settings.TryValidate())
                 Settings = settings;
+            return Settings;
         }
-        catch (Exception) { }
-        return Settings;
+        catch(JsonException)
+        {
+            return fallback;
+        }
     }
 
     public AppSettings RollBack()
@@ -68,7 +77,7 @@ public class AppSettingsManager
 
     public bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)
     {
-        if (!Settings.AppearanceSettings.EnableAcrylic)
+        if(!Settings.AppearanceSettings.EnableAcrylic)
         {
             window.WindowBackdropType = BackgroundType.None;
             return false;
@@ -78,13 +87,13 @@ public class AppSettingsManager
             window.WindowBackdropType = BackgroundType.Acrylic;
             return true;
         }
-        catch (Exception)
+        catch(Exception)
         {
             window.WindowBackdropType = BackgroundType.None;
             Settings.AppearanceSettings.EnableAcrylic = false;
-            if (autoSave)
+            if(autoSave)
             {
-                if (FilePath is null)
+                if(FilePath is null)
                     throw new InvalidOperationException("Settings have not been loaded.");
                 Save();
             }
@@ -113,7 +122,7 @@ public class AppSettingsManager
 
     static void ThrowIfNotJson(string filePath)
     {
-        if (!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
+        if(!Path.GetExtension(filePath).Equals(".json", StringComparison.CurrentCultureIgnoreCase))
             throw new ArgumentException("File path not legal.");
     }
 

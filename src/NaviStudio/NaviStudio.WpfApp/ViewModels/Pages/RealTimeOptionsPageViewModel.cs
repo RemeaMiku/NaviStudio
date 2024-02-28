@@ -149,6 +149,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         SolutionName = options.Name;
         BaseOptions = new InputOptionsViewModel(options.BaseOptions);
         RoverOptions = new InputOptionsViewModel(options.RoverOptions);
+        OutputFolder = options.OutputFolder;
     }
 
     [RelayCommand]
@@ -164,20 +165,24 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     }
 
     [RelayCommand]
-    void Read()
+    void Read(string? filePath = default)
     {
-        var dialog = new OpenFileDialog()
+        if(filePath is null)
         {
-            Title = "打开解算配置文件",
-            Filter = $"NaviStudio 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
-            RestoreDirectory = true,
-            CheckPathExists = true,
-        };
-        if(dialog.ShowDialog() != true)
-            return;
+            var dialog = new OpenFileDialog()
+            {
+                Title = "打开解算配置文件",
+                Filter = $"NaviStudio 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
+                RestoreDirectory = true,
+                CheckPathExists = true,
+            };
+            if(dialog.ShowDialog() != true)
+                return;
+            filePath = dialog.FileName;
+        }
         try
         {
-            var content = File.ReadAllText(dialog.FileName, Encoding.UTF8);
+            var content = File.ReadAllText(filePath, Encoding.UTF8);
             var options = JsonSerializer.Deserialize<RealTimeOptions>(content, _jsonSerializerOptions);
             if(options is null)
                 return;
@@ -185,7 +190,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         }
         catch(JsonException)
         {
-            _snackbarService.ShowError("读取出错", $"{dialog.FileName} 不是有效的解算配置文件。");
+            _snackbarService.ShowError("读取出错", $"{filePath} 不是有效的解算配置文件");
         }
         catch(Exception e)
         {
@@ -199,7 +204,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         var builder = new StringBuilder(SolutionName);
         foreach(var ch in Path.GetInvalidFileNameChars())
             builder.Replace(ch, '_');
-        var fileName = $"{builder}.{RealTimeOptionsFileExtension}";
+        var fileName = $"{builder}{RealTimeOptionsFileExtension}";
         var dialog = new SaveFileDialog()
         {
             Title = "保存解算配置文件至",
@@ -214,6 +219,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         {
             var content = JsonSerializer.Serialize(GetOptions(), _jsonSerializerOptions);
             File.WriteAllText(dialog.FileName, content, Encoding.UTF8);
+            _snackbarService.ShowSuccess("保存成功", $"解算配置已保存至 {dialog.FileName}");
         }
         catch(Exception e)
         {

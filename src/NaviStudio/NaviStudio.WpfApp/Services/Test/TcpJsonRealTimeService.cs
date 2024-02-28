@@ -9,6 +9,7 @@ using NaviStudio.Shared.Models.Options;
 using NaviStudio.Shared.Serialization;
 using NaviStudio.WpfApp.Services.Contracts;
 
+
 namespace NaviStudio.WpfApp.Services;
 
 public class TcpJsonRealTimeService() : IRealTimeService
@@ -39,13 +40,16 @@ public class TcpJsonRealTimeService() : IRealTimeService
             var process = Process.Start(_clientPath);
             using var client = await listener.AcceptTcpClientAsync(token);
             using var tcpStream = client.GetStream();
-            using var fileStream = string.IsNullOrEmpty(options.OutputFolder) ? default : new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}.mnedf"), FileMode.Create, FileAccess.Write, FileShare.Read);
+            var IsOutputRequested = !string.IsNullOrEmpty(options.OutputFolder);
+            if(IsOutputRequested)
+                Directory.CreateDirectory(options.OutputFolder);
+            using var fileStream = IsOutputRequested ? new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}.edjson"), FileMode.Create, FileAccess.Write, FileShare.Read) : default;
             using var writer = fileStream is null ? default : new Utf8JsonWriter(fileStream);
             writer?.WriteStartArray();
             using var reader = new BinaryReader(tcpStream, Encoding.UTF8);
             var jsonOptions = new JsonSerializerOptions()
             {
-                WriteIndented = true,
+                IgnoreReadOnlyProperties = true
             };
             jsonOptions.Converters.Add(new UtcTimeJsonConverter());
             await Task.Run(() =>

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Messaging;
@@ -80,14 +81,17 @@ public partial class App : Application
         RegisterKeys();
         ApplyTheme();
         new SplashScreen("Assets/splash-screen.png").Show(true);
-        SettingsManager.Load("appsettings.json", new());
+        SettingsManager.Load();
         SettingsManager.Save();
         var mainWindow = Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
         mainWindow.WindowState = WindowState.Maximized;
-#if DEBUG
-        // TODO DEBUG
-        //mainWindow.ViewModel.Options = new("Debug");
-#endif
+        if(e.Args.Length == 1)
+        {
+            if(Path.Exists(e.Args[0]))
+            {
+                Services.GetRequiredService<RealTimeOptionsPageViewModel>().ReadCommand.Execute(e.Args[0]);
+            }
+        }
     }
 }
