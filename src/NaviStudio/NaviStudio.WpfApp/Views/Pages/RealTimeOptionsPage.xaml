@@ -213,15 +213,13 @@
                 </ui:DynamicScrollViewer>
             </Border>
             <Border Grid.Row="1" Padding="10">
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}"
-                    Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <ui:Button
                         Appearance="Caution"
                         Command="{Binding ViewModel.ReadCommand, Mode=OneTime}"
                         Content="导入"
-                        Icon="DocumentArrowLeft24" />
+                        Icon="DocumentArrowLeft24"
+                        IsEnabled="{Binding ViewModel.IsEditable, Mode=OneWay}" />
                     <ui:Button
                         Margin="5,0,0,0"
                         Appearance="Info"
@@ -233,9 +231,10 @@
                         Margin="5,0,0,0"
                         Appearance="Primary"
                         Command="{Binding ViewModel.ConfirmCommand, Mode=OneTime}"
-                        Content="确认"
+                        Content="应用"
                         Icon="CheckmarkCircle24"
-                        IsEnabled="{Binding ViewModel.HasErrors, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}" />
+                        IsEnabled="{Binding ViewModel.HasErrors, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
+                        Visibility="{Binding ViewModel.HasChanged, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
                 </StackPanel>
             </Border>
         </Grid>

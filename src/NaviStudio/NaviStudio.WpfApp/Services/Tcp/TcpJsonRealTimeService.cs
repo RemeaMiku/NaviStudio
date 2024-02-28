@@ -5,10 +5,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
 using NaviStudio.Shared.Serialization;
 using NaviStudio.WpfApp.Services.Contracts;
-
 
 namespace NaviStudio.WpfApp.Services;
 
@@ -43,7 +43,7 @@ public class TcpJsonRealTimeService() : IRealTimeService
             var IsOutputRequested = !string.IsNullOrEmpty(options.OutputFolder);
             if(IsOutputRequested)
                 Directory.CreateDirectory(options.OutputFolder);
-            using var fileStream = IsOutputRequested ? new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}.edjson"), FileMode.Create, FileAccess.Write, FileShare.Read) : default;
+            using var fileStream = IsOutputRequested ? new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}{FileExtensions.EpochDataFileExtension}"), FileMode.Create, FileAccess.Write, FileShare.Read) : default;
             using var writer = fileStream is null ? default : new Utf8JsonWriter(fileStream);
             writer?.WriteStartArray();
             using var reader = new BinaryReader(tcpStream, Encoding.UTF8);

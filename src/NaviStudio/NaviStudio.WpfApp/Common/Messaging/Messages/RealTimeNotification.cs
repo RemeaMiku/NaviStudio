@@ -7,6 +7,7 @@ public class RealTimeNotification
     public static readonly RealTimeNotification Reset = new();
     public static readonly RealTimeNotification Update = new();
     public static readonly RealTimeNotification Sync = new();
+    public static readonly RealTimeNotification Stop = new();
 
     #endregion Public Fields
 

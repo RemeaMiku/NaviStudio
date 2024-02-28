@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Ports;
@@ -11,19 +12,21 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Win32;
+using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
 using NaviStudio.WpfApp.Common.Extensions;
+using NaviStudio.WpfApp.Common.Messaging.Messages;
+using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<RealTimeOptions>
+public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<RealTimeNotification>
 {
     #region Public Fields
 
     public const string Title = "实时解算配置";
     public const string MenuItemHeader = $"{Title}(_S)";
-    public const string RealTimeOptionsFileExtension = ".nsrto";
 
     #endregion Public Fields
 
@@ -32,11 +35,17 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     public RealTimeOptionsPageViewModel(IMessenger messenger, ISnackbarService snackbarService)
     {
         _messenger = messenger;
-        _snackbarService = snackbarService;
         _messenger.Register(this);
-        BaseOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
-        RoverOptions.PropertyChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
-        PropertyChanged += (_, _) => _hasChanged = true;
+        _snackbarService = snackbarService;
+        BaseOptions = new();
+        RoverOptions = new();
+        PropertyChanged += (_, e) =>
+        {
+            if(e.PropertyName is not (nameof(HasChanged) or nameof(IsEditable)))
+                HasChanged = true;
+        };
+        if(File.Exists(_cachedOptionsFileName))
+            Read(_cachedOptionsFileName);
     }
 
     #endregion Public Constructors
@@ -79,16 +88,11 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         return true;
     }
 
-    public void Receive(RealTimeOptions message)
-    {
-        IsEditable = !IsEditable;
-        SetOptions(message);
-    }
-
     #endregion Public Methods
 
-    #region Private Fields
+    #region Private Fields    
 
+    [ObservableProperty]
     bool _hasChanged = true;
 
     readonly static JsonSerializerOptions _jsonSerializerOptions = new()
@@ -116,10 +120,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     string _solutionName = "未命名";
 
     [ObservableProperty]
-    InputOptionsViewModel _baseOptions = new();
+    InputOptionsViewModel _baseOptions;
 
     [ObservableProperty]
-    InputOptionsViewModel _roverOptions = new();
+    InputOptionsViewModel _roverOptions;
 
     [ObservableProperty]
     [RegularExpression(@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.]+)+\\?$", ErrorMessage = "非法目录")]
@@ -129,20 +133,33 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     [ObservableProperty]
     bool _isEditable = true;
 
+    const string _cachedOptionsFileName = $"cache{FileExtensions.RealTimeOptionsFileExtension}";
+
     #endregion Private Fields
 
     #region Private Methods
 
-    partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
+    void OnInputOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
     {
         OnPropertyChanged(nameof(HasErrors));
         if(oldValue is not null)
+        {
             oldValue.ErrorsChanged -= (_, _) => OnPropertyChanged(nameof(HasErrors));
+            oldValue.PropertyChanged -= OnInputOptionsPropertyChanged;
+        }
         newValue.ErrorsChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
+        newValue.PropertyChanged += OnInputOptionsPropertyChanged;
     }
 
+    void OnInputOptionsPropertyChanged(object? _, PropertyChangedEventArgs __)
+        => HasChanged = true;
+
+
+    partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
+        => OnInputOptionsChanged(oldValue, newValue);
+
     partial void OnRoverOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
-        => OnBaseOptionsChanged(oldValue, newValue);
+        => OnInputOptionsChanged(oldValue, newValue);
 
     void SetOptions(RealTimeOptions options)
     {
@@ -172,7 +189,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
             var dialog = new OpenFileDialog()
             {
                 Title = "打开解算配置文件",
-                Filter = $"NaviStudio 解算配置文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
+                Filter = $"NaviStudio 解算配置文件|*{FileExtensions.RealTimeOptionsFileExtension}|所有文件|*.*",
                 RestoreDirectory = true,
                 CheckPathExists = true,
             };
@@ -204,11 +221,11 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         var builder = new StringBuilder(SolutionName);
         foreach(var ch in Path.GetInvalidFileNameChars())
             builder.Replace(ch, '_');
-        var fileName = $"{builder}{RealTimeOptionsFileExtension}";
+        var fileName = $"{builder}{FileExtensions.RealTimeOptionsFileExtension}";
         var dialog = new SaveFileDialog()
         {
             Title = "保存解算配置文件至",
-            Filter = $"NaviStudio 解算预设文件|*{RealTimeOptionsFileExtension}|所有文件|*.*",
+            Filter = $"NaviStudio 解算预设文件|*{FileExtensions.RealTimeOptionsFileExtension}|所有文件|*.*",
             FileName = fileName,
             RestoreDirectory = true,
             CheckPathExists = true,
@@ -218,7 +235,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         try
         {
             var content = JsonSerializer.Serialize(GetOptions(), _jsonSerializerOptions);
-            File.WriteAllText(dialog.FileName, content, Encoding.UTF8);
+            File.WriteAllText(dialog.FileName, content);
             _snackbarService.ShowSuccess("保存成功", $"解算配置已保存至 {dialog.FileName}");
         }
         catch(Exception e)
@@ -230,11 +247,22 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     [RelayCommand]
     void Confirm()
     {
-        if(!_hasChanged)
+        if(!HasChanged)
             return;
+        var options = GetOptions();
+        var content = JsonSerializer.Serialize(options, _jsonSerializerOptions);
+        File.WriteAllText(_cachedOptionsFileName, content);
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
         _messenger.Send(new Output(Title, SeverityType.Info, "实时解算配置已更新"));
-        _hasChanged = false;
+        HasChanged = false;
+    }
+
+    public void Receive(RealTimeNotification message)
+    {
+        if(message == RealTimeNotification.Reset)
+            IsEditable = false;
+        else if(message == RealTimeNotification.Stop)
+            IsEditable = true;
     }
 
     #endregion Private Methods

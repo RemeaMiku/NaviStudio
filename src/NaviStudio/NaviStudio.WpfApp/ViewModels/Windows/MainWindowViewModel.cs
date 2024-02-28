@@ -1,24 +1,30 @@
 ﻿using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Win32;
+using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
+using NaviStudio.WpfApp.Common.Extensions;
 using NaviStudio.WpfApp.Common.Helpers;
 using NaviStudio.WpfApp.Common.Messaging.Messages;
 using NaviStudio.WpfApp.Services.Contracts;
+using Wpf.Ui.Mvvm.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>, IRecipient<StatusNotification>
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger, ISnackbarService snackbarService) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>, IRecipient<StatusNotification>
 {
     #region Public Fields
 
     public const string Title = "NaviStudio";
 
-    public static readonly RealTimeOptions DefaultOptions = new("默认");
+    //public static readonly RealTimeOptions DefaultOptions = new("默认");
 
     #endregion Public Fields
 
@@ -50,7 +56,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
 
     #region Private Fields
 
-    const string _optionsNullStatusContent = "未创建实时解算配置";
+    const string _optionsNullStatusContent = "等待应用实时解算配置";
 
     const string _optionsReadyStatusContent = "就绪";
 
@@ -80,9 +86,50 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     [ObservableProperty]
     bool _statusIsProcessing = false;
 
+    readonly ISnackbarService _snackbarService = snackbarService;
+
     #endregion Private Fields
 
     #region Private Methods
+
+    [RelayCommand]
+    async Task SaveEpochDatasAsync()
+    {
+        if(!_epochDatasService.HasData)
+        {
+            _snackbarService.ShowError("保存失败", "无数据");
+            return;
+        }
+        var dialog = new SaveFileDialog()
+        {
+            Title = "保存历元数据文件至",
+            Filter = $"NaviStudio 历元数据文件|*{FileExtensions.EpochDataFileExtension}|所有文件|*.*",
+            RestoreDirectory = true,
+            CheckPathExists = true,
+        };
+        if(dialog.ShowDialog() != true)
+            return;
+        var json = JsonSerializer.Serialize(_epochDatasService.Datas);
+        try
+        {
+            StatusContent = "正在保存历元数据...";
+            StatusSeverityType = SeverityType.Info;
+            StatusIsProcessing = true;
+            await File.WriteAllTextAsync(dialog.FileName, json);
+            var message = $"历元数据已保存至 {dialog.FileName}";
+            _snackbarService.ShowSuccess("保存成功", message);
+            StatusContent = message;
+            StatusSeverityType = SeverityType.Success;
+            StatusIsProcessing = false;
+        }
+        catch(Exception)
+        {
+            _snackbarService.ShowError("保存失败", "无法保存历元数据");
+            StatusContent = "保存失败";
+            StatusSeverityType = SeverityType.Error;
+            StatusIsProcessing = false;
+        }
+    }
 
     void ValidateEpochData(EpochData epochData)
     {
@@ -119,14 +166,13 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         {
             Messenger.Send(RealTimeNotification.Reset);
             Messenger.Send(new Output(Title, SeverityType.Info, "开始接收"));
-            Messenger.Send(Options!);
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
         else
         {
             _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
             Messenger.Send(new Output(Title, SeverityType.Info, "停止接收"));
-            Messenger.Send(Options!);
+            Messenger.Send(RealTimeNotification.Stop);
         }
     }
 
