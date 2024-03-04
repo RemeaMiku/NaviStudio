@@ -37,14 +37,16 @@ public partial class ChartGroupPage : UserControl
         ViewModel.Title = groupParas.Title;
         ViewModel.MaxEpochCount = groupParas.MaxEpochCount;
         var index = 0;
-        foreach (var item in groupParas.Items)
+        foreach(var item in groupParas.Items)
         {
             var page = App.Current.Services.GetRequiredService<ChartPage>();
             page.ViewModel.Title = item;
             ViewModel.ItemViewModels.Add(page.ViewModel);
-            var funcs = ChartItemManager.ChartItemFuncs[item];
-            foreach ((var label, _) in funcs)
-                page.AddSeries(label);
+            if(ChartItemManager.ChartItemFuncs.TryGetValue(item, out var funcs))
+            {
+                foreach((var label, _) in funcs)
+                    page.AddSeries(label);
+            }
             DocumentContainer.SetHeader(page, item);
             DocumentContainer.SetMDIWindowState(page, MDIWindowState.Normal);
             DocumentContainer.SetMDIBounds(page, new(index * 100, index * 50, 400, 200));

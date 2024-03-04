@@ -2,8 +2,8 @@
 
 public enum InputFormat
 {
-    RTCM3,
     RTCM2,
+    RTCM3,
     OEM4,
     UBX,
 }

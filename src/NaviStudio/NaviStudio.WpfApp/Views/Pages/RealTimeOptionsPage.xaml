@@ -20,6 +20,7 @@
         <sys:Double x:Key="WrapItemWidth">200</sys:Double>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
+        <cv:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
         <Thickness x:Key="SmallSpacing">0,5</Thickness>
         <Thickness x:Key="LargeSpacing">5,10</Thickness>
         <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
@@ -65,16 +66,47 @@
                             SelectedValuePath="Tag">
                             <ComboBoxItem Content="TCP" Tag="{x:Static options:InputType.Tcp}" />
                             <ComboBoxItem Content="串口" Tag="{x:Static options:InputType.Serial}" />
+                            <ComboBoxItem Content="NTRIP" Tag="{x:Static options:InputType.Ntrip}" />
                         </ComboBox>
                     </HeaderedContentControl>
-                    <HeaderedContentControl Header="格式">
+                    <HeaderedContentControl Header="ZMQ ID">
+                        <ui:NumberBox Margin="{StaticResource SmallSpacing}" Value="{Binding ZmqId, Mode=TwoWay}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Header="基站类型">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            SelectedValue="{Binding BaseType, Mode=TwoWay}"
+                            SelectedValuePath="Tag">
+                            <ComboBoxItem Content="单基站" Tag="{x:Static options:BaseType.Single}" />
+                            <ComboBoxItem Content="VRS" Tag="{x:Static options:BaseType.Vrs}" />
+                        </ComboBox>
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Header="数据格式">
                         <ComboBox
                             Margin="{StaticResource SmallSpacing}"
                             ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.InputFormats}"
                             SelectedValue="{Binding Format}" />
                     </HeaderedContentControl>
+                    <HeaderedContentControl Header="传输间隔(ms)">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.ServerCycles}"
+                            SelectedValue="{Binding ServerCycle, Mode=TwoWay}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Header="IMU 类型">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.ImuTypes}"
+                            SelectedValue="{Binding ImuType, Mode=TwoWay}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl Header="IMU 采样频率">
+                        <ComboBox
+                            Margin="{StaticResource SmallSpacing}"
+                            ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.ImuRates}"
+                            SelectedValue="{Binding ImuRate, Mode=TwoWay}" />
+                    </HeaderedContentControl>
                 </WrapPanel>
-                <ui:CardExpander ContentPadding="5" Visibility="{Binding IsTcp, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                <ui:CardExpander ContentPadding="5" Visibility="{Binding Type, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static options:InputType.Tcp}, Mode=OneWay}">
                     <ui:CardExpander.Header>
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="CellularData124" />
@@ -98,7 +130,7 @@
                         </HeaderedContentControl>
                     </WrapPanel>
                 </ui:CardExpander>
-                <ui:CardExpander ContentPadding="5" Visibility="{Binding IsSerial, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                <ui:CardExpander ContentPadding="5" Visibility="{Binding Type, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static options:InputType.Serial}, Mode=OneWay}">
                     <ui:CardExpander.Header>
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="SerialPort24" />
@@ -142,6 +174,39 @@
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="启用 RTS 信号">
                             <ui:ToggleSwitch Margin="0,12,0,0" IsChecked="{Binding SerialRtsEnable}" />
+                        </HeaderedContentControl>
+                    </WrapPanel>
+                </ui:CardExpander>
+                <ui:CardExpander ContentPadding="5" Visibility="{Binding Type, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static options:InputType.Ntrip}, Mode=OneWay}">
+                    <ui:CardExpander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="CellularData124" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="NTRIP 选项" />
+                        </StackPanel>
+                    </ui:CardExpander.Header>
+                    <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
+                        <HeaderedContentControl Header="Caster 主机">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripCasterHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="挂载点">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripMountPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="端口">
+                            <ui:NumberBox
+                                Margin="{StaticResource SmallSpacing}"
+                                Maximum="65535"
+                                Minimum="0"
+                                ValidationMode="InvalidInputOverwritten"
+                                Value="{Binding NtripPort, Mode=TwoWay}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="用户名">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="密码">
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                     </WrapPanel>
                 </ui:CardExpander>

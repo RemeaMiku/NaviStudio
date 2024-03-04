@@ -9,8 +9,8 @@ public partial class AppSettingsWindowViewModel : ObservableValidator
 {
     #region Public Fields
 
-    public const string Title = "设置";
-    public const string MenuItemHeader = $"{Title}(_S)";
+    public const string Title = "选项";
+    public const string MenuItemHeader = $"{Title}(_O)";
 
     #endregion Public Fields
 

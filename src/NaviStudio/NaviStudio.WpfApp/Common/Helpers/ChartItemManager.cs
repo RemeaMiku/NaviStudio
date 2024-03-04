@@ -50,9 +50,9 @@ public static class ChartItemManager
             {
                 ChartItems.Velocity, new()
                 {
-                    { "X", epochData => epochData.Result?.Velocity.E },
-                    { "Y", epochData => epochData.Result?.Velocity.N },
-                    { "Z", epochData => epochData.Result?.Velocity.U }
+                    { "E", epochData => epochData.Result?.Velocity.E },
+                    { "N", epochData => epochData.Result?.Velocity.N },
+                    { "U", epochData => epochData.Result?.Velocity.U }
                 }
             },
             {

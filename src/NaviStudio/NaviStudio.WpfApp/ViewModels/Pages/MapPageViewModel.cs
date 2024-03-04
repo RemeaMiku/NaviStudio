@@ -25,7 +25,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     protected override void Update(EpochData data)
     {
-        if (data.Result is null)
+        if(data.Result is null)
             return;
         RoutePointsCount++;
         var point = data.Result.GeodeticCoord.ToPointLatLng();
@@ -34,12 +34,12 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     protected override void Sync()
     {
-        if (!_epochDatasService.HasData)
+        if(!_epochDatasService.HasData)
         {
             Reset();
             return;
         }
-        if (_epochDatasService.EpochCount == RoutePointsCount + 1)
+        if(_epochDatasService.EpochCount == RoutePointsCount + 1)
         {
             Update(_epochDatasService.Last);
             return;
@@ -64,7 +64,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         get => _gMapRouteDisplayService.Indicator;
         set
         {
-            if (_gMapRouteDisplayService.Indicator == value)
+            if(_gMapRouteDisplayService.Indicator == value)
                 return;
             _gMapRouteDisplayService.Indicator = value;
             OnPropertyChanged(nameof(Indicator));
@@ -76,7 +76,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         get => _gMapRouteDisplayService.KeepCenter;
         set
         {
-            if (_gMapRouteDisplayService.KeepCenter == value)
+            if(_gMapRouteDisplayService.KeepCenter == value)
                 return;
             _gMapRouteDisplayService.KeepCenter = value;
             OnPropertyChanged(nameof(KeepCenter));
@@ -88,7 +88,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         get => _gMapRouteDisplayService.EnableMapBearing;
         set
         {
-            if (_gMapRouteDisplayService.EnableMapBearing == value)
+            if(_gMapRouteDisplayService.EnableMapBearing == value)
                 return;
             _gMapRouteDisplayService.EnableMapBearing = value;
             OnPropertyChanged(nameof(EnableMapBearing));
@@ -99,14 +99,18 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     [ObservableProperty]
     PointLatLng _mapCenter;
-    //[ObservableProperty]
-    //bool _isRealTime = false;
 
     [ObservableProperty]
-    int _positionIndex = -1;
+    bool _isRealTime = false;
 
     [ObservableProperty]
-    int _routePointsCount = 0;
+    int _positionIndex;
+
+    [ObservableProperty]
+    int _routePointsCount;
+
+    [ObservableProperty]
+    double _timeScale = 1;
 
     [ObservableProperty]
     TimePointLatLng? _selectedPoint;
@@ -125,7 +129,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     void ReturnToPosition()
     {
         KeepCenter = true;
-        if (_gMapRouteDisplayService.CurrentPosition.HasValue)
+        if(_gMapRouteDisplayService.CurrentPosition.HasValue)
             MapCenter = _gMapRouteDisplayService.CurrentPosition.Value;
     }
 

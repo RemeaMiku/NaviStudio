@@ -10,7 +10,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     #region Public Fields
 
     public const string Title = "位姿";
-    public const string MenuItemHeader = $"{Title}(_P)";
+    public const string MenuItemHeader = $"{Title}(_N)";
 
     #endregion Public Fields
 
@@ -34,7 +34,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
     protected override void Update(EpochData data)
     {
         TimeStamp = data.TimeStamp;
-        if (data.Result is null)
+        if(data.Result is null)
         {
             Reset();
             return;

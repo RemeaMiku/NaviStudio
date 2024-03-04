@@ -69,10 +69,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controls\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Reference Include="NaviSharp">
 	    <HintPath>..\libraries\NaviSharp.dll</HintPath>
 	  </Reference>

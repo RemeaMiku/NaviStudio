@@ -21,13 +21,12 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
     protected override void Update(EpochData epochData)
     {
         var removeCount = _epochCount - MaxEpochCount + 1;
-        foreach (var viewModel in ItemViewModels)
+        foreach(var viewModel in ItemViewModels)
         {
-            if (removeCount > 0)
+            if(removeCount > 0)
                 viewModel.RemoveOnAllSeries(removeCount);
-            if (ChartItemManager.ChartItemFuncs.ContainsKey(viewModel.Title))
+            if(ChartItemManager.ChartItemFuncs.ContainsKey(viewModel.Title))
                 UpdateChartItemCommon(viewModel, epochData);
-
         }
         _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
     }
@@ -35,19 +34,19 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
     protected override void Sync()
     {
         Reset();
-        if (!_epochDatasService.HasData)
+        if(!_epochDatasService.HasData)
             return;
         _epochCount = Math.Min(MaxEpochCount, _epochDatasService.EpochCount);
-        foreach (var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
-            foreach (var viewModel in ItemViewModels)
+        foreach(var epochData in _epochDatasService.Datas.TakeLast(MaxEpochCount))
+            foreach(var viewModel in ItemViewModels)
                 UpdateChartItemCommon(viewModel, epochData);
     }
 
     protected override void Reset()
     {
-        if (_epochCount == 0)
+        if(_epochCount == 0)
             return;
-        foreach (var viewModel in ItemViewModels)
+        foreach(var viewModel in ItemViewModels)
             viewModel.Clear();
         _epochCount = 0;
     }
@@ -71,7 +70,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
     static void UpdateChartItemCommon(ChartPageViewModel viewModel, EpochData epochData)
     {
         var funcs = ChartItemManager.ChartItemFuncs[viewModel.Title];
-        foreach ((var label, var func) in funcs)
+        foreach((var label, var func) in funcs)
             viewModel.Add(label, new(epochData.TimeStamp, func(epochData)));
     }
 

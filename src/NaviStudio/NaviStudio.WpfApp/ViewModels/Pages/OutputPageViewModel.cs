@@ -12,7 +12,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     #region Public Fields
 
     public const string Title = "输出";
-    public const string MenuItemHeader = $"{Title}(_O)";
+    public const string MenuItemHeader = $"{Title}(_E)";
 
     #endregion Public Fields
 
@@ -70,7 +70,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
         var SeverityTypeFlag = _SeverityTypeFlags[output.Type];
         var senderFlag = SelectedSender == _allSenders || output.SenderName == SelectedSender;
         var accepted = SeverityTypeFlag && senderFlag && output.DisplayMessage.Contains(SearchKeyword);
-        if (accepted)
+        if(accepted)
             _SeverityTypeCounts[output.Type]++;
         return accepted;
     }
@@ -80,11 +80,11 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
         App.Current.Dispatcher.Invoke(() =>
         {
             Outputs.Add(message);
-            if (!Senders.Contains(message.SenderName))
+            if(!Senders.Contains(message.SenderName))
                 Senders.Add(message.SenderName);
             OnPropertyChanged(string.Empty);
         });
-        if (KeepBottom)
+        if(KeepBottom)
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
     }
 
@@ -113,7 +113,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 
     void Refresh()
     {
-        foreach (var SeverityType in _SeverityTypeCounts.Keys)
+        foreach(var SeverityType in _SeverityTypeCounts.Keys)
             _SeverityTypeCounts[SeverityType] = default;
         OutputsView?.Refresh();
         OnPropertyChanged(string.Empty);
@@ -130,14 +130,14 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     [RelayCommand(CanExecute = nameof(Filtered))]
     void ClearFilter()
     {
-        foreach (var SeverityType in _SeverityTypeFlags.Keys)
+        foreach(var SeverityType in _SeverityTypeFlags.Keys)
             _SeverityTypeFlags[SeverityType] = true;
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }
     partial void OnSearchKeywordChanged(string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if(string.IsNullOrEmpty(value))
             Refresh();
     }
 
@@ -145,7 +145,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     void Search() => Refresh();
     partial void OnKeepBottomChanged(bool value)
     {
-        if (value)
+        if(value)
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
     }
 

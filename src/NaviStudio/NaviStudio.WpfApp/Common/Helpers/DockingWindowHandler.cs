@@ -10,13 +10,15 @@ public static class DockingWindowHandler
     public static void RestoreDockState(ContentControl contentControl)
     {
         SetViewModelIsActive(contentControl, true);
-        if (_dockStatesOnClosed.TryGetValue(contentControl, out var dockState))
+        if(_dockStatesOnClosed.TryGetValue(contentControl, out var dockState))
             DockingManager.SetState(contentControl, dockState);
+        else
+            DockingManager.SetState(contentControl, DockState.Document);
     }
 
     public static void SaveDockState(ContentControl contentControl)
     {
-        if (contentControl.Content is null)
+        if(contentControl.Content is null)
             return;
         _dockStatesOnClosed[contentControl] = DockingManager.GetState(contentControl);
     }

@@ -60,7 +60,7 @@ public static class IServiceCollectionExtensions
             .AddSingleton<ISnackbarService, SnackbarService>()
             .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
 #if DEBUG
-            .AddSingleton<IRealTimeService, TcpJsonRealTimeService>()
+            .AddSingleton<IRealTimeService, ZmqRealTimeService>()
 #endif
             .AddSingleton<IEpochDatasService, EpochDatasService>()
             .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>();

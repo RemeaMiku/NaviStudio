@@ -16,7 +16,6 @@ using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
 using NaviStudio.WpfApp.Common.Extensions;
 using NaviStudio.WpfApp.Common.Messaging.Messages;
-using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
@@ -25,8 +24,8 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 {
     #region Public Fields
 
-    public const string Title = "实时解算配置";
-    public const string MenuItemHeader = $"{Title}(_S)";
+    public const string Title = "解算配置";
+    public const string MenuItemHeader = $"{Title}(_R)";
 
     #endregion Public Fields
 
@@ -52,11 +51,17 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 
     #region Public Properties
 
+    public static int[] ServerCycles { get; } = [1000, 20, 10, 5];
+
+    public static string[] ImuTypes { get; } = ["NULL", "NovAtel SPAN FSAS"];
+
+    public static int[] ImuRates { get; } = [100, 125, 200];
+
     public static Array Parities { get; } = Enum.GetValues(typeof(Parity));
 
     public static Array InputFormats { get; } = Enum.GetValues(typeof(InputFormat));
 
-    public static int[] DataBits { get; } = [5, 6, 7, 8];
+    public static int[] DataBits { get; } = [7, 8];
 
     public static IEnumerable<int> BaudRates { get; } = [2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600];
 
@@ -117,7 +122,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     [Required(ErrorMessage = "不能为空")]
     [Length(1, 20, ErrorMessage = "长度需在 1 到 20 之间")]
     [NotifyDataErrorInfo]
-    string _solutionName = "未命名";
+    string _solutionName = "默认";
 
     [ObservableProperty]
     InputOptionsViewModel _baseOptions;
@@ -253,7 +258,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         var content = JsonSerializer.Serialize(options, _jsonSerializerOptions);
         File.WriteAllText(_cachedOptionsFileName, content);
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
-        _messenger.Send(new Output(Title, SeverityType.Info, "实时解算配置已更新"));
+        _messenger.Send(new Output(Title, SeverityType.Info, "解算配置已更新"));
         HasChanged = false;
     }
 

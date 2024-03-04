@@ -26,6 +26,11 @@ public partial class InputOptionsViewModel : ObservableValidator
         SerialParity = options.SerialOptions.Parity;
         SerialStopBits = options.SerialOptions.StopBits;
         SerialRtsEnable = options.SerialOptions.RtsEnable;
+        NtripCasterHost = options.NtripOptions.CasterHost;
+        NtripMountPoint = options.NtripOptions.MountPoint;
+        NtripPort = options.NtripOptions.Port;
+        NtripUserName = options.NtripOptions.UserName;
+        NtripPassword = options.NtripOptions.Password;
         Validate();
     }
 
@@ -33,9 +38,9 @@ public partial class InputOptionsViewModel : ObservableValidator
 
     #region Public Properties
 
-    public bool IsTcp => Type == InputType.Tcp;
+    //public bool IsTcp => Type == InputType.Tcp;
 
-    public bool IsSerial => Type == InputType.Serial;
+    //public bool IsSerial => Type == InputType.Serial;
 
     #endregion Public Properties
 
@@ -52,6 +57,9 @@ public partial class InputOptionsViewModel : ObservableValidator
             case InputType.Serial:
                 ValidateSerial();
                 break;
+            case InputType.Ntrip:
+                ValidateNtrip();
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -63,6 +71,11 @@ public partial class InputOptionsViewModel : ObservableValidator
         {
             Type = Type,
             Format = Format,
+            ZmqId = ZmqId,
+            BaseType = BaseType,
+            ServerCycle = ServerCycle,
+            ImuType = ImuType,
+            ImuRate = ImuRate,
             TcpOptions = new IPEndPointOptions()
             {
                 Address = TcpAddress,
@@ -75,7 +88,15 @@ public partial class InputOptionsViewModel : ObservableValidator
                 Parity = SerialParity,
                 PortName = SerialPortName,
                 RtsEnable = SerialRtsEnable,
-                StopBits = SerialStopBits
+                StopBits = SerialStopBits,
+            },
+            NtripOptions = new NtripOptions()
+            {
+                CasterHost = NtripCasterHost,
+                MountPoint = NtripMountPoint,
+                Port = NtripPort,
+                UserName = NtripUserName,
+                Password = NtripPassword
             }
         };
     }
@@ -106,11 +127,31 @@ public partial class InputOptionsViewModel : ObservableValidator
     const int _defaultSerialDataBits = 8;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsTcp))]
-    [NotifyPropertyChangedFor(nameof(IsSerial))]
+    //[NotifyPropertyChangedFor(nameof(IsTcp))]
+    //[NotifyPropertyChangedFor(nameof(IsSerial))]
     InputType _type = InputType.Tcp;
+
     [ObservableProperty]
     InputFormat _format = InputFormat.RTCM3;
+
+    [ObservableProperty]
+    BaseType _baseType = BaseType.Single;
+
+    [ObservableProperty]
+    int _zmqId;
+
+    [ObservableProperty]
+    [Range(0, int.MaxValue, ErrorMessage = "非法周期")]
+    [NotifyDataErrorInfo]
+    int _serverCycle = 1000;
+
+    [ObservableProperty]
+    string _imuType = "NULL";
+
+    [ObservableProperty]
+    [Range(0, int.MaxValue, ErrorMessage = "非法频率")]
+    [NotifyDataErrorInfo]
+    int _imuRate = 100;
 
     [ObservableProperty]
     [Required(ErrorMessage = "不能为空")]
@@ -149,6 +190,24 @@ public partial class InputOptionsViewModel : ObservableValidator
     [ObservableProperty]
     bool _serialRtsEnable = false;
 
+    [ObservableProperty]
+    string _ntripCasterHost = string.Empty;
+
+    [ObservableProperty]
+    string _ntripMountPoint = string.Empty;
+
+    [ObservableProperty]
+    [Required(ErrorMessage = "不能为空")]
+    [Range(0, IPEndPoint.MaxPort, ErrorMessage = "非法端口")]
+    [NotifyDataErrorInfo]
+    int _ntripPort;
+
+    [ObservableProperty]
+    string _ntripUserName = string.Empty;
+
+    [ObservableProperty]
+    string _ntripPassword = string.Empty;
+
     #endregion Private Fields
 
     #region Private Methods
@@ -176,7 +235,7 @@ public partial class InputOptionsViewModel : ObservableValidator
                     SerialDataBits = _defaultSerialDataBits;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
         }
         Validate();
@@ -192,6 +251,15 @@ public partial class InputOptionsViewModel : ObservableValidator
     {
         ValidateProperty(TcpAddress, nameof(TcpAddress));
         ValidateProperty(TcpPort, nameof(TcpPort));
+    }
+
+    void ValidateNtrip()
+    {
+        ValidateProperty(NtripCasterHost, nameof(NtripCasterHost));
+        ValidateProperty(NtripMountPoint, nameof(NtripMountPoint));
+        ValidateProperty(NtripPort, nameof(NtripPort));
+        ValidateProperty(NtripUserName, nameof(NtripUserName));
+        ValidateProperty(NtripPassword, nameof(NtripPassword));
     }
 
     #endregion Private Methods

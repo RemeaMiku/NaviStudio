@@ -4,4 +4,5 @@ public enum InputType
 {
     Tcp,
     Serial,
+    Ntrip,
 }

@@ -13,7 +13,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     #region Public Fields
 
     public const string Title = "卫星天空图";
-    public const string MenuItemHeader = $"{Title}(_P)";
+    public const string MenuItemHeader = $"{Title}(_S)";
 
     #endregion Public Fields
 
@@ -27,7 +27,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
 
     protected override void Update(EpochData message)
     {
-        if (message.SatelliteSkyPositions is null)
+        if(message.SatelliteSkyPositions is null)
         {
             Reset();
             return;
@@ -61,7 +61,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
     [RelayCommand]
     void EnableOrDisableSystem(SatelliteSystems systems)
     {
-        if (!_enabledSystems.Remove(systems))
+        if(!_enabledSystems.Remove(systems))
             _enabledSystems.Add(systems);
         OnPropertyChanged(nameof(EnabledPositions));
     }

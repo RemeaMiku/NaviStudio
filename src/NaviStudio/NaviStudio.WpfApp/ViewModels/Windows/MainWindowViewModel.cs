@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -31,7 +32,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     #region Public Properties
 
     public string StartOrResumeText
-        => IsRealTimeStarted ? "继续" : Options is null ? string.Empty : Options.Name;
+        => IsRealTimeStarted ? "继续" : Options is null ? "开始" : $"启动：{Options.Name}";
 
     public IRelayCommand StartOrResumeCommand
         => IsRealTimeStarted ? ResumeCommand : StartCommand;
@@ -56,7 +57,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
 
     #region Private Fields
 
-    const string _optionsNullStatusContent = "等待应用实时解算配置";
+    const string _optionsNullStatusContent = "无解算配置";
 
     const string _optionsReadyStatusContent = "就绪";
 

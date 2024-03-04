@@ -9,7 +9,7 @@ partial class GMapRouteDisplayService
     const int _clusterLevel0 = 1;
     const int _clusterLevel1 = 3;
     const int _clusterLevel2 = 10;
-    const int _clusterLevel3 = 100;
+    const int _clusterLevel3 = 50;
     const int _clusterThreshold = 1000;
 
     readonly Dictionary<int, HashSet<GMapMarker>> _clusterLevelToMarkersMap = [];

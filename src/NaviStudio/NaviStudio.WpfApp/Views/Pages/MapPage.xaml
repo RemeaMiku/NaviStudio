@@ -8,8 +8,9 @@
     xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Pages"
     xmlns:map="clr-namespace:NaviStudio.Shared.Models.Map;assembly=NaviStudio.Shared"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    d:DataContext="{d:DesignInstance local:MapPage}"
+    d:DataContext="{d:DesignInstance {x:Type local:MapPage}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -35,20 +36,31 @@
         </ui:SymbolIcon>
         <Thickness x:Key="SmallSpacing">0,3</Thickness>
         <Thickness x:Key="LargeSpacing">0,5</Thickness>
-        <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
+        <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="{x:Type HeaderedContentControl}">
             <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
         </Style>
-        <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
+        <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="{x:Type ComboBox}">
             <Setter Property="Width" Value="150" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="SelectedIndex" Value="0" />
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
-                    <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
+                    <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="{x:Type ComboBoxItem}">
                         <Setter Property="Padding" Value="5" />
                     </Style>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style
+            x:Key="ToolUiButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="{x:Type ui:Button}">
+            <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
+            <Setter Property="IconFilled" Value="True" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="3,0" />
         </Style>
     </UserControl.Resources>
     <Grid d:Background="White" Cursor="Cross">
@@ -56,7 +68,7 @@
             x:Name="GMap"
             CanDragMap="True"
             IgnoreMarkerOnMouseWheel="True"
-            MapProvider="{Binding SelectedValue, ElementName=MapTypeBox, Mode=OneWay, Converter={StaticResource MapTypeToGMapProviderConverter}}"
+            MapProvider="{Binding SelectedValue, Converter={StaticResource MapTypeToGMapProviderConverter}, ElementName=MapTypeBox, Mode=OneWay}"
             MaxZoom="20"
             MinZoom="3"
             MouseLeftButtonDown="OnGMapMouseLeftButtonDown"
@@ -149,5 +161,53 @@
                     Value="{Binding Zoom, ElementName=GMap}" />
             </Border>
         </StackPanel>
+        <Border
+            Margin="5"
+            Padding="5"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+            CornerRadius="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Icon="Play24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="Pause24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="Stop24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="ArrowPrevious24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button Icon="ArrowNext24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ComboBox
+                        Width="60"
+                        Margin="5,0"
+                        SelectedValue="{Binding ViewModel.TimeScale, Mode=TwoWay}"
+                        SelectedValuePath="Tag"
+                        Text="1x">
+                        <ComboBoxItem Content="0.5x" Tag="2" />
+                        <ComboBoxItem Content="1x" Tag="1" />
+                        <ComboBoxItem Content="2x" Tag="0.5" />
+                        <ComboBoxItem Content="5x" Tag="0.2" />
+                    </ComboBox>
+                    <TextBlock
+                        Margin="5,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource SmallFontSize}">
+                        <Run Text="{Binding ViewModel.PositionIndex, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding ViewModel.RoutePointsCount, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+                <syncfusion:SfRangeSlider
+                    Grid.Column="1"
+                    Margin="10,0"
+                    Maximum="100"
+                    Minimum="0"
+                    SnapsTo="StepValues"
+                    StepFrequency="1"
+                    Value="39" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

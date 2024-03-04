@@ -21,10 +21,17 @@
     mc:Ignorable="d">
     <ui:UiWindow.Resources>
         <cv:ReversedBooleanToVisibilityConverter x:Key="ReversedBooleanToVisibilityConverter" />
+        <cv:StringFormatConverter x:Key="StringFormatConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
         <cv:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         <cv:SeverityTypeToInfoBarSeverityConverter x:Key="SeverityTypeToInfoBarSeverityConverter" />
+        <Style TargetType="ui:MenuItem">
+            <Setter Property="Width" Value="150" />
+        </Style>
+        <Style x:Key="TopUiMenuItemStyle" TargetType="ui:MenuItem">
+            <Setter Property="Width" Value="Auto" />
+        </Style>
         <Style
             x:Key="ToolUiButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
@@ -64,19 +71,31 @@
                     d:Foreground="White"
                     Background="{ui:ThemeResource}"
                     FontSize="{StaticResource SmallFontSize}">
-                    <ui:MenuItem Header="文件(_F)">
-                        <ui:MenuItem Header="导入(_I)" />
-                        <ui:MenuItem Header="导出(_O)" />
-                    </ui:MenuItem>
-                    <ui:MenuItem Header="视图(_V)">
-                        <ui:MenuItem
-                            Click="OnViewMenuItemClicked"
-                            Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}"
-                            Tag="{Binding ElementName=RealTimeOptionsView}">
+                    <ui:MenuItem Header="文件(_F)" Style="{StaticResource TopUiMenuItemStyle}">
+                        <ui:MenuItem Header="打开(_I)">
+                            <ui:MenuItem Header="历元数据(_E)">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="DocumentData20" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
+                            <ui:MenuItem Header="解算配置(_R)">
+                                <ui:MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="DocumentSettings20" />
+                                </ui:MenuItem.Icon>
+                            </ui:MenuItem>
+                        </ui:MenuItem>
+                        <ui:MenuItem Header="保存历元数据(_S)">
                             <ui:MenuItem.Icon>
-                                <ui:SymbolIcon Symbol="PlaySettings20" />
+                                <ui:SymbolIcon Symbol="Save24" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
+                        <ui:MenuItem Header="关闭历元数据(_C)">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Dismiss24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="视图(_V)" Style="{StaticResource TopUiMenuItemStyle}">
                         <ui:MenuItem
                             Click="OnViewMenuItemClicked"
                             Header="{x:Static pages:MapPageViewModel.MenuItemHeader}"
@@ -134,14 +153,60 @@
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                     </ui:MenuItem>
-                    <ui:MenuItem Header="工具(_T)">
+                    <ui:MenuItem Header="解算(_P)" Style="{StaticResource TopUiMenuItemStyle}">
+                        <ui:MenuItem Click="OnRealTimeOptionsViewButtonClicked" Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="PlaySettings20" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Command="{Binding Command, ElementName=StartOrResumeButton, Mode=OneWay}"
+                            Header="{Binding Text, ElementName=StartOrResumeButtonTextBlock, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_S)'}"
+                            IsEnabled="{Binding IsEnabled, ElementName=StartOrResumeButton, Mode=OneWay}"
+                            Visibility="{Binding Visibility, ElementName=StartOrResumeButton, Mode=OneWay}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Play24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Command="{Binding Command, ElementName=PauseButton, Mode=OneWay}"
+                            Header="{Binding ToolTip, ElementName=PauseButton, Mode=OneTime}"
+                            IsEnabled="{Binding IsEnabled, ElementName=PauseButton, Mode=OneWay}"
+                            Visibility="{Binding Visibility, ElementName=PauseButton, Mode=OneWay}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Pause24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Command="{Binding Command, ElementName=StopButton, Mode=OneWay}"
+                            Header="{Binding ToolTip, ElementName=StopButton, Mode=OneTime}"
+                            IsEnabled="{Binding IsEnabled, ElementName=StopButton, Mode=OneWay}"
+                            Visibility="{Binding Visibility, ElementName=StopButton, Mode=OneWay}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Stop24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Command="{Binding Command, ElementName=RestartButton, Mode=OneWay}"
+                            Header="{Binding ToolTip, ElementName=RestartButton, Mode=OneTime}"
+                            IsEnabled="{Binding IsEnabled, ElementName=RestartButton, Mode=OneWay}"
+                            Visibility="{Binding Visibility, ElementName=RestartButton, Mode=OneWay}">
+                            <ui:MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="ArrowCounterclockwise24" />
+                            </ui:MenuItem.Icon>
+                        </ui:MenuItem>
+                    </ui:MenuItem>
+                    <ui:MenuItem Header="工具(_T)" Style="{StaticResource TopUiMenuItemStyle}">
                         <ui:MenuItem Click="OnChartToolItemClicked" Header="{x:Static windows:ChartToolWindowViewModel.MenuItemHeader}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="ChartMultiple24" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                     </ui:MenuItem>
-                    <ui:MenuItem Click="OnAppSettingsItemClicked" Header="{x:Static windows:AppSettingsWindowViewModel.MenuItemHeader}" />
+                    <ui:MenuItem
+                        Click="OnAppSettingsItemClicked"
+                        Header="{x:Static windows:AppSettingsWindowViewModel.MenuItemHeader}"
+                        Style="{StaticResource TopUiMenuItemStyle}" />
                 </Menu>
             </StackPanel>
             <ui:TitleBar Grid.Column="1" />
@@ -164,36 +229,50 @@
                 <Grid Margin="5,0">
                     <StackPanel Orientation="Horizontal">
                         <ui:Button
+                            x:Name="PauseButton"
                             Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
                             Icon="Pause24"
                             IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay}"
                             Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="暂停"
                             Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ui:Button
+                            x:Name="StopButton"
                             Command="{Binding ViewModel.StopCommand, Mode=OneTime}"
                             Foreground="{StaticResource MikuRedBrush}"
                             Icon="Stop24"
                             Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="停止"
                             Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ui:Button
+                            x:Name="RestartButton"
                             Foreground="{StaticResource MeaBlueBrush}"
-                            Icon="ChevronCircleLeft24"
-                            Style="{StaticResource ToolUiButtonStyle}" />
+                            Icon="ArrowCounterclockwise24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="重新启动"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ui:Button
-                            Foreground="{StaticResource MeaBlueBrush}"
-                            Icon="ChevronCircleRight24"
-                            Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button
+                            x:Name="OpenEpochDatasButton"
                             Foreground="{StaticResource MeaYellowBrush}"
                             Icon="FolderOpen24"
-                            Style="{StaticResource ToolUiButtonStyle}" />
-                        <ui:Button Icon="Save24" Style="{StaticResource ToolUiButtonStyle}" />
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="打开历元数据" />
                         <ui:Button
+                            x:Name="SaveEpochDatasButton"
+                            Command="{Binding ViewModel.SaveEpochDatasCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="Save24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="保存历元数据" />
+                        <ui:Button
+                            x:Name="RealTimeOptionsViewButton"
                             Click="OnRealTimeOptionsViewButtonClicked"
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="PlaySettings20"
-                            Style="{StaticResource ToolUiButtonStyle}" />
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="配置实时选项" />
                         <ui:Button
+                            x:Name="StartOrResumeButton"
                             Command="{Binding ViewModel.StartOrResumeCommand, Mode=OneWay}"
                             FontSize="{StaticResource MediumFontSize}"
                             Foreground="{StaticResource MikuGreenBrush}"
@@ -203,6 +282,7 @@
                             ToolTip="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
                             Visibility="{Binding ViewModel.Options, Converter={StaticResource NullableToVisibilityConverter}, Mode=OneWay}">
                             <TextBlock
+                                x:Name="StartOrResumeButtonTextBlock"
                                 MaxWidth="390"
                                 FontSize="{StaticResource SmallFontSize}"
                                 Style="{StaticResource DynamicForegroundTextBlock}"
@@ -246,15 +326,15 @@
                         syncfusion:DockingManager.State="Dock"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
-                        x:Name="MapView"
-                        syncfusion:DockingManager.CanDock="False"
-                        syncfusion:DockingManager.Header="{x:Static pages:MapPageViewModel.Title}"
-                        syncfusion:DockingManager.State="Document"
-                        Style="{StaticResource DefaultContentControlStyle}" />
-                    <ContentControl
                         x:Name="RealTimeOptionsView"
                         syncfusion:DockingManager.CanDock="False"
                         syncfusion:DockingManager.Header="{x:Static pages:RealTimeOptionsPageViewModel.Title}"
+                        syncfusion:DockingManager.State="Hidden"
+                        Style="{StaticResource DefaultContentControlStyle}" />
+                    <ContentControl
+                        x:Name="MapView"
+                        syncfusion:DockingManager.CanDock="False"
+                        syncfusion:DockingManager.Header="{x:Static pages:MapPageViewModel.Title}"
                         syncfusion:DockingManager.State="Document"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
