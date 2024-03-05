@@ -32,7 +32,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     #region Public Properties
 
     public string StartOrResumeText
-        => IsRealTimeStarted ? "继续" : Options is null ? "开始" : $"启动：{Options.Name}";
+        => IsRealTimeStarted ? "继续" : Options is null ? "启动" : $"启动：{Options.Name}";
 
     public IRelayCommand StartOrResumeCommand
         => IsRealTimeStarted ? ResumeCommand : StartCommand;
@@ -192,6 +192,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         else
             StatusIsProcessing = false;
     }
+
     [RelayCommand]
     async Task StartAsync()
     {
@@ -247,6 +248,30 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         _tokenSource.Cancel();
         IsRealTimeStarted = false;
     }
+
+    [RelayCommand]
+    async Task Restart()
+    {
+        if(!IsRealTimeStarted)
+            return;
+        Stop();
+        await Task.Delay(500);
+        StartCommand.Execute(default);
+    }
+
+    [RelayCommand]
+    void ClearEpochDatas()
+    {
+        if(!_epochDatasService.HasData)
+        {
+            _snackbarService.ShowError("清空失败", "无数据");
+            return;
+        }
+        _epochDatasService.Clear();
+        Messenger.Send(RealTimeNotification.Reset);
+        Messenger.Send(new Output(Title, SeverityType.Info, "历元数据已清空"));
+    }
+
     partial void OnOptionsChanged(RealTimeOptions? value)
     {
         if(value is null)

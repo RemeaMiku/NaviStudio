@@ -137,4 +137,10 @@ public partial class MainWindow : UiWindow
     }
 
     #endregion Private Methods
+
+    private void OnOpenRealTimeOptionsFileItemClicked(object sender, RoutedEventArgs e)
+    {
+        OnRealTimeOptionsViewButtonClicked(sender, e);
+        App.Current.Services.GetRequiredService<RealTimeOptionsPage>().ViewModel.ReadCommand.Execute(default);
+    }
 }

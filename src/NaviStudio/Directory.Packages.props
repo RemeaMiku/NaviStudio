@@ -10,6 +10,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.1" />
     <PackageVersion Include="NaviSharp" Version="1.0.1" />
+    <PackageVersion Include="NetMQ" Version="4.0.1.13" />
     <PackageVersion Include="Syncfusion.Licensing" Version="24.2.8" />
     <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="24.2.8" />
     <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="24.2.8" />

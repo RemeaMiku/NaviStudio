@@ -132,7 +132,7 @@ public class ZmqRealTimeService() : IRealTimeService
         IsRunning = true;
         try
         {
-            WriteOptFiles(options);
+            //WriteOptFiles(options);
             using var listener = new TcpListener(App.Current.SettingsManager.Settings.SolutionSettings.EpochDataTcpOptions.ToIPEndPoint());
             listener.Start();
             var process = Process.Start(_clientPath);

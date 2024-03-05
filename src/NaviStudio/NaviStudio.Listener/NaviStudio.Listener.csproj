@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="NetMQ" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NaviStudio.IPS\NaviStudio.IPS.csproj" />
     <ProjectReference Include="..\NaviStudio.Shared\NaviStudio.Shared.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,12 @@
-﻿using NaviStudio.Shared.Models.Options;
+﻿using System.Text;
+using NetMQ;
+using NetMQ.Sockets;
 
-var str = "NULL";
-Console.WriteLine($"Test:{str}");
+using var subscriber = new SubscriberSocket();
+subscriber.SubscribeToAnyTopic();
+subscriber.Connect("tcp://localhost:9112");
+while(true)
+{
+    var msg = subscriber.ReceiveFrameString();
+    Console.WriteLine(msg);
+}

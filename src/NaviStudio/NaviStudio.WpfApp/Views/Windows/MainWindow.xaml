@@ -36,7 +36,7 @@
             x:Key="ToolUiButtonStyle"
             BasedOn="{StaticResource BorderlessTransparentUiButtonStyle}"
             TargetType="ui:Button">
-            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+            <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
             <Setter Property="Padding" Value="5" />
         </Style>
         <Style x:Key="DefaultContentControlStyle" TargetType="ContentControl">
@@ -78,20 +78,20 @@
                                     <ui:SymbolIcon Symbol="DocumentData20" />
                                 </ui:MenuItem.Icon>
                             </ui:MenuItem>
-                            <ui:MenuItem Header="解算配置(_R)">
+                            <ui:MenuItem Click="OnOpenRealTimeOptionsFileItemClicked" Header="解算配置(_R)">
                                 <ui:MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="DocumentSettings20" />
                                 </ui:MenuItem.Icon>
                             </ui:MenuItem>
                         </ui:MenuItem>
-                        <ui:MenuItem Header="保存历元数据(_S)">
+                        <ui:MenuItem Command="{Binding Command, ElementName=SaveEpochDatasButton, Mode=OneWay}" Header="保存历元数据(_S)">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="Save24" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
-                        <ui:MenuItem Header="关闭历元数据(_C)">
+                        <ui:MenuItem Command="{Binding Command, ElementName=ClearEpochDatasButton, Mode=OneWay}" Header="清除历元数据(_C)">
                             <ui:MenuItem.Icon>
-                                <ui:SymbolIcon Symbol="Dismiss24" />
+                                <ui:SymbolIcon Symbol="Delete24" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                     </ui:MenuItem>
@@ -153,15 +153,15 @@
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                     </ui:MenuItem>
-                    <ui:MenuItem Header="解算(_P)" Style="{StaticResource TopUiMenuItemStyle}">
-                        <ui:MenuItem Click="OnRealTimeOptionsViewButtonClicked" Header="{x:Static pages:RealTimeOptionsPageViewModel.MenuItemHeader}">
+                    <ui:MenuItem Header="解算(_S)" Style="{StaticResource TopUiMenuItemStyle}">
+                        <ui:MenuItem Click="OnRealTimeOptionsViewButtonClicked" Header="{Binding ToolTip, ElementName=RealTimeOptionsViewButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_C)'}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="PlaySettings20" />
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                         <ui:MenuItem
                             Command="{Binding Command, ElementName=StartOrResumeButton, Mode=OneWay}"
-                            Header="{Binding Text, ElementName=StartOrResumeButtonTextBlock, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_S)'}"
+                            Header="{Binding Text, ElementName=StartOrResumeButtonTextBlock, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_L)'}"
                             IsEnabled="{Binding IsEnabled, ElementName=StartOrResumeButton, Mode=OneWay}"
                             Visibility="{Binding Visibility, ElementName=StartOrResumeButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
@@ -170,7 +170,7 @@
                         </ui:MenuItem>
                         <ui:MenuItem
                             Command="{Binding Command, ElementName=PauseButton, Mode=OneWay}"
-                            Header="{Binding ToolTip, ElementName=PauseButton, Mode=OneTime}"
+                            Header="{Binding ToolTip, ElementName=PauseButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_P)'}"
                             IsEnabled="{Binding IsEnabled, ElementName=PauseButton, Mode=OneWay}"
                             Visibility="{Binding Visibility, ElementName=PauseButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
@@ -179,7 +179,7 @@
                         </ui:MenuItem>
                         <ui:MenuItem
                             Command="{Binding Command, ElementName=StopButton, Mode=OneWay}"
-                            Header="{Binding ToolTip, ElementName=StopButton, Mode=OneTime}"
+                            Header="{Binding ToolTip, ElementName=StopButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_E)'}"
                             IsEnabled="{Binding IsEnabled, ElementName=StopButton, Mode=OneWay}"
                             Visibility="{Binding Visibility, ElementName=StopButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
@@ -188,7 +188,7 @@
                         </ui:MenuItem>
                         <ui:MenuItem
                             Command="{Binding Command, ElementName=RestartButton, Mode=OneWay}"
-                            Header="{Binding ToolTip, ElementName=RestartButton, Mode=OneTime}"
+                            Header="{Binding ToolTip, ElementName=RestartButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_R)'}"
                             IsEnabled="{Binding IsEnabled, ElementName=RestartButton, Mode=OneWay}"
                             Visibility="{Binding Visibility, ElementName=RestartButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
@@ -229,6 +229,25 @@
                 <Grid Margin="5,0">
                     <StackPanel Orientation="Horizontal">
                         <ui:Button
+                            x:Name="OpenEpochDatasButton"
+                            Foreground="{StaticResource MeaYellowBrush}"
+                            Icon="FolderOpen24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="打开历元数据" />
+                        <ui:Button
+                            x:Name="SaveEpochDatasButton"
+                            Command="{Binding ViewModel.SaveEpochDatasCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MeaBlueBrush}"
+                            Icon="Save24"
+                            Style="{StaticResource ToolUiButtonStyle}"
+                            ToolTip="保存历元数据" />
+                        <ui:Button
+                            x:Name="ClearEpochDatasButton"
+                            Command="{Binding ViewModel.ClearEpochDatasCommand, Mode=OneTime}"
+                            Foreground="{StaticResource MikuRedBrush}"
+                            Icon="Delete24"
+                            Style="{StaticResource ToolUiButtonStyle}" />
+                        <ui:Button
                             x:Name="PauseButton"
                             Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
                             Icon="Pause24"
@@ -246,35 +265,22 @@
                             Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ui:Button
                             x:Name="RestartButton"
+                            Command="{Binding ViewModel.RestartCommand, Mode=OneTime}"
                             Foreground="{StaticResource MeaBlueBrush}"
                             Icon="ArrowCounterclockwise24"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="重新启动"
                             Visibility="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ui:Button
-                            x:Name="OpenEpochDatasButton"
-                            Foreground="{StaticResource MeaYellowBrush}"
-                            Icon="FolderOpen24"
-                            Style="{StaticResource ToolUiButtonStyle}"
-                            ToolTip="打开历元数据" />
-                        <ui:Button
-                            x:Name="SaveEpochDatasButton"
-                            Command="{Binding ViewModel.SaveEpochDatasCommand, Mode=OneTime}"
-                            Foreground="{StaticResource MeaBlueBrush}"
-                            Icon="Save24"
-                            Style="{StaticResource ToolUiButtonStyle}"
-                            ToolTip="保存历元数据" />
-                        <ui:Button
                             x:Name="RealTimeOptionsViewButton"
                             Click="OnRealTimeOptionsViewButtonClicked"
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="PlaySettings20"
                             Style="{StaticResource ToolUiButtonStyle}"
-                            ToolTip="配置实时选项" />
+                            ToolTip="配置" />
                         <ui:Button
                             x:Name="StartOrResumeButton"
                             Command="{Binding ViewModel.StartOrResumeCommand, Mode=OneWay}"
-                            FontSize="{StaticResource MediumFontSize}"
                             Foreground="{StaticResource MikuGreenBrush}"
                             Icon="Play24"
                             IsEnabled="{Binding ViewModel.IsRealTimeRunning, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}"

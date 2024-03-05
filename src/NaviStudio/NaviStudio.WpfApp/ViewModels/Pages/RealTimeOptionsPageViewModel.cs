@@ -24,8 +24,8 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 {
     #region Public Fields
 
-    public const string Title = "解算配置";
-    public const string MenuItemHeader = $"{Title}(_R)";
+    public const string Title = "实时解算配置";
+    public const string MenuItemHeader = $"{Title}(_C)";
 
     #endregion Public Fields
 
