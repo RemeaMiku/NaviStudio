@@ -30,9 +30,9 @@ public interface IGMapRouteDisplayService
 
     public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl);
 
-    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool moveToLast = false);
+    public void AddPoint(MapPoint point, bool moveToLast = false);
 
-    public void AddPoints(IEnumerable<(PointLatLng point, UtcTime timeStamp)> points, bool moveToLast = false);
+    public void AddPoints(IEnumerable<MapPoint> points, bool moveToLast = false);
 
     public void Clear();
 

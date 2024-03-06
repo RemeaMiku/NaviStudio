@@ -32,7 +32,7 @@ public partial class MapPage : UserControl
             Shape = shape,
             Offset = new(0, -20)
         };
-        //TODO 比例尺
+        // 比例尺
         //GMap.OnMapZoomChanged += () => Test.Text = GMap.MapProvider.Projection.GetGroundResolution((int)GMap.Zoom, GMap.Position.Lat).ToString();
     }
 

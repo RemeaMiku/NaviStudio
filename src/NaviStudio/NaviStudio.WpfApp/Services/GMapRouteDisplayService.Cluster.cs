@@ -4,6 +4,7 @@ using NaviStudio.WpfApp.Common.Extensions;
 
 namespace NaviStudio.WpfApp.Services;
 
+//TODO 地图标记点优化
 partial class GMapRouteDisplayService
 {
     const int _clusterLevel0 = 1;

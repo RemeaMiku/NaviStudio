@@ -6,7 +6,6 @@ using NaviStudio.WpfApp.ViewModels.Base;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-// TODO 添加系统筛选器
 public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
 {
     #region Public Fields
@@ -20,7 +19,7 @@ public partial class SatelliteTrackingPageViewModel(IMessenger messenger, IEpoch
 
     protected override void Update(EpochData message)
     {
-        if (message.SatelliteTrackings is null)
+        if(message.SatelliteTrackings is null)
         {
             Reset();
             return;

@@ -28,11 +28,6 @@ public class ZmqRealTimeService() : IRealTimeService
 
     #region Public Methods
 
-    static void Format(object value)
-    {
-
-    }
-
     static void WriteOptFile(InputOptions options, int serverMode, int roveType, int baseType, string filePath)
     {
         var content =

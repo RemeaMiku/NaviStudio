@@ -45,8 +45,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
             return;
         if(!IsRealTime)
             return;
-        var point = data.Result.GeodeticCoord.ToPointLatLng();
-        _gMapRouteDisplayService.AddPoint(point, data.TimeStamp, true);
+        _gMapRouteDisplayService.AddPoint(MapPoint.FromEpochData(data), true);
         RoutePointsCount++;
         PositionIndex = MaxPositionIndex;
     }
@@ -64,7 +63,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
             Update(_epochDatasService.Last);
             return;
         }
-        _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(d => (d.Result!.GeodeticCoord.ToPointLatLng(), d.TimeStamp)), true);
+        _gMapRouteDisplayService.AddPoints(_epochDatasService.Datas.Skip(RoutePointsCount).Select(MapPoint.FromEpochData), true);
         RoutePointsCount = _epochDatasService.EpochCount;
         PositionIndex = MaxPositionIndex;
     }

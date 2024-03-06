@@ -8,25 +8,26 @@ using GMap.NET.WindowsPresentation;
 using NaviStudio.WpfApp.Services.Contracts;
 using System.Windows.Media;
 using NaviStudio.WpfApp.Common.Extensions;
+using NaviStudio.Shared.Models.Map;
 
 namespace NaviStudio.WpfApp.Services;
 
-//TODO 地图标记点优化
+
 public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 {
     public double TimeScale { get; set; } = 1;
 
     public PointLatLng? CurrentPosition => CurrentPositionIndex == -1 ? null : _routeMarkers[CurrentPositionIndex].Position;
 
-    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool moveToLast = false)
+    public void AddPoint(MapPoint point, bool moveToLast = false)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         App.Current.Dispatcher.Invoke(() =>
         {
             _gMapControl.Markers.Remove(_positionMarker);
-            var marker = CreateRouteMarker(_forwardFill, point, timeStamp);
+            var marker = CreateRouteMarker(_forwardFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
             _routeMarkers.Add(marker);
-            _timeStamps.Add(timeStamp);
+            _points.Add(point);
             _gMapControl.Markers.Add(marker);
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
@@ -43,7 +44,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             _gMapControl.Markers.Remove(marker);
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
-        _timeStamps.Clear();
+        _points.Clear();
         CurrentPositionIndex = -1;
     }
 
@@ -66,7 +67,6 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentOutOfRangeException.ThrowIfGreaterThan(newIndex, _routeMarkers.Count - 1);
         if(CurrentPositionIndex == newIndex)
             return;
-        UpdatePosition(_routeMarkers[newIndex].Position);
         if(CurrentPositionIndex > newIndex)
         {
             for(int i = newIndex + 1; i <= CurrentPositionIndex; i++)
@@ -78,6 +78,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
                 SetEllipseMarkerFill(_routeMarkers[i], _backFill);
         }
         CurrentPositionIndex = newIndex;
+        UpdatePositionMarker(_routeMarkers[newIndex].Position);
         CurrentPositionChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -95,7 +96,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             {
                 while(!token.IsCancellationRequested && CurrentPositionIndex < _routeMarkers.Count - 1)
                 {
-                    var duration = (_timeStamps![CurrentPositionIndex + 1] - _timeStamps[CurrentPositionIndex]) * TimeScale;
+                    var duration = (_points![CurrentPositionIndex + 1].TimeStamp - _points[CurrentPositionIndex].TimeStamp) * TimeScale;
                     await Task.Delay(duration, token);
                     App.Current.Dispatcher.Invoke(() => MoveToOffset(1));
                 }
@@ -110,7 +111,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     public void MoveToOffset(int offset) => MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
 
-    public void AddPoints(IEnumerable<(PointLatLng, UtcTime)> points, bool moveToLast = false)
+    public void AddPoints(IEnumerable<MapPoint> points, bool moveToLast = false)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
@@ -119,11 +120,11 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         App.Current.Dispatcher.Invoke(() =>
         {
             _gMapControl.Markers.Remove(_positionMarker);
-            foreach((var point, var timeStamp) in points)
+            foreach(var point in points)
             {
-                var marker = CreateRouteMarker(_backFill, point, timeStamp);
+                var marker = CreateRouteMarker(_backFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
                 _routeMarkers.Add(marker);
-                _timeStamps.Add(timeStamp);
+                _points.Add(point);
                 _gMapControl.Markers.Add(marker);
             }
             if(moveToLast)
@@ -139,7 +140,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     readonly List<GMapMarker> _routeMarkers = [];
 
-    readonly List<UtcTime> _timeStamps = [];
+    readonly List<MapPoint> _points = [];
 
     GMapControl? _gMapControl;
     readonly GMapMarker _positionMarker = new(new());

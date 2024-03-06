@@ -14,7 +14,7 @@ public class EpochData
 
     public GpsTime GpsTime => GpsTime.FromUtc(TimeStamp);
 
-    public NaviResult? Result { get; set; }
+    public NaviResult Result { get; set; } = new();
 
     public NaviPrecision? Precision { get; set; }
 
