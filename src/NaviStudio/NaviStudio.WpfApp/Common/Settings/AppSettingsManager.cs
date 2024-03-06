@@ -9,7 +9,11 @@ namespace NaviStudio.WpfApp.Common.Settings;
 
 public class AppSettingsManager
 {
+    #region Public Fields
+
     public const string DefaultFileName = "appsettings.json";
+
+    #endregion Public Fields
 
     #region Public Properties
 

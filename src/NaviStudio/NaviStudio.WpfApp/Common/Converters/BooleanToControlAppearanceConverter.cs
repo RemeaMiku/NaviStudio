@@ -11,9 +11,9 @@ public class BooleanToControlAppearanceConverter : IValueConverter
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is bool flag)
-            return flag ? (ControlAppearance)parameter : ControlAppearance.Secondary;
-        throw new ArgumentException("value is not bool");
+        return value is bool flag
+            ? (object)(flag ? (ControlAppearance)parameter : ControlAppearance.Secondary)
+            : throw new ArgumentException("value is not bool");
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -12,18 +12,6 @@ partial class GMapRouteDisplayService
 {
     #region Public Properties
 
-    public NavigationIndicators Indicator
-    {
-        get => _indicator;
-        set
-        {
-            if(_indicator == value)
-                return;
-            _indicator = value;
-            SetPositionMarkerShape();
-        }
-    }
-
     public bool EnableMapBearing
     {
         get => _enableMapBearing;
@@ -46,6 +34,17 @@ partial class GMapRouteDisplayService
         }
     }
 
+    public NavigationIndicators Indicator
+    {
+        get => _indicator;
+        set
+        {
+            if(_indicator == value)
+                return;
+            _indicator = value;
+            SetPositionMarkerShape();
+        }
+    }
     public bool KeepCenter
     {
         get => _keepCenter;
@@ -63,20 +62,19 @@ partial class GMapRouteDisplayService
 
     #region Private Fields
 
-    const double _updateBearingMinDistance = 0.0005;
-
     const string _basePath = "/Assets/Map/";
 
     const string _carPath = _basePath + "car.png";
 
-    const string _planePath = _basePath + "plane.png";
+    const string _defaultPath = _basePath + "default.png";
 
     const string _ellipsePath = _basePath + "ellipse.png";
 
-    const string _defaultPath = _basePath + "default.png";
+    const string _planePath = _basePath + "plane.png";
 
     const double _positionMarkerSize = 30;
 
+    const double _updateBearingMinDistance = 0.0005;
     readonly static Dictionary<NavigationIndicators, ImageSource> _indicatorImages = new()
     {
         { NavigationIndicators.Default, new BitmapImage(new(_defaultPath, UriKind.Relative)) },
@@ -91,8 +89,9 @@ partial class GMapRouteDisplayService
         CenterY = _positionMarkerSize / 2
     };
 
-    NavigationIndicators _indicator = NavigationIndicators.Default;
     bool _enableMapBearing = true;
+
+    NavigationIndicators _indicator = NavigationIndicators.Default;
     bool _keepCenter = true;
 
     #endregion Private Fields

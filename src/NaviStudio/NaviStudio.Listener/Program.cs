@@ -1,5 +1,4 @@
-﻿using System.Text;
-using NetMQ;
+﻿using NetMQ;
 using NetMQ.Sockets;
 
 using var subscriber = new SubscriberSocket();

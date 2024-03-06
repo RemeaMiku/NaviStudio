@@ -1,9 +1,9 @@
 ﻿using System.Collections.Frozen;
-using NaviStudio.Shared.Models.Navi;
-using NaviStudio.Shared.Models.Satellites;
 using NaviSharp;
 using NaviSharp.SpatialReference;
 using NaviSharp.Time;
+using NaviStudio.Shared.Models.Navi;
+using NaviStudio.Shared.Models.Satellites;
 
 namespace NaviStudio.WpfApp.Common.Helpers;
 

@@ -15,9 +15,23 @@ namespace NaviStudio.WpfApp.Services;
 
 public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 {
-    public double TimeScale { get; set; } = 1;
+    #region Public Events
+
+    public event EventHandler? CurrentPositionChanged;
+
+    #endregion Public Events
+
+    #region Public Properties
 
     public PointLatLng? CurrentPosition => CurrentPositionIndex == -1 ? null : _routeMarkers[CurrentPositionIndex].Position;
+
+    public int CurrentPositionIndex { get; private set; } = -1;
+
+    public double TimeScale { get; set; } = 1;
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public void AddPoint(MapPoint point, bool moveToLast = false)
     {
@@ -36,6 +50,29 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         });
     }
 
+    public void AddPoints(IEnumerable<MapPoint> points, bool moveToLast = false)
+    {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
+        ArgumentNullException.ThrowIfNull(_positionMarker);
+        if(!points.Any())
+            return;
+        App.Current.Dispatcher.Invoke(() =>
+        {
+            _gMapControl.Markers.Remove(_positionMarker);
+            foreach(var point in points)
+            {
+                var marker = CreateRouteMarker(_backFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
+                _routeMarkers.Add(marker);
+                _points.Add(point);
+                _gMapControl.Markers.Add(marker);
+            }
+            if(moveToLast)
+                MoveTo(_routeMarkers.Count - 1);
+            _positionMarker.Shape.Visibility = Visibility.Visible;
+            _gMapControl.Markers.Add(_positionMarker);
+        });
+    }
+
     public void Clear()
     {
         ThrowIfIsRunnning();
@@ -46,19 +83,6 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         _routeMarkers.Clear();
         _points.Clear();
         CurrentPositionIndex = -1;
-    }
-
-    public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
-    {
-        if(_gMapControl is not null)
-            throw new InvalidOperationException("The GMapControl has been registered.");
-        _gMapControl = gMapControl;
-        SetPositionMarkerShape();
-        _gMapControl.Markers.Add(_positionMarker);
-        _gMapControl.OnMapZoomChanged += Cluster;
-        _gMapControl.OnPositionChanged += (_) => Cluster();
-        _gMapControl.OnMapDrag += Cluster;
-        return this;
     }
 
     public void MoveTo(int newIndex)
@@ -82,6 +106,20 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         CurrentPositionChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    public void MoveToOffset(int offset) => MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
+
+    public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
+    {
+        if(_gMapControl is not null)
+            throw new InvalidOperationException("The GMapControl has been registered.");
+        _gMapControl = gMapControl;
+        SetPositionMarkerShape();
+        _gMapControl.Markers.Add(_positionMarker);
+        _gMapControl.OnMapZoomChanged += Cluster;
+        _gMapControl.OnPositionChanged += (_) => Cluster();
+        _gMapControl.OnMapDrag += Cluster;
+        return this;
+    }
     public async Task StartAsync(CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
@@ -109,51 +147,32 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         }
     }
 
-    public void MoveToOffset(int offset) => MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
+    #endregion Public Methods
 
-    public void AddPoints(IEnumerable<MapPoint> points, bool moveToLast = false)
-    {
-        ArgumentNullException.ThrowIfNull(_gMapControl);
-        ArgumentNullException.ThrowIfNull(_positionMarker);
-        if(!points.Any())
-            return;
-        App.Current.Dispatcher.Invoke(() =>
-        {
-            _gMapControl.Markers.Remove(_positionMarker);
-            foreach(var point in points)
-            {
-                var marker = CreateRouteMarker(_backFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
-                _routeMarkers.Add(marker);
-                _points.Add(point);
-                _gMapControl.Markers.Add(marker);
-            }
-            if(moveToLast)
-                MoveTo(_routeMarkers.Count - 1);
-            _positionMarker.Shape.Visibility = Visibility.Visible;
-            _gMapControl.Markers.Add(_positionMarker);
-        });
-    }
-
-    readonly static Brush _forwardFill = (Brush)App.Current.Resources["MikuRedBrush"];
+    #region Private Fields
 
     readonly static Brush _backFill = (Brush)App.Current.Resources["MikuGreenBrush"];
 
-    readonly List<GMapMarker> _routeMarkers = [];
-
+    readonly static Brush _forwardFill = (Brush)App.Current.Resources["MikuRedBrush"];
     readonly List<MapPoint> _points = [];
 
-    GMapControl? _gMapControl;
     readonly GMapMarker _positionMarker = new(new());
 
-    public int CurrentPositionIndex { get; private set; } = -1;
-
+    readonly List<GMapMarker> _routeMarkers = [];
+    GMapControl? _gMapControl;
     bool _isRunning = false;
 
-    public event EventHandler? CurrentPositionChanged;
+    #endregion Private Fields
 
     // double _groundResolution;
 
+    #region Private Properties
+
     PureProjection Projection => _gMapControl!.MapProvider.Projection;
+
+    #endregion Private Properties
+
+    #region Private Methods
 
     static GMapMarker CreateRouteMarker(Brush fill, PointLatLng point, UtcTime timeStamp)
     {
@@ -181,6 +200,8 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         if(_isRunning)
             throw new InvalidOperationException("The display is running.");
     }
+
+    #endregion Private Methods
 
     //void UpdateGroundResolution()
     //{

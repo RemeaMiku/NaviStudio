@@ -22,12 +22,12 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     {
         _messenger = messenger;
         _messenger.RegisterAll(this);
-        _SeverityTypeFlags.Add(SeverityType.Error, true);
-        _SeverityTypeFlags.Add(SeverityType.Warning, true);
-        _SeverityTypeFlags.Add(SeverityType.Info, true);
-        _SeverityTypeCounts.Add(SeverityType.Error, default);
-        _SeverityTypeCounts.Add(SeverityType.Warning, default);
-        _SeverityTypeCounts.Add(SeverityType.Info, default);
+        _severityTypeFlags.Add(SeverityType.Error, true);
+        _severityTypeFlags.Add(SeverityType.Warning, true);
+        _severityTypeFlags.Add(SeverityType.Info, true);
+        _severityTypeCounts.Add(SeverityType.Error, default);
+        _severityTypeCounts.Add(SeverityType.Warning, default);
+        _severityTypeCounts.Add(SeverityType.Info, default);
     }
 
     #endregion Public Constructors
@@ -40,17 +40,17 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 
     #region Public Properties
 
-    public bool ShowError => _SeverityTypeFlags[SeverityType.Error];
+    public bool ShowError => _severityTypeFlags[SeverityType.Error];
 
-    public int ErrorCount => _SeverityTypeCounts[SeverityType.Error];
+    public int ErrorCount => _severityTypeCounts[SeverityType.Error];
 
-    public bool ShowWarning => _SeverityTypeFlags[SeverityType.Warning];
+    public bool ShowWarning => _severityTypeFlags[SeverityType.Warning];
 
-    public int WarningCount => _SeverityTypeCounts[SeverityType.Warning];
+    public int WarningCount => _severityTypeCounts[SeverityType.Warning];
 
-    public bool ShowInformational => _SeverityTypeFlags[SeverityType.Info];
+    public bool ShowInformational => _severityTypeFlags[SeverityType.Info];
 
-    public int InformationalCount => _SeverityTypeCounts[SeverityType.Info];
+    public int InformationalCount => _severityTypeCounts[SeverityType.Info];
 
     public ObservableCollection<string> Senders { get; } = [_allSenders];
 
@@ -58,7 +58,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 
     public ICollectionView? OutputsView { get; set; }
 
-    public bool Filtered => _SeverityTypeFlags.Values.Any(f => !f);
+    public bool Filtered => _severityTypeFlags.Values.Any(f => !f);
 
     #endregion Public Properties
 
@@ -67,11 +67,11 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     public bool OutputsViewFilter(object item)
     {
         var output = (Output)item;
-        var SeverityTypeFlag = _SeverityTypeFlags[output.Type];
+        var SeverityTypeFlag = _severityTypeFlags[output.Type];
         var senderFlag = SelectedSender == _allSenders || output.SenderName == SelectedSender;
         var accepted = SeverityTypeFlag && senderFlag && output.DisplayMessage.Contains(SearchKeyword);
         if(accepted)
-            _SeverityTypeCounts[output.Type]++;
+            _severityTypeCounts[output.Type]++;
         return accepted;
     }
 
@@ -95,9 +95,9 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     const string _allSenders = "全部";
 
     readonly IMessenger _messenger;
-    readonly Dictionary<SeverityType, bool> _SeverityTypeFlags = [];
+    readonly Dictionary<SeverityType, bool> _severityTypeFlags = [];
 
-    readonly Dictionary<SeverityType, int> _SeverityTypeCounts = [];
+    readonly Dictionary<SeverityType, int> _severityTypeCounts = [];
 
     [ObservableProperty]
     string _selectedSender = _allSenders;
@@ -113,8 +113,8 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
 
     void Refresh()
     {
-        foreach(var SeverityType in _SeverityTypeCounts.Keys)
-            _SeverityTypeCounts[SeverityType] = default;
+        foreach(var SeverityType in _severityTypeCounts.Keys)
+            _severityTypeCounts[SeverityType] = default;
         OutputsView?.Refresh();
         OnPropertyChanged(string.Empty);
     }
@@ -123,15 +123,15 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     [RelayCommand]
     void SwitchVisibility(SeverityType SeverityType)
     {
-        _SeverityTypeFlags[SeverityType] = !_SeverityTypeFlags[SeverityType];
+        _severityTypeFlags[SeverityType] = !_severityTypeFlags[SeverityType];
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }
     [RelayCommand(CanExecute = nameof(Filtered))]
     void ClearFilter()
     {
-        foreach(var SeverityType in _SeverityTypeFlags.Keys)
-            _SeverityTypeFlags[SeverityType] = true;
+        foreach(var SeverityType in _severityTypeFlags.Keys)
+            _severityTypeFlags[SeverityType] = true;
         Refresh();
         ClearFilterCommand.NotifyCanExecuteChanged();
     }

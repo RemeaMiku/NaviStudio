@@ -19,6 +19,8 @@ namespace NaviStudio.WpfApp.Views.Windows;
 /// </summary>
 public partial class ExceptionWindow : UiWindow
 {
+    #region Public Constructors
+
     public ExceptionWindow(string message)
     {
         InitializeComponent();
@@ -26,7 +28,15 @@ public partial class ExceptionWindow : UiWindow
         Message = message;
     }
 
+    #endregion Public Constructors
+
+    #region Public Properties
+
     public string Message { get; set; }
+
+    #endregion Public Properties
+
+    #region Public Methods
 
     public static bool? Show(string message)
     {
@@ -52,4 +62,6 @@ public partial class ExceptionWindow : UiWindow
         }
         return Show(stringbuilder.ToString());
     }
+
+    #endregion Public Methods
 }
