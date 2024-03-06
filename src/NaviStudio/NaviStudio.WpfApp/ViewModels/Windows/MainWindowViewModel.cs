@@ -13,6 +13,7 @@ using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
 using NaviStudio.WpfApp.Common.Extensions;
 using NaviStudio.WpfApp.Common.Helpers;
+using NaviStudio.WpfApp.Common.Messaging;
 using NaviStudio.WpfApp.Common.Messaging.Messages;
 using NaviStudio.WpfApp.Services.Contracts;
 using Wpf.Ui.Mvvm.Contracts;
@@ -191,6 +192,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         }
         else
             StatusIsProcessing = false;
+        Messenger.Send(new ValueChangedMessage<bool>(value), MessageTokens.IsRealTimeRunning);
     }
 
     [RelayCommand]

@@ -27,8 +27,8 @@ public partial class PropertyPageViewModel : ObservableRecipient, IRecipient<Val
 
     protected override void OnActivated()
     {
-        if (!Messenger.IsRegistered<PropertyPageViewModel>(this))
-            Messenger.Register(this, MessageTokens.MapPageToPropertyPage);
+        if(!Messenger.IsRegistered<PropertyPageViewModel>(this))
+            Messenger.Register(this, MessageTokens.MapSelectionChanged);
     }
 
     protected override void OnDeactivated() { }

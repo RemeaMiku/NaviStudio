@@ -17,6 +17,9 @@
     <UserControl.Resources>
         <cv:MapTypeToGMapProviderConverter x:Key="MapTypeToGMapProviderConverter" />
         <cv:BooleanToControlAppearanceConverter x:Key="BooleanToControlAppearanceConverter" />
+        <cv:BooleanToReversedBooleanConverter x:Key="BooleanToReversedBooleanConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:ReversedBooleanToVisibilityConverter x:Key="ReversedBooleanToVisibilityConverter" />
         <ui:SymbolIcon
             x:Key="SelectedPointMarkerShape"
             HorizontalContentAlignment="Center"
@@ -120,6 +123,15 @@
                             Background="{StaticResource MikuGreenBrush}"
                             IsChecked="{Binding ViewModel.EnableMapBearing}" />
                     </HeaderedContentControl>
+                    <HeaderedContentControl
+                        Margin="{StaticResource LargeSpacing}"
+                        Header="启用回放"
+                        IsEnabled="{Binding ViewModel.IsReplayAvailable, Mode=OneWay}">
+                        <ui:ToggleSwitch
+                            Margin="{StaticResource LargeSpacing}"
+                            Background="{StaticResource MikuGreenBrush}"
+                            IsChecked="{Binding ViewModel.IsRealTime, Mode=TwoWay, Converter={StaticResource BooleanToReversedBooleanConverter}}" />
+                    </HeaderedContentControl>
                 </StackPanel>
             </Border>
         </ui:CardExpander>
@@ -162,26 +174,43 @@
             </Border>
         </StackPanel>
         <Border
+            Width="500"
             Margin="5"
             Padding="5"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
-            CornerRadius="5">
+            CornerRadius="5"
+            Visibility="{Binding ViewModel.IsRealTime, Mode=TwoWay, Converter={StaticResource ReversedBooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <ui:Button Icon="Play24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="Pause24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="Stop24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="ArrowPrevious24" Style="{StaticResource ToolUiButtonStyle}" />
-                    <ui:Button Icon="ArrowNext24" Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button
+                        Command="{Binding ViewModel.StartCommand, Mode=OneTime}"
+                        Icon="Play24"
+                        Style="{StaticResource ToolUiButtonStyle}"
+                        Visibility="{Binding ViewModel.IsReplaying, Mode=OneWay, Converter={StaticResource ReversedBooleanToVisibilityConverter}}" />
+                    <ui:Button
+                        Command="{Binding ViewModel.PauseCommand, Mode=OneTime}"
+                        Icon="Pause24"
+                        Style="{StaticResource ToolUiButtonStyle}"
+                        Visibility="{Binding ViewModel.IsReplaying, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <ui:Button
+                        Command="{Binding ViewModel.MoveBackwardCommand, Mode=OneTime}"
+                        Icon="ArrowPrevious24"
+                        Style="{StaticResource ToolUiButtonStyle}" />
+                    <ui:Button
+                        Command="{Binding ViewModel.MoveForwardCommand, Mode=OneTime}"
+                        Icon="ArrowNext24"
+                        Style="{StaticResource ToolUiButtonStyle}" />
                     <ComboBox
                         Width="60"
                         Margin="5,0"
+                        Padding="3"
+                        FontSize="{StaticResource SmallFontSize}"
                         SelectedValue="{Binding ViewModel.TimeScale, Mode=TwoWay}"
                         SelectedValuePath="Tag"
                         Text="1x">
@@ -189,6 +218,7 @@
                         <ComboBoxItem Content="1x" Tag="1" />
                         <ComboBoxItem Content="2x" Tag="0.5" />
                         <ComboBoxItem Content="5x" Tag="0.2" />
+                        <ComboBoxItem Content="10x" Tag="0.1" />
                     </ComboBox>
                     <TextBlock
                         Margin="5,0"
@@ -196,17 +226,17 @@
                         FontSize="{StaticResource SmallFontSize}">
                         <Run Text="{Binding ViewModel.PositionIndex, Mode=OneWay}" />
                         <Run Text="/" />
-                        <Run Text="{Binding ViewModel.RoutePointsCount, Mode=OneWay}" />
+                        <Run Text="{Binding ViewModel.MaxPositionIndex, Mode=OneWay}" />
                     </TextBlock>
                 </StackPanel>
                 <syncfusion:SfRangeSlider
                     Grid.Column="1"
                     Margin="10,0"
-                    Maximum="100"
+                    Maximum="{Binding ViewModel.MaxPositionIndex, Mode=OneWay}"
                     Minimum="0"
                     SnapsTo="StepValues"
-                    StepFrequency="1"
-                    Value="39" />
+                    StepFrequency="{Binding ViewModel.StepLength, Mode=OneWay}"
+                    Value="{Binding ViewModel.PositionIndex, Mode=TwoWay}" />
             </Grid>
         </Border>
     </Grid>

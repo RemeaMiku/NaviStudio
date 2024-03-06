@@ -14,22 +14,22 @@ namespace NaviStudio.WpfApp.Services;
 //TODO 地图标记点优化
 public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 {
+    public double TimeScale { get; set; } = 1;
 
-    public PointLatLng? CurrentPosition => _positionIndex == -1 ? null : _routeMarkers[_positionIndex].Position;
+    public PointLatLng? CurrentPosition => CurrentPositionIndex == -1 ? null : _routeMarkers[CurrentPositionIndex].Position;
 
-    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool updatePositionMarker = false)
+    public void AddPoint(PointLatLng point, UtcTime timeStamp, bool moveToLast = false)
     {
-        ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
         App.Current.Dispatcher.Invoke(() =>
         {
             _gMapControl.Markers.Remove(_positionMarker);
-            var marker = CreateRouteMarker(_afterFill, point, timeStamp);
+            var marker = CreateRouteMarker(_forwardFill, point, timeStamp);
             _routeMarkers.Add(marker);
             _timeStamps.Add(timeStamp);
             _gMapControl.Markers.Add(marker);
-            if(updatePositionMarker)
-                UpdatePositionMarker(point);
+            if(moveToLast)
+                MoveTo(_routeMarkers.Count - 1);
             _positionMarker.Shape.Visibility = Visibility.Visible;
             _gMapControl.Markers.Add(_positionMarker);
         });
@@ -44,7 +44,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _timeStamps.Clear();
-        _positionIndex = -1;
+        CurrentPositionIndex = -1;
     }
 
     public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
@@ -64,24 +64,24 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(newIndex, 0);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(newIndex, _routeMarkers.Count - 1);
-        if(_positionIndex == newIndex)
+        if(CurrentPositionIndex == newIndex)
             return;
-        ThrowIfIsRunnning();
-        UpdatePositionMarker(_routeMarkers[newIndex].Position);
-        if(_positionIndex > newIndex)
+        UpdatePosition(_routeMarkers[newIndex].Position);
+        if(CurrentPositionIndex > newIndex)
         {
-            for(int i = newIndex + 1; i <= _positionIndex; i++)
-                SetEllipseMarkerFill(_routeMarkers[i], _afterFill);
+            for(int i = newIndex + 1; i <= CurrentPositionIndex; i++)
+                SetEllipseMarkerFill(_routeMarkers[i], _forwardFill);
         }
         else
         {
-            for(int i = _positionIndex; i < newIndex; i++)
-                SetEllipseMarkerFill(_routeMarkers[i], _beforeFill);
+            for(int i = int.Max(CurrentPositionIndex, 0); i < newIndex; i++)
+                SetEllipseMarkerFill(_routeMarkers[i], _backFill);
         }
-        _positionIndex = newIndex;
+        CurrentPositionIndex = newIndex;
+        CurrentPositionChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public async Task StartAsync(CancellationToken token, double timeScale = 1)
+    public async Task StartAsync(CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         if(_routeMarkers.Count == 0)
@@ -93,34 +93,25 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         {
             await Task.Run(async () =>
             {
-                while(!token.IsCancellationRequested && _positionIndex < _routeMarkers.Count - 1)
+                while(!token.IsCancellationRequested && CurrentPositionIndex < _routeMarkers.Count - 1)
                 {
-                    var duration = (_timeStamps![_positionIndex + 1] - _timeStamps[_positionIndex]) * timeScale;
+                    var duration = (_timeStamps![CurrentPositionIndex + 1] - _timeStamps[CurrentPositionIndex]) * TimeScale;
                     await Task.Delay(duration, token);
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        UpdatePositionMarker(_routeMarkers[_positionIndex + 1].Position);
-                        SetEllipseMarkerFill(_routeMarkers[_positionIndex], _beforeFill);
-                    });
-                    _positionIndex++;
+                    App.Current.Dispatcher.Invoke(() => MoveToOffset(1));
                 }
             }, token);
         }
-        catch(Exception)
-        {
-
-        }
+        catch(Exception) { }
         finally
         {
             _isRunning = false;
         }
     }
 
-    public void MoveToOffset(int offset) => MoveTo(_positionIndex + offset);
+    public void MoveToOffset(int offset) => MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
 
-    public void AddPoints(IEnumerable<(PointLatLng, UtcTime)> points, bool updatePositionMarker = false)
+    public void AddPoints(IEnumerable<(PointLatLng, UtcTime)> points, bool moveToLast = false)
     {
-        ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
         if(!points.Any())
@@ -130,21 +121,21 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             _gMapControl.Markers.Remove(_positionMarker);
             foreach((var point, var timeStamp) in points)
             {
-                var marker = CreateRouteMarker(_afterFill, point, timeStamp);
+                var marker = CreateRouteMarker(_backFill, point, timeStamp);
                 _routeMarkers.Add(marker);
                 _timeStamps.Add(timeStamp);
                 _gMapControl.Markers.Add(marker);
             }
-            if(updatePositionMarker)
-                UpdatePositionMarker(_routeMarkers[^1].Position);
+            if(moveToLast)
+                MoveTo(_routeMarkers.Count - 1);
             _positionMarker.Shape.Visibility = Visibility.Visible;
             _gMapControl.Markers.Add(_positionMarker);
         });
     }
 
-    readonly static Brush _beforeFill = (Brush)App.Current.Resources["MikuRedBrush"];
+    readonly static Brush _forwardFill = (Brush)App.Current.Resources["MikuRedBrush"];
 
-    readonly static Brush _afterFill = (Brush)App.Current.Resources["MikuGreenBrush"];
+    readonly static Brush _backFill = (Brush)App.Current.Resources["MikuGreenBrush"];
 
     readonly List<GMapMarker> _routeMarkers = [];
 
@@ -152,8 +143,13 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     GMapControl? _gMapControl;
     readonly GMapMarker _positionMarker = new(new());
-    int _positionIndex = -1;
+
+    public int CurrentPositionIndex { get; private set; } = -1;
+
     bool _isRunning = false;
+
+    public event EventHandler? CurrentPositionChanged;
+
     // double _groundResolution;
 
     PureProjection Projection => _gMapControl!.MapProvider.Projection;

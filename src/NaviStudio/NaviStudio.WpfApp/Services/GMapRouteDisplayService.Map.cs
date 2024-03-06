@@ -102,12 +102,12 @@ partial class GMapRouteDisplayService
     void SetMapBearing()
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        if(CurrentPosition is null || _positionIndex == 0)
+        if(CurrentPosition is null || CurrentPositionIndex == 0)
         {
             _gMapControl.Bearing = 0;
             return;
         }
-        var previousPosition = _routeMarkers[_positionIndex - 1].Position;
+        var previousPosition = _routeMarkers[CurrentPositionIndex - 1].Position;
         if(Projection.GetDistance(previousPosition, CurrentPosition.Value) > _updateBearingMinDistance)
             _gMapControl.Bearing = (float)Projection.GetBearing(previousPosition, CurrentPosition.Value);
     }
@@ -115,12 +115,12 @@ partial class GMapRouteDisplayService
     void SetPosiitonMarkerRotateTransform()
     {
         ArgumentNullException.ThrowIfNull(_positionMarker);
-        if(CurrentPosition is null || _positionIndex == 0)
+        if(CurrentPosition is null || CurrentPositionIndex == 0)
         {
             _positionMarkerRotateTransform.Angle = 0;
             return;
         }
-        var previousPosition = _routeMarkers[_positionIndex - 1].Position;
+        var previousPosition = _routeMarkers[CurrentPositionIndex - 1].Position;
         if(Projection.GetDistance(previousPosition, CurrentPosition.Value) > _updateBearingMinDistance)
             _positionMarkerRotateTransform.Angle = (float)Projection.GetBearing(previousPosition, CurrentPosition.Value);
     }
@@ -145,11 +145,11 @@ partial class GMapRouteDisplayService
         _positionMarker.SetShape(shape);
     }
 
-    void UpdatePositionMarker(PointLatLng point)
+    void UpdatePosition(PointLatLng point)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
         _positionMarker.Position = point;
-        _positionIndex = _routeMarkers.Count - 1;
+        //_positionIndex = _routeMarkers.Count - 1;
         if(EnableMapBearing)
             SetMapBearing();
         else

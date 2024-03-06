@@ -4,7 +4,9 @@ public static class MessageTokens
 {
     #region Public Fields
 
-    public const string MapPageToPropertyPage = nameof(MapPageToPropertyPage);
+    public const string MapSelectionChanged = nameof(MapSelectionChanged);
+
+    public const string IsRealTimeRunning = nameof(IsRealTimeRunning);
 
     #endregion Public Fields
 }

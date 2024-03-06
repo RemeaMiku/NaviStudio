@@ -290,6 +290,7 @@
                             <TextBlock
                                 x:Name="StartOrResumeButtonTextBlock"
                                 MaxWidth="390"
+                                Padding="3"
                                 FontSize="{StaticResource SmallFontSize}"
                                 Style="{StaticResource DynamicForegroundTextBlock}"
                                 Text="{Binding ViewModel.StartOrResumeText, Mode=OneWay}"
