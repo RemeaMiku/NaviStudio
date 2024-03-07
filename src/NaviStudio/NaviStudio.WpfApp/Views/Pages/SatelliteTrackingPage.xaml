@@ -70,7 +70,7 @@
                     VirtualizingPanel.VirtualizationMode="Recycling">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="satellites:SatelliteTracking">
-                            <Grid>
+                            <Grid Margin="5,15">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60" />
                                     <ColumnDefinition Width="30" />

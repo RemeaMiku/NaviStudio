@@ -8,9 +8,9 @@ namespace NaviStudio.WpfApp.Services;
 partial class GMapRouteDisplayService
 {
     const int _clusterLevel0 = 1;
-    const int _clusterLevel1 = 3;
-    const int _clusterLevel2 = 10;
-    const int _clusterLevel3 = 50;
+    const int _clusterLevel1 = 10;
+    const int _clusterLevel2 = 30;
+    const int _clusterLevel3 = 100;
     const int _clusterThreshold = 1000;
 
     readonly Dictionary<int, HashSet<GMapMarker>> _clusterLevelToMarkersMap = [];
@@ -26,6 +26,7 @@ partial class GMapRouteDisplayService
             >= 0 and < 5 => _clusterLevel3,
             _ => throw new Exception("Zoom level is out of range."),
         };
+        //return _clusterLevel0;
     }
 
     HashSet<GMapMarker> GetClusteredMarkers(int clusterLevel)
@@ -80,6 +81,7 @@ partial class GMapRouteDisplayService
             return;
         lock(_clusterLock)
         {
+            _gMapControl.Markers.Remove(_positionMarker);
             var clusterLevel = GetClusterLevel();
             var markers = GetClusteredMarkers(clusterLevel);
             if(markers.Count >= _clusterThreshold)
@@ -87,6 +89,7 @@ partial class GMapRouteDisplayService
             EnableMarkers(markers);
             _lastClusterTime = DateTime.Now;
             Trace.WriteLine($"Clustered: {markers.Count}");
+            _gMapControl.Markers.Add(_positionMarker);
         }
     }
 }

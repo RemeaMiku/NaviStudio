@@ -18,9 +18,19 @@ public interface IEpochDatasService
 
     public void Add(EpochData epochData);
 
-    public EpochData? GetByTimeStamp(UtcTime timeStamp);
+    public EpochData GetByTimeStamp(UtcTime timeStamp);
+
+    public EpochData GetByIndex(int index);
 
     public void Clear();
+
+    public void Save(string filePath);
+
+    public void Load(string filePath);
+
+    public void StartAutoSave(string filePath);
+
+    public void StopAutoSave();
 
     #endregion Public Methods
 }

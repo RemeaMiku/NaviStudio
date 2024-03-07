@@ -5,10 +5,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using NaviStudio.Shared.Models.Satellites;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
+using NaviStudio.WpfApp.ViewModels.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
+public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService), IEpochDataRecipient
 {
     #region Public Fields
 
@@ -25,7 +26,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
 
     #region Protected Methods
 
-    protected override void Update(EpochData message)
+    public override void Update(EpochData message)
     {
         if(message.SatelliteSkyPositions is null)
         {
@@ -36,7 +37,7 @@ public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasServic
         OnPropertyChanged(nameof(EnabledPositions));
     }
 
-    protected override void Reset()
+    public override void Reset()
     {
         _positions = default;
         OnPropertyChanged(nameof(EnabledPositions));

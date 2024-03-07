@@ -85,8 +85,15 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         CurrentPositionIndex = -1;
     }
 
+    void ThrowIfNoPoints()
+    {
+        if(_points.Count == 0)
+            throw new InvalidOperationException("No points.");
+    }
+
     public void MoveTo(int newIndex)
     {
+        ThrowIfNoPoints();
         ArgumentOutOfRangeException.ThrowIfLessThan(newIndex, 0);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(newIndex, _routeMarkers.Count - 1);
         if(CurrentPositionIndex == newIndex)
@@ -106,7 +113,11 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         CurrentPositionChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void MoveToOffset(int offset) => MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
+    public void MoveToOffset(int offset)
+    {
+        ThrowIfNoPoints();
+        MoveTo(int.Clamp(CurrentPositionIndex + offset, 0, _routeMarkers.Count - 1));
+    }
 
     public IGMapRouteDisplayService RegisterGMapControl(GMapControl gMapControl)
     {
@@ -120,11 +131,12 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         _gMapControl.OnMapDrag += Cluster;
         return this;
     }
+
     public async Task StartAsync(CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        if(_routeMarkers.Count == 0)
-            throw new InvalidOperationException("No points.");
+        if(_points.Count == 0)
+            return;
         ThrowIfIsRunnning();
         _positionMarker.Shape.Visibility = Visibility.Visible;
         _isRunning = true;
@@ -168,7 +180,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     #region Private Properties
 
-    PureProjection Projection => _gMapControl!.MapProvider.Projection;
+    //PureProjection Projection => _gMapControl!.MapProvider.Projection;
 
     #endregion Private Properties
 

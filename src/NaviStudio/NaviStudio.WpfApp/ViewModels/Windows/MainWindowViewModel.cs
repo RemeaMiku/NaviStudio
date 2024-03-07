@@ -94,7 +94,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     #region Private Methods
 
     [RelayCommand]
-    async Task SaveEpochDatasAsync()
+    void SaveEpochDatas()
     {
         if(!_epochDatasService.HasData)
         {
@@ -110,13 +110,12 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         };
         if(dialog.ShowDialog() != true)
             return;
-        var json = JsonSerializer.Serialize(_epochDatasService.Datas);
         try
         {
             StatusContent = "正在保存历元数据...";
             StatusSeverityType = SeverityType.Info;
             StatusIsProcessing = true;
-            await File.WriteAllTextAsync(dialog.FileName, json);
+            _epochDatasService.Save(dialog.FileName);
             var message = $"历元数据已保存至 {dialog.FileName}";
             _snackbarService.ShowSuccess("保存成功", message);
             StatusContent = message;
@@ -206,6 +205,11 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         IsRealTimeRunning = true;
         try
         {
+            if(!string.IsNullOrEmpty(Options.OutputFolder))
+            {
+                Directory.CreateDirectory(Options.OutputFolder);
+                _epochDatasService.StartAutoSave(Path.Combine(Options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}{FileExtensions.EpochDataFileExtension}"));
+            }
             await _realTimeControlService.StartAsync(Options, _tokenSource.Token);
         }
         catch(Exception ex)
@@ -215,6 +219,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         }
         finally
         {
+            _epochDatasService.StopAutoSave();
             _tokenSource.Dispose();
             _tokenSource = default;
             IsRealTimeRunning = false;
@@ -265,12 +270,12 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if(!_epochDatasService.HasData)
         {
-            _snackbarService.ShowError("清空失败", "无数据");
+            _snackbarService.ShowError("清除失败", "无数据");
             return;
         }
         _epochDatasService.Clear();
         Messenger.Send(RealTimeNotification.Reset);
-        Messenger.Send(new Output(Title, SeverityType.Info, "历元数据已清空"));
+        Messenger.Send(new Output(Title, SeverityType.Info, "历元数据已清除"));
     }
 
     partial void OnOptionsChanged(RealTimeOptions? value)

@@ -11,7 +11,7 @@ public static class RandomDataGenerator
     {
         var random = new Random();
         var systems = Enum.GetValues<SatelliteSystems>();
-        for (int i = 0; i < count; i++)
+        for(int i = 0; i < count; i++)
         {
             var system = (char)systems[random.Next(0, systems.Length)];
             var number = random.Next(1, 33);
@@ -32,7 +32,7 @@ public static class RandomDataGenerator
 
     public static IEnumerable<SatelliteSkyPosition> GetSatelliteSkyPositions(IEnumerable<Satellite> satellites)
     {
-        foreach (var satellite in satellites)
+        foreach(var satellite in satellites)
             yield return GetSatelliteSkyPosition(satellite);
     }
 
@@ -50,7 +50,7 @@ public static class RandomDataGenerator
 
     public static IEnumerable<SatelliteTracking> GetSatelliteTrackings(IEnumerable<Satellite> satellites)
     {
-        foreach (var satellite in satellites)
+        foreach(var satellite in satellites)
         {
             yield return GetSatelliteTracking(satellite);
             yield return GetSatelliteTracking(satellite);

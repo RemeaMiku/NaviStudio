@@ -18,7 +18,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
 
     #region Protected Methods
 
-    protected override void Update(EpochData epochData)
+    public override void Update(EpochData epochData)
     {
         var removeCount = _epochCount - MaxEpochCount + 1;
         foreach(var viewModel in ItemViewModels)
@@ -31,7 +31,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
         _epochCount = Math.Min(_epochCount + 1, MaxEpochCount);
     }
 
-    protected override void Sync()
+    public override void Sync()
     {
         Reset();
         if(!_epochDatasService.HasData)
@@ -42,7 +42,7 @@ public partial class ChartGroupPageViewModel(IMessenger messenger, IEpochDatasSe
                 UpdateChartItemCommon(viewModel, epochData);
     }
 
-    protected override void Reset()
+    public override void Reset()
     {
         if(_epochCount == 0)
             return;

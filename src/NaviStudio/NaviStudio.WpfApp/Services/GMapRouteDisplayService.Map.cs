@@ -29,7 +29,7 @@ partial class GMapRouteDisplayService
             {
                 if(_gMapControl is not null)
                     _gMapControl.Bearing = 0;
-                SetPosiitonMarkerRotateTransform();
+                SetPositionMarkerRotateTransform();
             }
         }
     }
@@ -112,17 +112,18 @@ partial class GMapRouteDisplayService
         //    _gMapControl.Bearing = (float)Projection.GetBearing(previousPosition, CurrentPosition.Value);
     }
 
-    void SetPosiitonMarkerRotateTransform()
+    void SetPositionMarkerRotateTransform()
     {
+        ArgumentNullException.ThrowIfNull(_gMapControl);
         ArgumentNullException.ThrowIfNull(_positionMarker);
-        if(CurrentPosition is null || CurrentPositionIndex == 0)
+        if(CurrentPosition is null || CurrentPositionIndex == -1)
         {
             _positionMarkerRotateTransform.Angle = 0;
             return;
         }
-        var previousPosition = _routeMarkers[CurrentPositionIndex - 1].Position;
-        if(Projection.GetDistance(previousPosition, CurrentPosition.Value) > _updateBearingMinDistance)
-            _positionMarkerRotateTransform.Angle = (float)Projection.GetBearing(previousPosition, CurrentPosition.Value);
+        _positionMarkerRotateTransform.Angle = (float)_points[CurrentPositionIndex].Bearing;
+        //if(Projection.GetDistance(previousPosition, CurrentPosition.Value) > _updateBearingMinDistance)
+        //    _positionMarkerRotateTransform.Angle = (float)Projection.GetBearing(previousPosition, CurrentPosition.Value);
     }
 
     void SetPositionMarkerShape()
@@ -148,14 +149,16 @@ partial class GMapRouteDisplayService
     void UpdatePositionMarker(PointLatLng point)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
+        _gMapControl.Markers.Remove(_positionMarker);
         _positionMarker.Position = point;
         //_positionIndex = _routeMarkers.Count - 1;
         if(EnableMapBearing)
             SetMapBearing();
         else
-            SetPosiitonMarkerRotateTransform();
+            SetPositionMarkerRotateTransform();
         if(KeepCenter)
             _gMapControl.Position = point;
+        _gMapControl.Markers.Add(_positionMarker);
     }
 
     #endregion Private Methods

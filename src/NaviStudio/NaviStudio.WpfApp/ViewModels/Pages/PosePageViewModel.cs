@@ -2,10 +2,11 @@
 using CommunityToolkit.Mvvm.Messaging;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
+using NaviStudio.WpfApp.ViewModels.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
+public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService), IEpochDataRecipient
 {
     #region Public Fields
 
@@ -16,7 +17,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
 
     #region Protected Methods
 
-    protected override void Reset()
+    public override void Reset()
     {
         TimeStamp = default;
         Latitude = double.NaN;
@@ -31,7 +32,7 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
         UpVelocity = double.NaN;
     }
 
-    protected override void Update(EpochData data)
+    public override void Update(EpochData data)
     {
         TimeStamp = data.TimeStamp;
         if(data.Result is null)

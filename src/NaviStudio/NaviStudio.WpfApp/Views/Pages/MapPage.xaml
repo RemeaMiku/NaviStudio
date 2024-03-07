@@ -26,7 +26,7 @@
             VerticalContentAlignment="Center"
             Filled="True"
             FontSize="{StaticResource LargeFontSize}"
-            Foreground="{StaticResource MikuRedBrush}"
+            Foreground="{StaticResource RinOrangeBrush}"
             Symbol="Pin24">
             <ui:SymbolIcon.Effect>
                 <DropShadowEffect
@@ -34,7 +34,7 @@
                     Direction="0"
                     Opacity="0.5"
                     ShadowDepth="0"
-                    Color="{StaticResource MikuRedAlpha}" />
+                    Color="{StaticResource RinOrangeAlpha}" />
             </ui:SymbolIcon.Effect>
         </ui:SymbolIcon>
         <Thickness x:Key="SmallSpacing">0,3</Thickness>
@@ -174,10 +174,10 @@
             </Border>
         </StackPanel>
         <Border
-            Width="500"
+            Width="700"
             Margin="5"
             Padding="5"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
             CornerRadius="5"
@@ -218,12 +218,15 @@
                         <ComboBoxItem Content="1x" Tag="1" />
                         <ComboBoxItem Content="2x" Tag="0.5" />
                         <ComboBoxItem Content="5x" Tag="0.2" />
-                        <ComboBoxItem Content="10x" Tag="0.1" />
                     </ComboBox>
                     <TextBlock
+                        MaxWidth="100"
                         Margin="5,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="{StaticResource SmallFontSize}">
+                        FontSize="{StaticResource SmallFontSize}"
+                        TextAlignment="Right"
+                        TextTrimming="CharacterEllipsis">
                         <Run Text="{Binding ViewModel.PositionIndex, Mode=OneWay}" />
                         <Run Text="/" />
                         <Run Text="{Binding ViewModel.MaxPositionIndex, Mode=OneWay}" />

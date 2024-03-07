@@ -24,7 +24,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     #endregion Public Fields
 
-    #region Protected Methods
+    #region Protected Methods    
 
     protected override void OnActivated()
     {
@@ -39,7 +39,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         Messenger.Unregister<RealTimeNotification>(this);
     }
 
-    protected override void Update(EpochData data)
+    public override void Update(EpochData data)
     {
         if(data.Result is null)
             return;
@@ -50,7 +50,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         PositionIndex = MaxPositionIndex;
     }
 
-    protected override void Sync()
+    public override void Sync()
     {
         IsRealTime = true;
         if(!_epochDatasService.HasData)
@@ -68,10 +68,12 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         PositionIndex = MaxPositionIndex;
     }
 
-    protected override void Reset()
+    public override void Reset()
     {
         _gMapRouteDisplayService.Clear();
         RoutePointsCount = 0;
+        PositionIndex = -1;
+        TimeScale = 1;
         IsRealTime = true;
         KeepCenter = true;
     }
@@ -206,14 +208,16 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
     void MoveForward()
     {
         Pause();
-        _gMapRouteDisplayService.MoveToOffset(StepLength);
+        if(PositionIndex != -1)
+            _gMapRouteDisplayService.MoveToOffset(StepLength);
     }
 
     [RelayCommand]
     void MoveBackward()
     {
         Pause();
-        _gMapRouteDisplayService.MoveToOffset(-StepLength);
+        if(PositionIndex != -1)
+            _gMapRouteDisplayService.MoveToOffset(-StepLength);
     }
 
     partial void OnIsRealTimeChanged(bool value)
@@ -227,9 +231,10 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     partial void OnPositionIndexChanged(int value)
     {
-        if(IsRealTime)
+        if(IsRealTime || value == -1)
             return;
         _gMapRouteDisplayService.MoveTo(value);
+        Messenger.Send(new ValueChangedMessage<EpochData>(_epochDatasService.GetByIndex(value)));
     }
 
     #endregion Private Methods

@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using NaviStudio.Shared.Common.Helpers;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
+using NaviStudio.WpfApp.ViewModels.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService)
+public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService), IEpochDataRecipient
 {
     #region Public Fields
 
@@ -31,7 +33,7 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Sync();
     }
 
-    protected override void Reset()
+    public override void Reset()
     {
         Speed = default;
         Yaw = default;
@@ -39,9 +41,9 @@ public partial class DashBoardPageViewModel(IMessenger messenger, IEpochDatasSer
         Roll = default;
     }
 
-    protected override void Update(EpochData data)
+    public override void Update(EpochData data)
     {
-        if (data.Result is null)
+        if(data.Result is null)
         {
             Reset();
             return;
