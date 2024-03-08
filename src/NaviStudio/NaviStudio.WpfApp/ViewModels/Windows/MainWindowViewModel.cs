@@ -117,16 +117,56 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             StatusIsProcessing = true;
             _epochDatasService.Save(dialog.FileName);
             var message = $"历元数据已保存至 {dialog.FileName}";
-            _snackbarService.ShowSuccess("保存成功", message);
-            StatusContent = message;
+            _snackbarService.ShowSuccess("保存完成", message);
+            StatusContent = "保存完成";
             StatusSeverityType = SeverityType.Success;
+            Messenger.Send(new Output(Title, SeverityType.Info, message));
+        }
+        catch(Exception ex)
+        {
+            _snackbarService.ShowError("保存失败", $"保存历元数据时出错：{ex.Message}");
+            StatusContent = "保存失败";
+            StatusSeverityType = SeverityType.Error;
+        }
+        finally
+        {
             StatusIsProcessing = false;
+        }
+    }
+
+    [RelayCommand]
+    async Task LoadEpochDatasAsync()
+    {
+        var dialog = new OpenFileDialog()
+        {
+            Title = "打开历元数据文件",
+            Filter = $"NaviStudio 历元数据文件|*{FileExtensions.EpochDataFileExtension}|所有文件|*.*",
+            RestoreDirectory = true,
+            CheckFileExists = true,
+        };
+        if(dialog.ShowDialog() != true)
+            return;
+        try
+        {
+            StatusContent = "正在加载历元数据...";
+            StatusSeverityType = SeverityType.Info;
+            StatusIsProcessing = true;
+            await Task.Run(() => _epochDatasService.Load(dialog.FileName));
+            var message = $"已加载 {dialog.FileName}";
+            Messenger.Send(NotificationMessage.Sync);
+            Messenger.Send(new Output(Title, SeverityType.Info, message));
+            StatusContent = "加载完成";
+            StatusSeverityType = SeverityType.Success;
         }
         catch(Exception)
         {
-            _snackbarService.ShowError("保存失败", "无法保存历元数据");
-            StatusContent = "保存失败";
+            Messenger.Send(NotificationMessage.Reset);
+            _snackbarService.ShowError("加载失败", "加载历元数据失败。可能不是目标文件格式。");
+            StatusContent = "加载失败";
             StatusSeverityType = SeverityType.Error;
+        }
+        finally
+        {
             StatusIsProcessing = false;
         }
     }
@@ -155,7 +195,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         _epochDatasService.Add(data);
         if(IsRealTimeRunning)
         {
-            Messenger.Send(RealTimeNotification.Update);
+            Messenger.Send(NotificationMessage.Update);
             StatusSeverityType = SeverityType.Info;
             StatusContent = $"历元 {data.TimeStamp:yyyy/MM/dd HH:mm:ss.fff} 已更新";
         }
@@ -164,7 +204,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if(value)
         {
-            Messenger.Send(RealTimeNotification.Reset);
+            Messenger.Send(NotificationMessage.Reset);
             Messenger.Send(new Output(Title, SeverityType.Info, "开始接收"));
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
@@ -172,7 +212,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         {
             _realTimeControlService.EpochDataReceived -= OnEpochDataReceived;
             Messenger.Send(new Output(Title, SeverityType.Info, "停止接收"));
-            Messenger.Send(RealTimeNotification.Stop);
+            Messenger.Send(NotificationMessage.Stop);
         }
     }
 
@@ -180,7 +220,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if(value)
         {
-            Messenger.Send(RealTimeNotification.Sync);
+            Messenger.Send(NotificationMessage.Sync);
             if(_epochDatasService.HasData)
             {
                 StatusSeverityType = SeverityType.Info;
@@ -199,10 +239,10 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if(IsRealTimeStarted)
             return;
         ArgumentNullException.ThrowIfNull(Options);
-        _epochDatasService.Clear();
-        _tokenSource = new();
         IsRealTimeStarted = true;
+        _epochDatasService.Clear();
         IsRealTimeRunning = true;
+        _tokenSource = new();
         try
         {
             if(!string.IsNullOrEmpty(Options.OutputFolder))
@@ -261,7 +301,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if(!IsRealTimeStarted)
             return;
         Stop();
-        await Task.Delay(500);
+        await Task.Delay(100);
         StartCommand.Execute(default);
     }
 
@@ -274,8 +314,10 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             return;
         }
         _epochDatasService.Clear();
-        Messenger.Send(RealTimeNotification.Reset);
+        Messenger.Send(NotificationMessage.Reset);
         Messenger.Send(new Output(Title, SeverityType.Info, "历元数据已清除"));
+        StatusContent = "历元数据已清除";
+        StatusSeverityType = SeverityType.Info;
     }
 
     partial void OnOptionsChanged(RealTimeOptions? value)

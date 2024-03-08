@@ -73,12 +73,18 @@
                     FontSize="{StaticResource SmallFontSize}">
                     <ui:MenuItem Header="文件(_F)" Style="{StaticResource TopUiMenuItemStyle}">
                         <ui:MenuItem Header="打开(_I)">
-                            <ui:MenuItem Header="历元数据(_E)">
+                            <ui:MenuItem
+                                Command="{Binding Command, ElementName=OpenEpochDatasButton, Mode=OneWay}"
+                                Header="历元数据(_E)"
+                                IsEnabled="{Binding IsEnabled, ElementName=OpenEpochDatasButton, Mode=OneWay}">
                                 <ui:MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="DocumentData20" />
                                 </ui:MenuItem.Icon>
                             </ui:MenuItem>
-                            <ui:MenuItem Click="OnOpenRealTimeOptionsFileItemClicked" Header="解算配置(_R)">
+                            <ui:MenuItem
+                                Click="OnOpenRealTimeOptionsFileItemClicked"
+                                Header="解算配置(_R)"
+                                IsEnabled="{Binding ViewModel.IsRealTimeStarted, Mode=OneWay, Converter={StaticResource BooleanToReversedBooleanConverter}}">
                                 <ui:MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="DocumentSettings20" />
                                 </ui:MenuItem.Icon>
@@ -233,8 +239,11 @@
                     <StackPanel Orientation="Horizontal">
                         <ui:Button
                             x:Name="OpenEpochDatasButton"
+                            Click="OnOpenEpochDatasButtonClicked"
+                            Command="{Binding ViewModel.LoadEpochDatasCommand, Mode=OneTIme}"
                             Foreground="{StaticResource MeaYellowBrush}"
                             Icon="FolderOpen24"
+                            IsEnabled="{Binding ViewModel.IsRealTimeStarted, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="打开历元数据" />
                         <ui:Button

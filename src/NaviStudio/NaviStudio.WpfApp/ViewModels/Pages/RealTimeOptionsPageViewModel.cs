@@ -20,7 +20,7 @@ using Wpf.Ui.Mvvm.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<RealTimeNotification>
+public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipient<NotificationMessage>
 {
     #region Public Fields
 
@@ -262,11 +262,11 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         HasChanged = false;
     }
 
-    public void Receive(RealTimeNotification message)
+    public void Receive(NotificationMessage message)
     {
-        if(message == RealTimeNotification.Reset)
+        if(message == NotificationMessage.Reset)
             IsEditable = false;
-        else if(message == RealTimeNotification.Stop)
+        else if(message == NotificationMessage.Stop)
             IsEditable = true;
     }
 

@@ -6,17 +6,17 @@ using NaviStudio.WpfApp.Services.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Base;
 
-public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<RealTimeNotification>, IRecipient<ValueChangedMessage<EpochData>>
+public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableRecipient(messenger), IRecipient<NotificationMessage>
 {
     #region Public Methods
 
-    public virtual void Receive(RealTimeNotification message)
+    public virtual void Receive(NotificationMessage message)
     {
-        if(message == RealTimeNotification.Update)
+        if(message == NotificationMessage.Update)
             Update(_epochDatasService.Last);
-        else if(message == RealTimeNotification.Sync)
+        else if(message == NotificationMessage.Sync)
             Sync();
-        else if(message == RealTimeNotification.Reset)
+        else if(message == NotificationMessage.Reset)
             Reset();
     }
 
@@ -47,10 +47,10 @@ public abstract class ObservableNotificationRecipient(IMessenger messenger, IEpo
             Reset();
     }
 
-    public virtual void Receive(ValueChangedMessage<EpochData> message)
-    {
-        Update(message.Value);
-    }
+    //public virtual void Receive(ValueChangedMessage<EpochData> message)
+    //{
+    //    Update(message.Value);
+    //}
 
     #endregion Protected Methods
 }

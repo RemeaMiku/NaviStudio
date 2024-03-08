@@ -133,37 +133,33 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
             var process = Process.Start(_clientPath);
             using var client = await listener.AcceptTcpClientAsync(token);
             using var tcpStream = client.GetStream();
-            //var IsOutputRequested = !string.IsNullOrEmpty(options.OutputFolder);
-            //if(IsOutputRequested)
-            //    Directory.CreateDirectory(options.OutputFolder);
-            //using var fileStream = IsOutputRequested ? new FileStream(Path.Combine(options.OutputFolder, $"{UtcTime.Now:yyMMddHHmmss}{FileExtensions.EpochDataFileExtension}"), FileMode.Create, FileAccess.Write, FileShare.Read) : default;
-            //using var writer = fileStream is null ? default : new Utf8JsonWriter(fileStream);
-            //writer?.WriteStartArray();
-            using var reader = new BinaryReader(tcpStream, Encoding.UTF8);
             var jsonOptions = new JsonSerializerOptions()
             {
                 IgnoreReadOnlyProperties = true
             };
             jsonOptions.Converters.Add(new UtcTimeJsonConverter());
-            await Task.Run(() =>
+            try
             {
                 while(!token.IsCancellationRequested)
                 {
-                    var message = reader.ReadString();
-                    if(string.IsNullOrEmpty(message))
+                    var bytes = new byte[10240];
+                    var count = await tcpStream.ReadAsync(bytes, token);
+                    if(count == 0)
                         continue;
-                    var epochData = JsonSerializer.Deserialize<EpochData>(message, jsonOptions);
-                    //writer?.WriteRawValue(JsonSerializer.Serialize(epochData, jsonOptions));
-                    //writer?.Flush();
+                    var json = Encoding.UTF8.GetString(bytes[0..count]);
+                    if(string.IsNullOrEmpty(json))
+                        continue;
+                    var epochData = JsonSerializer.Deserialize<EpochData>(json, jsonOptions);
                     EpochDataReceived?.Invoke(this, epochData);
                 }
-            }, token);
-            process.Kill();
-            listener.Stop();
-            //writer?.WriteEndArray();
+            }
+            catch(OperationCanceledException) { }
+            finally
+            {
+                process.Kill();
+            }
         }
         catch(TaskCanceledException) { }
-        catch(OperationCanceledException) { }
         finally
         {
             IsRunning = false;
@@ -174,7 +170,7 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
 
     #region Private Fields
 
-    const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Client\bin\Debug\net8.0\MiraiNavi.Client.exe";
+    const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Listener\bin\Debug\net8.0\NaviStudio.Listener.exe";
 
     //const string _baseDirectory = "Base";
     //const string _roveDirectory = "Rove";

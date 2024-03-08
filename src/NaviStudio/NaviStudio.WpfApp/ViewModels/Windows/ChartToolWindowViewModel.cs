@@ -58,14 +58,17 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
-    [Range(3, 100, ErrorMessage = $"大小需在 3 到 100 之间")]
-    int _maxEpochCount = 10;
+    [Range(MinEpochCount, MaxEpochCount, ErrorMessage = $"大小需在 3 到 100 之间")]
+    int _epochCount = 10;
+
+    public const int MinEpochCount = 1;
+
+    public const int MaxEpochCount = 10000;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
     [Required(ErrorMessage = "不能为空")]
-    [Length(1, 10, ErrorMessage = "长度需在 1 到 10 之间")]
     string _chartGroupName = "未命名";
 
     #endregion Private Fields
@@ -75,7 +78,7 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [RelayCommand]
     void SelectItem(string item)
     {
-        if (!SelectedItems.Add(item))
+        if(!SelectedItems.Add(item))
             SelectedItems.Remove(item);
         OnPropertyChanged(nameof(CanCreateChartGroup));
     }

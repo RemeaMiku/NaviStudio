@@ -40,9 +40,11 @@
         <Thickness x:Key="SmallSpacing">0,3</Thickness>
         <Thickness x:Key="LargeSpacing">0,5</Thickness>
         <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="{x:Type HeaderedContentControl}">
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
             <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
         </Style>
         <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="{x:Type ComboBox}">
+            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
             <Setter Property="Width" Value="150" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="SelectedIndex" Value="0" />
@@ -174,7 +176,7 @@
             </Border>
         </StackPanel>
         <Border
-            Width="700"
+            Width="500"
             Margin="5"
             Padding="5"
             HorizontalAlignment="Right"

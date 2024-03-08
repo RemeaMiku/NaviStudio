@@ -112,11 +112,11 @@
                                         <ItemsControl ItemsSource="{x:Static windows:ChartToolWindowViewModel.QualityCheckItems}" Style="{StaticResource OptionalItemsControlStyle}" />
                                     </Border>
                                 </ui:CardExpander>
-                                <ui:CardExpander Header="卫星信息" Icon="Rocket24">
+                                <!--<ui:CardExpander Header="卫星信息" Icon="Rocket24">
                                     <Border Style="{StaticResource CardContentBorderStyle}">
                                         <ItemsControl ItemsSource="{x:Static windows:ChartToolWindowViewModel.SatelliteInfoItems}" Style="{StaticResource OptionalItemsControlStyle}" />
                                     </Border>
-                                </ui:CardExpander>
+                                </ui:CardExpander>-->
                             </StackPanel>
                         </ui:DynamicScrollViewer>
                     </Grid>
@@ -142,20 +142,22 @@
                             Margin="20"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="最大历元数" />
+                            <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="历元数" />
                             <ui:NumberBox
                                 Margin="{StaticResource SmallSpacing}"
                                 ClearButtonEnabled="False"
-                                Maximum="100"
+                                Maximum="10000"
                                 Minimum="1"
-                                PlaceholderText="输入最大历元数..."
-                                Text="{Binding ViewModel.MaxEpochCount, UpdateSourceTrigger=PropertyChanged}" />
+                                PlaceholderText="输入历元数..."
+                                ValidationMode="InvalidInputOverwritten"
+                                Value="{Binding ViewModel.EpochCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                             <TextBlock
                                 Margin="{StaticResource LargeSpacing}"
                                 Style="{StaticResource DynamicForegroundTextBlock}"
                                 Text="图表组名称" />
                             <ui:TextBox
                                 Margin="{StaticResource SmallSpacing}"
+                                MaxLength="100"
                                 PlaceholderText="输入图表组名称..."
                                 Text="{Binding ViewModel.ChartGroupName, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -166,7 +168,7 @@
                             Appearance="Primary"
                             Click="OnConfirmButtonClicked"
                             Content="确定"
-                            Icon="CheckmarkCircle24"
+                            Icon="Checkmark24"
                             IsEnabled="{Binding ViewModel.CanCreateChartGroup, Mode=OneWay}" />
                     </Grid>
                 </Border>

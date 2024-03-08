@@ -119,10 +119,10 @@ public partial class MainWindow : UiWindow
         var window = App.Current.Services.GetRequiredService<ChartToolWindow>();
         if(window.ShowDialog() == true)
         {
-            var paras = new ChartGroupParameters(window.ViewModel.ChartGroupName!, window.ViewModel.MaxEpochCount, window.ViewModel.SelectedItems);
+            var paras = new ChartGroupParameters(window.ViewModel.ChartGroupName!, window.ViewModel.EpochCount, window.ViewModel.SelectedItems);
             var page = App.Current.Services.GetRequiredService<ChartGroupPage>();
-            AddDocument($"图表组: {paras.Title}", page);
             page.CreateCharts(paras);
+            AddDocument($"图表组: {paras.Title}", page);
         }
     }
 
@@ -142,5 +142,10 @@ public partial class MainWindow : UiWindow
     {
         OnRealTimeOptionsViewButtonClicked(sender, e);
         App.Current.Services.GetRequiredService<RealTimeOptionsPage>().ViewModel.ReadCommand.Execute(default);
+    }
+
+    private void OnOpenEpochDatasButtonClicked(object sender, RoutedEventArgs e)
+    {
+        DockingWindowHandler.RestoreDockState(MapView);
     }
 }

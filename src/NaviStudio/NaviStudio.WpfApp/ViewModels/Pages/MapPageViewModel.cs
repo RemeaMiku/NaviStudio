@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -36,7 +37,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     protected override void OnDeactivated()
     {
-        Messenger.Unregister<RealTimeNotification>(this);
+        Messenger.Unregister<NotificationMessage>(this);
     }
 
     public override void Update(EpochData data)
@@ -70,12 +71,13 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
 
     public override void Reset()
     {
-        _gMapRouteDisplayService.Clear();
+        Pause();
         RoutePointsCount = 0;
         PositionIndex = -1;
         TimeScale = 1;
         IsRealTime = true;
         KeepCenter = true;
+        _gMapRouteDisplayService.Clear();
     }
 
     #endregion Protected Methods
@@ -201,7 +203,6 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         ArgumentNullException.ThrowIfNull(_tokenSource);
         _tokenSource.Cancel();
         IsReplaying = false;
-        Thread.Sleep(100);
     }
 
     [RelayCommand]
@@ -237,7 +238,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         Messenger.Send(new ValueChangedMessage<EpochData>(_epochDatasService.GetByIndex(value)));
     }
 
-    #endregion Private Methods
+    #endregion Private Methods    
 
     //[RelayCommand]
     //void Pause()

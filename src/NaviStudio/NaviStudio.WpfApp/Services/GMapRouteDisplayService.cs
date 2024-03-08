@@ -9,6 +9,7 @@ using NaviStudio.WpfApp.Services.Contracts;
 using System.Windows.Media;
 using NaviStudio.WpfApp.Common.Extensions;
 using NaviStudio.Shared.Models.Map;
+using System.Diagnostics;
 
 namespace NaviStudio.WpfApp.Services;
 
@@ -75,7 +76,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     public void Clear()
     {
-        ThrowIfIsRunnning();
+        //ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
         foreach(var marker in _routeMarkers)
             _gMapControl.Markers.Remove(marker);
@@ -152,10 +153,11 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
                 }
             }, token);
         }
-        catch(Exception) { }
+        catch(OperationCanceledException) { }
         finally
         {
             _isRunning = false;
+            Trace.WriteLine("Stop");
         }
     }
 

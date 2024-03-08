@@ -2,14 +2,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using NaviStudio.Shared.Models.Satellites;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
-using NaviStudio.WpfApp.ViewModels.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService), IEpochDataRecipient
+public partial class SkyMapPageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableSingleEpochDataRecipient(messenger, epochDatasService)
 {
     #region Public Fields
 

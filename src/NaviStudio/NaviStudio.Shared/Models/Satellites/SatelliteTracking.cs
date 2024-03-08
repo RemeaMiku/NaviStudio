@@ -1,6 +1,6 @@
 ﻿namespace NaviStudio.Shared.Models.Satellites;
 
-public record struct SatelliteTracking
+public record class SatelliteTracking
 {
     public Satellite Satellite { get; set; }
 
@@ -10,5 +10,7 @@ public record struct SatelliteTracking
 
     public double SignalNoiseRatio { get; set; }
 
-    public override readonly string ToString() => $"{Satellite}: {Frequency}, {SignalNoiseRatio:F1}";
+    //public double SignalStrength => 100 / double.Max(SignalNoiseRatio, 1);
+
+    public override string ToString() => $"{Satellite}: {Frequency}, {SignalNoiseRatio:F1}";
 }

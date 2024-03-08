@@ -18,6 +18,11 @@ public partial class InputOptionsViewModel : ObservableValidator
     {
         Type = options.Type;
         Format = options.Format;
+        ZmqId = options.ZmqId;
+        BaseType = options.BaseType;
+        ServerCycle = options.ServerCycle;
+        ImuType = options.ImuType;
+        ImuRate = options.ImuRate;
         TcpAddress = options.TcpOptions.Address;
         TcpPort = options.TcpOptions.Port;
         SerialPortName = options.SerialOptions.PortName;

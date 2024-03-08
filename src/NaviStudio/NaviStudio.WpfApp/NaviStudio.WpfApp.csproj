@@ -74,4 +74,8 @@
 	  </Reference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="ViewModels\Contracts\" />
+	</ItemGroup>
+
 </Project>

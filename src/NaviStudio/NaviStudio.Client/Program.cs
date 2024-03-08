@@ -8,21 +8,19 @@ using NaviStudio.Shared.Serialization;
 using NaviSharp;
 
 using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
+
 using var client = new TcpClient();
 client.Connect(new(IPAddress.Loopback, 39831));
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
-using var writer = new BinaryWriter(stream, Encoding.UTF8);
 reader.ReadLine();
 reader.ReadLine();
 var options = new JsonSerializerOptions()
 {
     IgnoreReadOnlyProperties = true,
-    WriteIndented = true,
 };
 options.Converters.Add(new UtcTimeJsonConverter());
-//options.Converters.Add(new XyzJsonConverter());
-while (!reader.EndOfStream)
+while(!reader.EndOfStream)
 {
     var startTime = DateTime.Now;
     var line = reader.ReadLine();
@@ -32,7 +30,7 @@ while (!reader.EndOfStream)
     epochData.SatelliteTrackings = RandomDataGenerator.GetSatelliteTrackings(satellites).ToList();
     var message = JsonSerializer.Serialize(epochData, options);
     Console.WriteLine(message);
-    writer.Write(message);
+    stream.Write(Encoding.UTF8.GetBytes(message));
     var endTime = DateTime.Now;
     Thread.Sleep(500);
 }

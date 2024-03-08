@@ -2,11 +2,10 @@
 using CommunityToolkit.Mvvm.Messaging;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
-using NaviStudio.WpfApp.ViewModels.Contracts;
 
 namespace NaviStudio.WpfApp.ViewModels.Pages;
 
-public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableNotificationRecipient(messenger, epochDatasService), IEpochDataRecipient
+public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService epochDatasService) : ObservableSingleEpochDataRecipient(messenger, epochDatasService)
 {
     #region Public Fields
 
