@@ -81,10 +81,11 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_gMapControl);
         foreach(var marker in _routeMarkers)
             _gMapControl.Markers.Remove(marker);
-        _gMapControl.Bearing = 0;
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _points.Clear();
+        _clusterLevelToMarkersMap.Clear();
+        _gMapControl.Bearing = 0;
         CurrentPositionIndex = -1;
     }
 

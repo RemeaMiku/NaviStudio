@@ -10,8 +10,8 @@ partial class GMapRouteDisplayService
 {
     const int _clusterLevel0 = 1;
     const int _clusterLevel1 = 10;
-    const int _clusterLevel2 = 30;
-    const int _clusterLevel3 = 100;
+    const int _clusterLevel2 = 50;
+    const int _clusterLevel3 = 500;
     const int _clusterThreshold = 1000;
 
     readonly Dictionary<int, HashSet<GMapMarker>> _clusterLevelToMarkersMap = [];
@@ -80,7 +80,7 @@ partial class GMapRouteDisplayService
     void Cluster()
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        if(DateTime.Now - _lastClusterTime <= _clusterInterval || _routeMarkers.Count <= _clusterThreshold)
+        if(_routeMarkers.Count <= _clusterThreshold)
             return;
         lock(_clusterLock)
         {

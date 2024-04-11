@@ -90,7 +90,10 @@
                                 </ui:MenuItem.Icon>
                             </ui:MenuItem>
                         </ui:MenuItem>
-                        <ui:MenuItem Command="{Binding Command, ElementName=SaveEpochDatasButton, Mode=OneWay}" Header="{Binding ToolTip, ElementName=SaveEpochDatasButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_S)'}">
+                        <ui:MenuItem
+                            Command="{Binding Command, ElementName=SaveEpochDatasButton, Mode=OneWay}"
+                            Header="{Binding ToolTip, ElementName=SaveEpochDatasButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_S)'}"
+                            IsEnabled="{Binding IsEnabled, ElementName=SaveEpochDatasButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="Save24" />
                             </ui:MenuItem.Icon>
@@ -98,6 +101,7 @@
                         <ui:MenuItem
                             Command="{Binding Command, ElementName=ClearEpochDatasButton, Mode=OneWay}"
                             Header="{Binding ToolTip, ElementName=ClearEpochDatasButton, Mode=OneTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0}(_D)'}"
+                            IsEnabled="{Binding IsEnabled, ElementName=ClearEpochDatasButton, Mode=OneWay}"
                             Visibility="{Binding Visibility, ElementName=ClearEpochDatasButton, Mode=OneWay}">
                             <ui:MenuItem.Icon>
                                 <ui:SymbolIcon Symbol="Delete24" />
@@ -243,14 +247,16 @@
                             Command="{Binding ViewModel.LoadEpochDatasCommand, Mode=OneTIme}"
                             Foreground="{StaticResource MeaYellowBrush}"
                             Icon="FolderOpen24"
-                            IsEnabled="{Binding ViewModel.IsRealTimeStarted, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
+                            IsEnabled="{Binding ViewModel.StatusIsProcessing, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
                             Style="{StaticResource ToolUiButtonStyle}"
-                            ToolTip="打开历元数据" />
+                            ToolTip="打开历元数据"
+                            Visibility="{Binding ViewModel.IsRealTimeStarted, Converter={StaticResource ReversedBooleanToVisibilityConverter}, Mode=OneWay}" />
                         <ui:Button
                             x:Name="SaveEpochDatasButton"
                             Command="{Binding ViewModel.SaveEpochDatasCommand, Mode=OneTime}"
                             Foreground="{StaticResource MeaBlueBrush}"
                             Icon="Save24"
+                            IsEnabled="{Binding ViewModel.StatusIsProcessing, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="保存历元数据" />
                         <ui:Button
@@ -258,6 +264,7 @@
                             Command="{Binding ViewModel.ClearEpochDatasCommand, Mode=OneTime}"
                             Foreground="{StaticResource MikuRedBrush}"
                             Icon="Delete24"
+                            IsEnabled="{Binding ViewModel.StatusIsProcessing, Converter={StaticResource BooleanToReversedBooleanConverter}, Mode=OneWay}"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="清除历元数据" />
                         <ui:Button
