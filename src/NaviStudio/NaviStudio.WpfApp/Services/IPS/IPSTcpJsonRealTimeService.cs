@@ -170,7 +170,9 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
 
     #region Private Fields
 
-    const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Listener\bin\Debug\net8.0\NaviStudio.Listener.exe";
+    //const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Listener\bin\Debug\net8.0\NaviStudio.Listener.exe";
+
+    const string _clientPath = @"D:\RemeaMiku study\course in progress\Graduation\projects\src\NaviStudio\NaviStudio.Client\bin\Debug\net8.0\NaviStudio.Client.exe";
 
     //const string _baseDirectory = "Base";
     //const string _roveDirectory = "Rove";

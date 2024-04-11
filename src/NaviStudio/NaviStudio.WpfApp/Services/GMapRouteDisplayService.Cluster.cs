@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using GMap.NET.WindowsPresentation;
 using NaviStudio.WpfApp.Common.Extensions;
 
 namespace NaviStudio.WpfApp.Services;
 
-//TODO 地图标记点优化
 partial class GMapRouteDisplayService
 {
     const int _clusterLevel0 = 1;
@@ -37,14 +38,12 @@ partial class GMapRouteDisplayService
             _clusterLevelToMarkersMap.Add(clusterLevel, []);
         var targetCount = _routeMarkers.Count / clusterLevel;
         var clusteredMarkers = _clusterLevelToMarkersMap[clusterLevel];
-        if(targetCount == clusteredMarkers.Count)
-            return clusteredMarkers;
         for(int i = clusteredMarkers.Count; i < targetCount; i++)
         {
             clusteredMarkers.Add(_routeMarkers[clusterLevel * i]);
             Trace.WriteLine($"Level {clusterLevel}: Add {clusterLevel * i}");
         }
-        return clusteredMarkers;
+        return [.. clusteredMarkers];
     }
 
     void FilterVisibleMarkers(HashSet<GMapMarker> markers)
@@ -58,13 +57,17 @@ partial class GMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_gMapControl);
         App.Current.Dispatcher.Invoke(() =>
         {
-            foreach(var marker in _routeMarkers)
-            {
-                if(markers.Contains(marker) && !_gMapControl.Markers.Contains(marker))
-                    _gMapControl.Markers.Add(marker);
-                else if(!markers.Contains(marker))
-                    _gMapControl.Markers.Remove(marker);
-            }
+            //foreach(var marker in _routeMarkers)
+            //{
+            //    if(markers.Contains(marker) && !_gMapControl.Markers.Contains(marker))
+            //        _gMapControl.Markers.Add(marker);
+            //    else if(!markers.Contains(marker))
+            //        _gMapControl.Markers.Remove(marker);
+            //}            
+            foreach(var marker in _gMapControl.Markers.Except(markers).ToHashSet())
+                _gMapControl.Markers.Remove(marker);
+            foreach(var marker in markers.Except(_gMapControl.Markers).ToHashSet())
+                _gMapControl.Markers.Add(marker);
         });
     }
 
@@ -81,15 +84,21 @@ partial class GMapRouteDisplayService
             return;
         lock(_clusterLock)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             _gMapControl.Markers.Remove(_positionMarker);
             var clusterLevel = GetClusterLevel();
             var markers = GetClusteredMarkers(clusterLevel);
+            Trace.WriteLine($"GetClusteredMarkers : {watch.ElapsedMilliseconds}ms");
             if(markers.Count >= _clusterThreshold)
                 FilterVisibleMarkers(markers);
+            Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
             EnableMarkers(markers);
+            Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
             _lastClusterTime = DateTime.Now;
             Trace.WriteLine($"Clustered: {markers.Count}");
             _gMapControl.Markers.Add(_positionMarker);
+            watch.Reset();
         }
     }
 }

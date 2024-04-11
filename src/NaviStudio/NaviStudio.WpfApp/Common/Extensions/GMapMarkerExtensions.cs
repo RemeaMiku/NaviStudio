@@ -19,7 +19,7 @@ public static class GMapMarkerExtensions
         var projection = map.MapProvider.Projection;
         var centerPosition = projection.FromLatLngToPixel(map.CenterPosition, (int)map.Zoom);
         var markerPosition = projection.FromLatLngToPixel(marker.Position, (int)map.Zoom);
-        var size = Math.Max(marker.Map.ActualWidth, marker.Map.ActualHeight);
+        var size = Math.Max(map.ActualWidth, map.ActualHeight);
         return Math.Abs(markerPosition.X - centerPosition.X) <= size / 2 && Math.Abs(markerPosition.Y - centerPosition.Y) <= size / 2;
     }
 

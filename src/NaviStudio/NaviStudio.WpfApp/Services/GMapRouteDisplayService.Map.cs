@@ -74,7 +74,7 @@ partial class GMapRouteDisplayService
 
     const double _positionMarkerSize = 30;
 
-    const double _updateBearingMinDistance = 0.0005;
+    //const double _updateBearingMinDistance = 0.0005;
     readonly static Dictionary<NavigationIndicators, ImageSource> _indicatorImages = new()
     {
         { NavigationIndicators.Default, new BitmapImage(new(_defaultPath, UriKind.Relative)) },
@@ -143,6 +143,7 @@ partial class GMapRouteDisplayService
             },
             RenderTransform = _positionMarkerRotateTransform
         };
+        Panel.SetZIndex(shape, 100);
         _positionMarker.SetShape(shape);
     }
 

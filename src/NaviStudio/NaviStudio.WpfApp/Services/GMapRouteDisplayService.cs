@@ -39,7 +39,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_gMapControl);
         App.Current.Dispatcher.Invoke(() =>
         {
-            _gMapControl.Markers.Remove(_positionMarker);
+            //_gMapControl.Markers.Remove(_positionMarker);
             var marker = CreateRouteMarker(_forwardFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
             _routeMarkers.Add(marker);
             _points.Add(point);
@@ -47,7 +47,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
             _positionMarker.Shape.Visibility = Visibility.Visible;
-            _gMapControl.Markers.Add(_positionMarker);
+            //_gMapControl.Markers.Add(_positionMarker);
         });
     }
 
@@ -59,18 +59,19 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             return;
         App.Current.Dispatcher.Invoke(() =>
         {
-            _gMapControl.Markers.Remove(_positionMarker);
+            //_gMapControl.Markers.Remove(_positionMarker);
             foreach(var point in points)
             {
                 var marker = CreateRouteMarker(_backFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
                 _routeMarkers.Add(marker);
                 _points.Add(point);
-                _gMapControl.Markers.Add(marker);
+                //_gMapControl.Markers.Add(marker);
             }
+            Cluster();
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
             _positionMarker.Shape.Visibility = Visibility.Visible;
-            _gMapControl.Markers.Add(_positionMarker);
+            //_gMapControl.Markers.Add(_positionMarker);
         });
     }
 
@@ -80,6 +81,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_gMapControl);
         foreach(var marker in _routeMarkers)
             _gMapControl.Markers.Remove(marker);
+        _gMapControl.Bearing = 0;
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _points.Clear();
@@ -168,6 +170,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
     readonly static Brush _backFill = (Brush)App.Current.Resources["MikuGreenBrush"];
 
     readonly static Brush _forwardFill = (Brush)App.Current.Resources["MikuRedBrush"];
+
     readonly List<MapPoint> _points = [];
 
     readonly GMapMarker _positionMarker = new(new());
