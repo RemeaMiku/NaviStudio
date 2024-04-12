@@ -33,6 +33,7 @@ public partial class MapPageViewModel(IMessenger messenger, IEpochDatasService e
         if(!Messenger.IsRegistered<ValueChangedMessage<bool>, string>(this, MessageTokens.IsRealTimeRunning))
             Messenger.Register(this, MessageTokens.IsRealTimeRunning, (MapPageViewModel r, ValueChangedMessage<bool> m) => r.IsReplayAvailable = !m.Value);
         _gMapRouteDisplayService.CurrentPositionChanged += (_, _) => PositionIndex = _gMapRouteDisplayService.CurrentPositionIndex;
+        Sync();
     }
 
     protected override void OnDeactivated()

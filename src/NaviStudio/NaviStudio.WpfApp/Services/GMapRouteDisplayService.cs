@@ -46,7 +46,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
             _gMapControl.Markers.Add(marker);
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
-            _positionMarker.Shape.Visibility = Visibility.Visible;
+            //_positionMarker.Shape.Visibility = Visibility.Visible;
             //_gMapControl.Markers.Add(_positionMarker);
         });
     }
@@ -61,16 +61,12 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         {
             //_gMapControl.Markers.Remove(_positionMarker);
             foreach(var point in points)
-            {
-                var marker = CreateRouteMarker(_backFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
-                _routeMarkers.Add(marker);
-                _points.Add(point);
-                //_gMapControl.Markers.Add(marker);
-            }
+                AddPoint(point);
+            //_gMapControl.Markers.Add(marker);            
             Cluster();
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
-            _positionMarker.Shape.Visibility = Visibility.Visible;
+            //_positionMarker.Shape.Visibility = Visibility.Visible;
             //_gMapControl.Markers.Add(_positionMarker);
         });
     }
@@ -102,6 +98,7 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentOutOfRangeException.ThrowIfGreaterThan(newIndex, _routeMarkers.Count - 1);
         if(CurrentPositionIndex == newIndex)
             return;
+        _positionMarker.Shape.Visibility = Visibility.Visible;
         if(CurrentPositionIndex > newIndex)
         {
             for(int i = newIndex + 1; i <= CurrentPositionIndex; i++)

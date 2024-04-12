@@ -192,14 +192,17 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             return;
         }
         ValidateEpochData(data);
-        _epochDatasService.Add(data);
-        if(IsRealTimeRunning)
+        if(!IsRealTimeRunning)
         {
-            Messenger.Send(NotificationMessage.Update);
-            StatusSeverityType = SeverityType.Info;
-            StatusContent = $"历元 {data.TimeStamp:yyyy/MM/dd HH:mm:ss.fff} 已更新";
+            _pausedEpochDatas.Add(data);
+            return;
         }
+        _epochDatasService.Add(data);
+        Messenger.Send(NotificationMessage.Update);
+        StatusSeverityType = SeverityType.Info;
+        StatusContent = $"历元 {data.TimeStamp:yyyy/MM/dd HH:mm:ss.fff} 已更新";
     }
+
     partial void OnIsRealTimeStartedChanged(bool value)
     {
         if(value)
@@ -272,9 +275,13 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
     {
         if(!IsRealTimeStarted)
             return;
+        _pausedEpochDatas.ForEach(_epochDatasService.Add);
+        _pausedEpochDatas.Clear();
         IsRealTimeRunning = true;
         Messenger.Send(new Output(Title, SeverityType.Info, "继续更新"));
     }
+
+    readonly List<EpochData> _pausedEpochDatas = [];
 
     [RelayCommand]
     void Pause()
