@@ -37,17 +37,16 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
     public void AddPoint(MapPoint point, bool moveToLast = false)
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
+        var marker = CreateRouteMarker(_forwardFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
+        _routeMarkers.Add(marker);
+        _points.Add(point);
+        UpdateClusteredMarkers();
         App.Current.Dispatcher.Invoke(() =>
         {
-            //_gMapControl.Markers.Remove(_positionMarker);
-            var marker = CreateRouteMarker(_forwardFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
-            _routeMarkers.Add(marker);
-            _points.Add(point);
-            _gMapControl.Markers.Add(marker);
+            if((_routeMarkers.Count - 1) % GetClusterLevel() == 0)
+                _gMapControl.Markers.Add(marker);
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
-            //_positionMarker.Shape.Visibility = Visibility.Visible;
-            //_gMapControl.Markers.Add(_positionMarker);
         });
     }
 
@@ -57,17 +56,18 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_positionMarker);
         if(!points.Any())
             return;
+        foreach(var point in points)
+        {
+            var marker = CreateRouteMarker(_forwardFill, new() { Lat = point.Latitude, Lng = point.Longitude }, point.TimeStamp);
+            _routeMarkers.Add(marker);
+            _points.Add(point);
+        }
+        UpdateClusteredMarkers();
         App.Current.Dispatcher.Invoke(() =>
         {
-            //_gMapControl.Markers.Remove(_positionMarker);
-            foreach(var point in points)
-                AddPoint(point);
-            //_gMapControl.Markers.Add(marker);            
-            Cluster();
+            Optimize();
             if(moveToLast)
                 MoveTo(_routeMarkers.Count - 1);
-            //_positionMarker.Shape.Visibility = Visibility.Visible;
-            //_gMapControl.Markers.Add(_positionMarker);
         });
     }
 
@@ -80,7 +80,8 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _points.Clear();
-        _clusterLevelToMarkersMap.Clear();
+        foreach(var markers in _clusterLevelToMarkersMap.Values)
+            markers.Clear();
         _gMapControl.Bearing = 0;
         CurrentPositionIndex = -1;
     }
@@ -127,9 +128,9 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
         _gMapControl = gMapControl;
         SetPositionMarkerShape();
         _gMapControl.Markers.Add(_positionMarker);
-        _gMapControl.OnMapZoomChanged += Cluster;
-        _gMapControl.OnPositionChanged += (_) => Cluster();
-        _gMapControl.OnMapDrag += Cluster;
+        _gMapControl.OnMapZoomChanged += Optimize;
+        _gMapControl.OnPositionChanged += (_) => Optimize();
+        //_gMapControl.OnMapDrag += Cluster;
         return this;
     }
 
