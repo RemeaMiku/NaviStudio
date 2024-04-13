@@ -264,7 +264,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 
     public void Receive(NotificationMessage message)
     {
-        if(message == NotificationMessage.Reset)
+        if(message == NotificationMessage.Start)
             IsEditable = false;
         else if(message == NotificationMessage.Stop)
             IsEditable = true;

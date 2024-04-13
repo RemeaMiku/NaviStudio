@@ -11,7 +11,7 @@ partial class GMapRouteDisplayService
 {
     const int _clusterLevel0 = 1;
     const int _clusterLevel1 = 5;
-    const int _clusterLevel2 = 10;
+    const int _clusterLevel2 = 15;
     const int _clusterLevel3 = 50;
     const int _clusterLevel4 = 500;
     const int _clusterThreshold = 1000;
@@ -91,23 +91,20 @@ partial class GMapRouteDisplayService
     void Optimize()
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        lock(_clusterLock)
-        {
-            var watch = new Stopwatch();
-            watch.Start();
-            _gMapControl.Markers.Remove(_positionMarker);
-            var clusterLevel = GetClusterLevel();
-            var markers = GetClusteredMarkers(clusterLevel);
-            Trace.WriteLine($"GetClusteredMarkers : {watch.ElapsedMilliseconds}ms");
-            if(markers.Count >= _clusterThreshold)
-                markers.RemoveWhere(marker => !marker.IsVisible(_gMapControl));
-            Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
-            EnableMarkers(markers);
-            Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
-            //_lastClusterTime = DateTime.Now;
-            Trace.WriteLine($"Clustered: {markers.Count}");
-            _gMapControl.Markers.Add(_positionMarker);
-            watch.Reset();
-        }
+        var watch = new Stopwatch();
+        watch.Start();
+        _gMapControl.Markers.Remove(_positionMarker);
+        var clusterLevel = GetClusterLevel();
+        var markers = GetClusteredMarkers(clusterLevel);
+        //Trace.WriteLine($"GetClusteredMarkers : {watch.ElapsedMilliseconds}ms");
+        if(markers.Count >= _clusterThreshold)
+            markers.RemoveWhere(marker => !marker.IsVisible(_gMapControl));
+        //Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
+        EnableMarkers(markers);
+        //Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
+        //_lastClusterTime = DateTime.Now;
+        //Trace.WriteLine($"Clustered: {markers.Count}");
+        _gMapControl.Markers.Add(_positionMarker);
+        watch.Reset();
     }
 }

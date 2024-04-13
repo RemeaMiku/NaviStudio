@@ -7,6 +7,7 @@ public class NotificationMessage
     public static readonly NotificationMessage Reset = new();
     public static readonly NotificationMessage Update = new();
     public static readonly NotificationMessage Sync = new();
+    public static readonly NotificationMessage Start = new();
     public static readonly NotificationMessage Stop = new();
 
     #endregion Public Fields

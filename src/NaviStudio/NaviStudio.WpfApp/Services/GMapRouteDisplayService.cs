@@ -73,10 +73,8 @@ public partial class GMapRouteDisplayService : IGMapRouteDisplayService
 
     public void Clear()
     {
-        //ThrowIfIsRunnning();
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        foreach(var marker in _routeMarkers)
-            _gMapControl.Markers.Remove(marker);
+        _gMapControl.Markers.Clear();
         _positionMarker.Shape.Visibility = Visibility.Collapsed;
         _routeMarkers.Clear();
         _points.Clear();

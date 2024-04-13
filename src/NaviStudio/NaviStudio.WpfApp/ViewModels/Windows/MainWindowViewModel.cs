@@ -148,6 +148,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
             return;
         try
         {
+            Messenger.Send(NotificationMessage.Reset);
             StatusContent = "正在加载历元数据...";
             StatusSeverityType = SeverityType.Info;
             StatusIsProcessing = true;
@@ -208,6 +209,7 @@ public partial class MainWindowViewModel(IEpochDatasService epochDatasService, I
         if(value)
         {
             Messenger.Send(NotificationMessage.Reset);
+            Messenger.Send(NotificationMessage.Start);
             Messenger.Send(new Output(Title, SeverityType.Info, "开始接收"));
             _realTimeControlService.EpochDataReceived += OnEpochDataReceived;
         }
