@@ -48,7 +48,7 @@
                 </gauge:SfCircularGauge.GaugeHeader>
                 <gauge:SfCircularGauge.Scales>
                     <gauge:CircularScale
-                        EndValue="200"
+                        EndValue="250"
                         FontSize="{StaticResource SmallFontSize}"
                         LabelOffset="0.85"
                         LabelPosition="Custom"

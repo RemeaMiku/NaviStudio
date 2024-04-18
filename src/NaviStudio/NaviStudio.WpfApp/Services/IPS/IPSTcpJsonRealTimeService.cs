@@ -120,6 +120,8 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
     //    WriteOptFile(options.BaseOptions, 1, roveType, baseType, Path.Combine("D:\\onedrive\\Desktop\\files\\data", "base.opt"));
     //}
 
+    DateTime _lastReceivedTime = DateTime.MaxValue;
+
     public async Task StartAsync(RealTimeOptions options, CancellationToken token)
     {
         if(IsRunning)
@@ -140,7 +142,7 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
             jsonOptions.Converters.Add(new UtcTimeJsonConverter());
             try
             {
-                while(!token.IsCancellationRequested)
+                while(!token.IsCancellationRequested && DateTime.Now - _lastReceivedTime <= TimeSpan.FromSeconds(10))
                 {
                     var bytes = new byte[10240];
                     var count = await tcpStream.ReadAsync(bytes, token);
@@ -151,6 +153,7 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
                         continue;
                     var epochData = JsonSerializer.Deserialize<EpochData>(json, jsonOptions);
                     EpochDataReceived?.Invoke(this, epochData);
+                    _lastReceivedTime = DateTime.Now;
                 }
             }
             catch(OperationCanceledException) { }
@@ -160,9 +163,11 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
             }
         }
         catch(TaskCanceledException) { }
+        catch(OperationCanceledException) { }
         finally
         {
             IsRunning = false;
+            _lastReceivedTime = DateTime.MaxValue;
         }
     }
 

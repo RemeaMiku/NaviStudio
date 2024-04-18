@@ -76,7 +76,8 @@
                             <ui:MenuItem
                                 Command="{Binding Command, ElementName=OpenEpochDatasButton, Mode=OneWay}"
                                 Header="历元数据(_E)"
-                                IsEnabled="{Binding IsEnabled, ElementName=OpenEpochDatasButton, Mode=OneWay}">
+                                IsEnabled="{Binding IsEnabled, ElementName=OpenEpochDatasButton, Mode=OneWay}"
+                                Visibility="{Binding Visibility, ElementName=OpenEpochDatasButton, Mode=OneWay}">
                                 <ui:MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="DocumentData20" />
                                 </ui:MenuItem.Icon>

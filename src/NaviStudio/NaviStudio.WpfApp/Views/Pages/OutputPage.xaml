@@ -94,7 +94,7 @@
                     Margin="{StaticResource LargeSpacing}"
                     Padding="3"
                     BorderThickness="0"
-                    IsChecked="{Binding ViewModel.KeepBottom, Mode=OneWayToSource}"
+                    IsChecked="{Binding ViewModel.KeepBottom, Mode=TwoWay}"
                     Style="{StaticResource DefaultToggleButtonStyle}">
                     <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="ArrowDown24" />
                 </ToggleButton>

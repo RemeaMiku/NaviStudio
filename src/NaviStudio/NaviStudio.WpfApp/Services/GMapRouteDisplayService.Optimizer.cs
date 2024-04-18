@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using NaviStudio.WpfApp.Common.Extensions;
 
@@ -29,9 +30,9 @@ partial class GMapRouteDisplayService
         ArgumentNullException.ThrowIfNull(_gMapControl);
         return _gMapControl.Zoom switch
         {
-            >= 14 => _clusterLevel0,
-            >= 12 and < 14 => _clusterLevel1,
-            >= 10 and < 12 => _clusterLevel2,
+            >= 16 => _clusterLevel0,
+            >= 14 and < 16 => _clusterLevel1,
+            >= 10 and < 14 => _clusterLevel2,
             >= 5 and < 10 => _clusterLevel3,
             >= 0 and < 5 => _clusterLevel4,
             _ => throw new Exception("Zoom level is out of range."),
@@ -86,11 +87,16 @@ partial class GMapRouteDisplayService
 
     //readonly static TimeSpan _clusterInterval = TimeSpan.FromSeconds(0.5);
 
+    PointLatLng _lastCenter;
+    int _lastZoom = -1;
+
     readonly object _clusterLock = new();
 
     void Optimize()
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
+        if(_gMapControl.CenterPosition == _lastCenter && (int)_gMapControl.Zoom == _lastZoom)
+            return;
         var watch = new Stopwatch();
         watch.Start();
         _gMapControl.Markers.Remove(_positionMarker);
@@ -103,8 +109,10 @@ partial class GMapRouteDisplayService
         EnableMarkers(markers);
         //Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
         //_lastClusterTime = DateTime.Now;
-        //Trace.WriteLine($"Clustered: {markers.Count}");
+        Trace.WriteLine($"Zoom:{_gMapControl.Zoom} Level:{clusterLevel} Count: {markers.Count} Time:{watch.ElapsedMilliseconds}ms");
         _gMapControl.Markers.Add(_positionMarker);
         watch.Reset();
+        _lastCenter = _gMapControl.CenterPosition;
+        _lastZoom = (int)_gMapControl.Zoom;
     }
 }

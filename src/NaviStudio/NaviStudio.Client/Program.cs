@@ -8,14 +8,14 @@ using NaviStudio.Shared.Serialization;
 using NaviSharp;
 using NaviStudio.Shared;
 
-using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\机载.dts");
+using var reader = new StreamReader("D:\\RemeaMiku study\\course in progress\\Graduation\\data\\车载.dts");
 
 using var client = new TcpClient();
 client.Connect(new(IPAddress.Loopback, 39831));
 Console.WriteLine("Client Connected");
 using var stream = client.GetStream();
-//using var stream = new FileStream(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "机载" + FileExtensions.EpochDataFileExtension), FileMode.OpenOrCreate);
-using var writer = new StreamWriter(stream);
+//using var stream = new FileStream(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "车载" + FileExtensions.EpochDataFileExtension), FileMode.OpenOrCreate);
+//using var writer = new StreamWriter(stream);
 reader.ReadLine();
 reader.ReadLine();
 var options = new JsonSerializerOptions()
@@ -23,9 +23,10 @@ var options = new JsonSerializerOptions()
     IgnoreReadOnlyProperties = true,
 };
 options.Converters.Add(new UtcTimeJsonConverter());
+var count = 0;
 while(!reader.EndOfStream)
 {
-    var startTime = DateTime.Now;
+    //var startTime = DateTime.Now;
     var line = reader.ReadLine();
     var epochData = ParseLine(line!);
     var satellites = RandomDataGenerator.GetSatellites(20).Order().ToList();
@@ -35,8 +36,9 @@ while(!reader.EndOfStream)
     Console.WriteLine(message);
     //writer.WriteLine(message);
     stream.Write(Encoding.UTF8.GetBytes(message));
-    var endTime = DateTime.Now;
+    //var endTime = DateTime.Now;   
     Thread.Sleep(500);
+    count++;
 }
 
 static EpochData ParseLine(string line)

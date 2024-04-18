@@ -105,7 +105,7 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
     string _searchKeyword = string.Empty;
 
     [ObservableProperty]
-    bool _keepBottom;
+    bool _keepBottom = true;
 
     #endregion Private Fields
 
