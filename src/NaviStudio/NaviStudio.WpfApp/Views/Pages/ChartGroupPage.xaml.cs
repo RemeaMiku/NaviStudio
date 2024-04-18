@@ -42,9 +42,9 @@ public partial class ChartGroupPage : UserControl
             var page = App.Current.Services.GetRequiredService<ChartPage>();
             page.ViewModel.Title = item;
             ViewModel.ItemViewModels.Add(page.ViewModel);
-            if(ChartItemManager.ChartItemFuncs.TryGetValue(item, out var funcs))
+            if(ChartItemManager.ChartItemFuncs.TryGetValue(item, out var funcMap))
             {
-                foreach((var label, _) in funcs)
+                foreach((var label, _) in funcMap)
                     page.AddSeries(label);
             }
             DocumentContainer.SetHeader(page, item);

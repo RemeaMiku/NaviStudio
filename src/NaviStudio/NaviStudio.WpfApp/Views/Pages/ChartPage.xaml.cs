@@ -58,6 +58,7 @@ public partial class ChartPage : UserControl
         (Brush)App.Current.Resources["MeaYellowBrush"],
         (Brush)App.Current.Resources["MikuRedBrush"],
         (Brush)App.Current.Resources["MeaBlueBrush"],
+        (Brush)App.Current.Resources["RinOrangeBrush"],
     ];
 
     #endregion Private Fields

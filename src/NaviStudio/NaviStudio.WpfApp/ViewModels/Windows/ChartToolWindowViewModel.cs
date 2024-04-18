@@ -40,12 +40,17 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [
         ChartItems.Dop,
         ChartItems.Ratio,
-        //ChartItems.VisibleSatelliteCount,
+        ChartItems.SatelliteCount,
+        ChartItems.SatelliteCountOfEachSystem,
     ];
 
-    public static List<string> SatelliteInfoItems { get; } =
-    [
-    ];
+    //public static List<string> SatelliteInfoItems { get; } =
+    //[
+    //    ChartItems.GPSSatelliteVisibility,
+    //    ChartItems.BeidouSatelliteVisibility,
+    //    ChartItems.GLONASSSatelliteVisibility,
+    //    ChartItems.GalileoSatelliteVisibility,
+    //];
 
     public HashSet<string> SelectedItems { get; } = [];
 
@@ -58,18 +63,18 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
-    [Range(MinEpochCount, MaxEpochCount, ErrorMessage = $"大小需在 3 到 100 之间")]
+    [Range(MinEpochCount, MaxEpochCount, ErrorMessage = $"大小需在 1 到 100 之间")]
     int _epochCount = 10;
 
-    public const int MinEpochCount = 1;
+    public const double MinEpochCount = 1;
 
-    public const int MaxEpochCount = 10000;
+    public const double MaxEpochCount = 100000;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(CanCreateChartGroup))]
     [Required(ErrorMessage = "不能为空")]
-    string _chartGroupName = "未命名";
+    string _chartGroupName = DateTime.Now.ToString("HH:mm:ss");
 
     #endregion Private Fields
 

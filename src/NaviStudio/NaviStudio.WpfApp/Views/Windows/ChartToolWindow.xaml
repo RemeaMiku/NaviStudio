@@ -146,8 +146,8 @@
                             <ui:NumberBox
                                 Margin="{StaticResource SmallSpacing}"
                                 ClearButtonEnabled="False"
-                                Maximum="10000"
-                                Minimum="1"
+                                Maximum="{x:Static windows:ChartToolWindowViewModel.MaxEpochCount}"
+                                Minimum="{x:Static windows:ChartToolWindowViewModel.MinEpochCount}"
                                 PlaceholderText="输入历元数..."
                                 ValidationMode="InvalidInputOverwritten"
                                 Value="{Binding ViewModel.EpochCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />

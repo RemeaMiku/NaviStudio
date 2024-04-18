@@ -1,5 +1,7 @@
 ﻿using System.Collections.Frozen;
+using System.Linq;
 using NaviStudio.Shared.Models.Chart;
+using NaviStudio.Shared.Models.Satellites;
 
 namespace NaviStudio.WpfApp.Common.Helpers;
 
@@ -16,15 +18,15 @@ public static class ChartItemManager
 
     #region Public Properties
 
-    public static FrozenDictionary<string, Dictionary<string, Func<EpochData, double?>>> ChartItemFuncs { get; }
+    public static IDictionary<string, Dictionary<string, Func<EpochData, double?>>> ChartItemFuncs { get; }
 
     #endregion Public Properties
 
     #region Private Methods
 
-    static FrozenDictionary<string, Dictionary<string, Func<EpochData, double?>>> GetDefaultChartItemFuncs()
+    private static Dictionary<string, Dictionary<string, Func<EpochData, double?>>> GetDefaultChartItemFuncs()
     {
-        return new Dictionary<string, Dictionary<string, Func<EpochData, double?>>>()
+        var map = new Dictionary<string, Dictionary<string, Func<EpochData, double?>>>()
         {
             {
                 ChartItems.LongitudeAndLatitude, new()
@@ -100,7 +102,52 @@ public static class ChartItemManager
                     { ChartItems.Ratio, epochData => epochData.QualityFactors?.AmbFixedRatio }
                 }
             },
-        }.ToFrozenDictionary();
+            {
+                ChartItems.SatelliteCount,new()
+                {
+                    { ChartItems.SatelliteCount, epochData => epochData.SatelliteSkyPositions?.Count }
+                }
+            },
+            {
+                ChartItems.SatelliteCountOfEachSystem,new()
+                {
+                    { "GPS", epochData=>epochData.SatelliteSkyPositions?.Count(p=>p.Satellite.System==SatelliteSystems.GPS)},
+                    { "BDS", epochData=>epochData.SatelliteSkyPositions?.Count(p=>p.Satellite.System==SatelliteSystems.Beidou)},
+                    { "GLONASS", epochData=>epochData.SatelliteSkyPositions?.Count(p=>p.Satellite.System==SatelliteSystems.GLONASS)},
+                    { "Galileo", epochData=>epochData.SatelliteSkyPositions?.Count(p=>p.Satellite.System==SatelliteSystems.Galileo)},
+                    { "其他", epochData=>epochData.SatelliteSkyPositions?.Count(p=>p.Satellite.System == SatelliteSystems.Others)},
+                }
+            },
+        };
+        //var gpsSatMap = new Dictionary<string, Func<EpochData, double?>>();
+        //for(var i = 1; i <= 32; i++)
+        //{
+        //    var sat = new Satellite($"G{i:00}");
+        //    gpsSatMap.Add(sat.PrnCode, epochData => epochData.SatelliteSkyPositions?.Exists(p => p.Satellite == sat) == true ? sat.Number : 0);
+        //}
+        //map.Add(ChartItems.GPSSatelliteVisibility, gpsSatMap);
+        //var bdsSatMap = new Dictionary<string, Func<EpochData, double?>>();
+        //for(var i = 1; i <= 64; i++)
+        //{
+        //    var sat = new Satellite($"C{i:00}");
+        //    bdsSatMap.Add(sat.PrnCode, epochData => epochData.SatelliteSkyPositions?.Exists(p => p.Satellite == sat) == true ? sat.Number : 0);
+        //}
+        //map.Add(ChartItems.BeidouSatelliteVisibility, bdsSatMap);
+        //var glonassSatMap = new Dictionary<string, Func<EpochData, double?>>();
+        //for(var i = 1; i <= 24; i++)
+        //{
+        //    var sat = new Satellite($"R{i:00}");
+        //    glonassSatMap.Add(sat.PrnCode, epochData => epochData.SatelliteSkyPositions?.Exists(p => p.Satellite == sat) == true ? sat.Number : 0);
+        //}
+        //map.Add(ChartItems.GLONASSSatelliteVisibility, glonassSatMap);
+        //var galileoSatMap = new Dictionary<string, Func<EpochData, double?>>();
+        //for(var i = 1; i <= 30; i++)
+        //{
+        //    var sat = new Satellite($"E{i:00}");
+        //    galileoSatMap.Add(sat.PrnCode, epochData => epochData.SatelliteSkyPositions?.Exists(p => p.Satellite == sat) == true ? sat.Number : 0);
+        //}
+        //map.Add(ChartItems.GalileoSatelliteVisibility, galileoSatMap);
+        return map;
     }
 
     #endregion Private Methods

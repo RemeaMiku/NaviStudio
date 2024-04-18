@@ -32,9 +32,17 @@ public static class ChartItems
 
     public const string Ratio = "Ratio";
 
-    public const string VisibleSatelliteCount = "可视卫星数量";
+    public const string SatelliteCount = "卫星数";
 
-    public const string SatelliteVisibility = "卫星可视性";
+    public const string SatelliteCountOfEachSystem = "各系统卫星数";
+
+    //public const string GPSSatelliteVisibility = "GPS 卫星可视性";
+
+    //public const string BeidouSatelliteVisibility = "BDS 卫星可视性";
+
+    //public const string GLONASSSatelliteVisibility = "GLONASS 卫星可视性";
+
+    //public const string GalileoSatelliteVisibility = "Galileo 卫星可视性";
 
     #endregion Public Fields
 }
