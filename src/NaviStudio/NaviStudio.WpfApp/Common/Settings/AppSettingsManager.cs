@@ -39,11 +39,7 @@ public class AppSettingsManager
     public AppSettings Load(string? filePath = default, AppSettings? fallback = default)
     {
         if(string.IsNullOrEmpty(filePath))
-        {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Miraisoft", "NaviStudio");
-            Directory.CreateDirectory(dir);
-            filePath = Path.Combine(dir, DefaultFileName);
-        }
+            filePath = DefaultFileName;
         ThrowIfNotJson(filePath);
         fallback ??= new();
         FilePath = filePath;

@@ -14,6 +14,7 @@ try
         Console.WriteLine("Invalid port number.");
     using var client = new TcpClient();
     client.Connect(new(IPAddress.Loopback, port));
+    Console.WriteLine($"Client Connected:{port}");
     using var stream = client.GetStream();
     using var subscriber = new SubscriberSocket();
     subscriber.SubscribeToAnyTopic();

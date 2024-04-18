@@ -73,25 +73,6 @@
                                 </HeaderedContentControl>
                             </Border>
                         </ui:CardExpander>
-                        <ui:CardExpander Header="通信" Icon="Communication24">
-                            <Border Padding="10">
-                                <HeaderedContentControl Header="用于获取历元解算结果数据的 TCP 选项">
-                                    <StackPanel Orientation="Horizontal">
-                                        <HeaderedContentControl Width="200" Header="IP 地址">
-                                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding ViewModel.SolutionEpochDataTcpAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        </HeaderedContentControl>
-                                        <HeaderedContentControl Width="200" Header="端口">
-                                            <ui:NumberBox
-                                                Margin="{StaticResource SmallSpacing}"
-                                                Maximum="65535"
-                                                Minimum="0"
-                                                ValidationMode="InvalidInputOverwritten"
-                                                Value="{Binding ViewModel.SolutionEpochDataTcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        </HeaderedContentControl>
-                                    </StackPanel>
-                                </HeaderedContentControl>
-                            </Border>
-                        </ui:CardExpander>
                     </StackPanel>
                 </Border>
                 <StackPanel

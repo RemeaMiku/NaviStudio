@@ -2,7 +2,7 @@
 
 public enum InputType
 {
-    Tcp,
-    Serial,
-    Ntrip,
+    Tcp = 1,
+    Serial = 0,
+    Ntrip = 2,
 }
