@@ -1,28 +1,28 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace NaviStudio.Shared.Models.Options;
 
-public class IPEndPointOptions
+public partial class IPEndPointOptions : ObservableValidator
 {
     #region Public Constructors
 
     public IPEndPointOptions() { }
 
-    public IPEndPointOptions(string address, int port)
-    {
-        Address = address;
-        Port = port;
-    }
-
     #endregion Public Constructors
 
-    #region Public Properties
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [RegularExpression("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", ErrorMessage = "非法地址")]
+    [Required(ErrorMessage = "不能为空")]
+    string _address = IPAddress.None.ToString();
 
-    public string Address { get; set; } = IPAddress.None.ToString();
+    [ObservableProperty]
+    [Range(0, IPEndPoint.MaxPort)]
+    [NotifyDataErrorInfo]
+    int _port = IPEndPoint.MaxPort;
 
-    public int Port { get; set; } = IPEndPoint.MaxPort;
-
-    #endregion Public Properties
 
     #region Public Methods
 

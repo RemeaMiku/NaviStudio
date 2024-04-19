@@ -9,7 +9,12 @@ public class SolutionSettings
 
     #region Public Properties
 
-    public IPEndPointOptions EpochDataTcpOptions { get; set; } = new("127.0.0.1", DefaultEpochDataTcpPort);
+    public IPEndPointOptions EpochDataTcpOptions { get; set; } = new()
+    {
+        Address = "127.0.0.1",
+        Port = DefaultEpochDataTcpPort
+    };
+
 
     public double Timeout { get; set; } = 15;
 

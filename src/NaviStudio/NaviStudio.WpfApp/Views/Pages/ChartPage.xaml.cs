@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
 using NaviStudio.Shared.Models.Chart;
 using NaviStudio.WpfApp.ViewModels.Pages;
 using Syncfusion.UI.Xaml.Charts;
@@ -77,4 +80,17 @@ public partial class ChartPage : UserControl
     }
 
     #endregion Private Methods
+
+    private void OnSaveButtonClicked(object sender, System.Windows.RoutedEventArgs e)
+    {
+        var dialog = new SaveFileDialog
+        {
+            Filter = "Bitmap(*.bmp)|*.bmp|JPEG(*.jpg,*.jpeg)|*.jpg;*.jpeg|Gif (*.gif)|*.gif|PNG(*.png)|*.png|TIFF(*.tif,*.tiff)|*.tif|All files (*.*)|*.*"
+        };
+        if(dialog.ShowDialog() == true)
+        {
+            using Stream fs = dialog.OpenFile();
+            SfChart.Save(fs, new PngBitmapEncoder());
+        }
+    }
 }

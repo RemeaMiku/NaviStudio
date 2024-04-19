@@ -81,6 +81,12 @@ public partial class ChartToolWindowViewModel : ObservableValidator
     #region Private Methods
 
     [RelayCommand]
+    void SetEpochCountToMax()
+    {
+        EpochCount = (int)MaxEpochCount;
+    }
+
+    [RelayCommand]
     void SelectItem(string item)
     {
         if(!SelectedItems.Add(item))

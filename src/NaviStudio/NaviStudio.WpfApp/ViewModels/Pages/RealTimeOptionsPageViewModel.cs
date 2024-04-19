@@ -76,21 +76,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
         return new RealTimeOptions()
         {
             Name = SolutionName,
-            BaseOptions = BaseOptions.GetInputOptions(),
-            RoverOptions = RoverOptions.GetInputOptions(),
+            BaseOptions = BaseOptions,
+            RoverOptions = RoverOptions,
             OutputFolder = OutputFolder,
         };
-    }
-
-    public bool TryGetSolutionOptions([NotNullWhen(true)] out RealTimeOptions? options)
-    {
-        if(HasErrors)
-        {
-            options = default;
-            return false;
-        }
-        options = GetOptions();
-        return true;
     }
 
     #endregion Public Methods
@@ -125,10 +114,10 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     string _solutionName = "默认";
 
     [ObservableProperty]
-    InputOptionsViewModel _baseOptions;
+    InputOptions _baseOptions;
 
     [ObservableProperty]
-    InputOptionsViewModel _roverOptions;
+    InputOptions _roverOptions;
 
     [ObservableProperty]
     [RegularExpression(@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.]+)+\\?$", ErrorMessage = "非法目录")]
@@ -144,33 +133,28 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
 
     #region Private Methods
 
-    void OnInputOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
+
+    partial void OnBaseOptionsChanged(InputOptions value) =>
+        OnInputOptionsChanged(value);
+
+    partial void OnRoverOptionsChanged(InputOptions value) =>
+        OnInputOptionsChanged(value);
+
+    void OnInputOptionsChanged(InputOptions options)
     {
-        OnPropertyChanged(nameof(HasErrors));
-        if(oldValue is not null)
+        options.PropertyChanged += (_, e) =>
         {
-            oldValue.ErrorsChanged -= (_, _) => OnPropertyChanged(nameof(HasErrors));
-            oldValue.PropertyChanged -= OnInputOptionsPropertyChanged;
-        }
-        newValue.ErrorsChanged += (_, _) => OnPropertyChanged(nameof(HasErrors));
-        newValue.PropertyChanged += OnInputOptionsPropertyChanged;
+            if(e.PropertyName == nameof(InputOptions.HasErrors))
+                OnPropertyChanged(nameof(HasErrors));
+            HasChanged = true;
+        };
     }
-
-    void OnInputOptionsPropertyChanged(object? _, PropertyChangedEventArgs __)
-        => HasChanged = true;
-
-
-    partial void OnBaseOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
-        => OnInputOptionsChanged(oldValue, newValue);
-
-    partial void OnRoverOptionsChanged(InputOptionsViewModel? oldValue, InputOptionsViewModel newValue)
-        => OnInputOptionsChanged(oldValue, newValue);
 
     void SetOptions(RealTimeOptions options)
     {
         SolutionName = options.Name;
-        BaseOptions = new InputOptionsViewModel(options.BaseOptions);
-        RoverOptions = new InputOptionsViewModel(options.RoverOptions);
+        BaseOptions = options.BaseOptions;
+        RoverOptions = options.RoverOptions;
         OutputFolder = options.OutputFolder;
     }
 

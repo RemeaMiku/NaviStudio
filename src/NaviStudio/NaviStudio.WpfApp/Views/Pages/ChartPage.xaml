@@ -17,40 +17,53 @@
         Padding="10"
         Background="{ui:ThemeResource}"
         CornerRadius="5">
-        <sfcharts:SfChart
-            x:Name="SfChart"
-            MouseEnter="OnSfChartMouseEnter"
-            MouseLeave="OnSfChartMouseLeave">
-            <sfcharts:SfChart.Behaviors>
-                <sfcharts:ChartZoomPanBehavior
-                    x:Name="ChartZoomPanBehavior"
-                    EnableMouseWheelZooming="True"
-                    EnableSelectionZooming="True"
-                    Fill="{StaticResource MikuGreenBrushAlpha}"
-                    ResetOnDoubleTap="True"
-                    Stroke="{StaticResource MikuGreenBrush}"
-                    StrokeThickness="1"
-                    ToolBarBackground="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
-                    ToolBarItems="All"
-                    ZoomRelativeToCursor="True" />
-            </sfcharts:SfChart.Behaviors>
-            <sfcharts:SfChart.Legend>
-                <sfcharts:ChartLegend
-                    DockPosition="Right"
-                    FontSize="{StaticResource SmallFontSize}"
-                    LegendPosition="Outside" />
-            </sfcharts:SfChart.Legend>
-            <sfcharts:SfChart.PrimaryAxis>
-                <sfcharts:DateTimeAxis
-                    FontSize="{StaticResource SmallFontSize}"
-                    Header="UTC(HH:mm:ss)"
-                    Interval="1"
-                    IntervalType="Seconds"
-                    LabelFormat="HH:mm:ss" />
-            </sfcharts:SfChart.PrimaryAxis>
-            <sfcharts:SfChart.SecondaryAxis>
-                <sfcharts:NumericalAxis FontSize="{StaticResource SmallFontSize}" Header="{Binding ViewModel.Title}" />
-            </sfcharts:SfChart.SecondaryAxis>
-        </sfcharts:SfChart>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <sfcharts:SfChart
+                x:Name="SfChart"
+                MouseEnter="OnSfChartMouseEnter"
+                MouseLeave="OnSfChartMouseLeave">
+                <sfcharts:SfChart.Behaviors>
+                    <sfcharts:ChartZoomPanBehavior
+                        x:Name="ChartZoomPanBehavior"
+                        EnableMouseWheelZooming="True"
+                        EnableSelectionZooming="True"
+                        Fill="{StaticResource MikuGreenBrushAlpha}"
+                        ResetOnDoubleTap="True"
+                        Stroke="{StaticResource MikuGreenBrush}"
+                        StrokeThickness="1"
+                        ToolBarBackground="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
+                        ToolBarItems="All"
+                        ZoomRelativeToCursor="True" />
+                </sfcharts:SfChart.Behaviors>
+                <sfcharts:SfChart.Legend>
+                    <sfcharts:ChartLegend
+                        DockPosition="Right"
+                        FontSize="{StaticResource SmallFontSize}"
+                        LegendPosition="Outside" />
+                </sfcharts:SfChart.Legend>
+                <sfcharts:SfChart.PrimaryAxis>
+                    <sfcharts:DateTimeAxis
+                        FontSize="{StaticResource SmallFontSize}"
+                        Header="UTC(HH:mm:ss)"
+                        Interval="1"
+                        IntervalType="Seconds"
+                        LabelFormat="HH:mm:ss" />
+                </sfcharts:SfChart.PrimaryAxis>
+                <sfcharts:SfChart.SecondaryAxis>
+                    <sfcharts:NumericalAxis FontSize="{StaticResource SmallFontSize}" Header="{Binding ViewModel.Title}" />
+                </sfcharts:SfChart.SecondaryAxis>
+            </sfcharts:SfChart>
+            <ui:Button
+                Grid.Row="1"
+                Margin="0,5,0,0"
+                Padding="5"
+                Click="OnSaveButtonClicked"
+                FontSize="{StaticResource MediumFontSize}"
+                Icon="Save24" />
+        </Grid>
     </Border>
 </UserControl>

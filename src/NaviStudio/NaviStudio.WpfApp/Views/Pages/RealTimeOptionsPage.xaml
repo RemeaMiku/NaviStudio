@@ -1,17 +1,16 @@
 ﻿<UserControl
     x:Class="NaviStudio.WpfApp.Views.Pages.RealTimeOptionsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:NaviStudio.WpfApp.Common.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:options="clr-namespace:NaviStudio.Shared.Models.Options;assembly=NaviStudio.Shared"
-    xmlns:cv="clr-namespace:NaviStudio.WpfApp.Common.Converters"
-    xmlns:vm="clr-namespace:NaviStudio.WpfApp.ViewModels"
     xmlns:pages="clr-namespace:NaviStudio.WpfApp.ViewModels.Pages"
-    xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Pages"
     xmlns:port="clr-namespace:System.IO.Ports;assembly=System"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DataContext="{d:DesignInstance Type=local:RealTimeOptionsPage}"
     d:DesignHeight="800"
     d:DesignWidth="800"
@@ -118,7 +117,7 @@
                     </ui:CardExpander.Header>
                     <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
                         <HeaderedContentControl Header="IP 地址">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding TcpAddress, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding TcpOptions.Address, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="端口">
                             <ui:NumberBox
@@ -126,7 +125,7 @@
                                 Maximum="65535"
                                 Minimum="0"
                                 ValidationMode="InvalidInputOverwritten"
-                                Value="{Binding TcpPort, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                Value="{Binding TcpOptions.Port, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         </HeaderedContentControl>
                     </WrapPanel>
                 </ui:CardExpander>
@@ -142,30 +141,30 @@
                     </ui:CardExpander.Header>
                     <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
                         <HeaderedContentControl Header="端口名">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding SerialPortName, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding SerialOptions.PortName, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="串行波特率(bps)">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
                                 ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.BaudRates}"
-                                SelectedValue="{Binding SerialBaudRate}" />
+                                SelectedValue="{Binding SerialOptions.BaudRate}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="标准数据位长度">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
                                 ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.DataBits}"
-                                SelectedValue="{Binding SerialDataBits}" />
+                                SelectedValue="{Binding SerialOptions.DataBits}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="奇偶校验协议">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
                                 ItemsSource="{x:Static pages:RealTimeOptionsPageViewModel.Parities}"
-                                SelectedValue="{Binding SerialParity}" />
+                                SelectedValue="{Binding SerialOptions.Parity}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="标准停止位数">
                             <ComboBox
                                 Margin="{StaticResource SmallSpacing}"
-                                SelectedValue="{Binding SerialStopBits}"
+                                SelectedValue="{Binding SerialOptions.StopBits}"
                                 SelectedValuePath="Tag">
                                 <ComboBoxItem Content="1" Tag="{x:Static port:StopBits.One}" />
                                 <ComboBoxItem Content="1.5" Tag="{x:Static port:StopBits.OnePointFive}" />
@@ -173,7 +172,7 @@
                             </ComboBox>
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="启用 RTS 信号">
-                            <ui:ToggleSwitch Margin="0,12,0,0" IsChecked="{Binding SerialRtsEnable}" />
+                            <ui:ToggleSwitch Margin="0,12,0,0" IsChecked="{Binding SerialOptions.RtsEnable}" />
                         </HeaderedContentControl>
                     </WrapPanel>
                 </ui:CardExpander>
@@ -189,10 +188,10 @@
                     </ui:CardExpander.Header>
                     <WrapPanel ItemWidth="{StaticResource WrapItemWidth}">
                         <HeaderedContentControl Header="Caster 主机">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripCasterHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripOptions.CasterHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="挂载点">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripMountPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripOptions.MountPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="端口">
                             <ui:NumberBox
@@ -200,13 +199,13 @@
                                 Maximum="65535"
                                 Minimum="0"
                                 ValidationMode="InvalidInputOverwritten"
-                                Value="{Binding NtripPort, Mode=TwoWay}" />
+                                Value="{Binding NtripOptions.Port, Mode=TwoWay}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="用户名">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripOptions.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                         <HeaderedContentControl Header="密码">
-                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox Margin="{StaticResource SmallSpacing}" Text="{Binding NtripOptions.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </HeaderedContentControl>
                     </WrapPanel>
                 </ui:CardExpander>

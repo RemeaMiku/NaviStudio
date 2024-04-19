@@ -143,14 +143,25 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                             <TextBlock Style="{StaticResource DynamicForegroundTextBlock}" Text="历元数" />
-                            <ui:NumberBox
-                                Margin="{StaticResource SmallSpacing}"
-                                ClearButtonEnabled="False"
-                                Maximum="{x:Static windows:ChartToolWindowViewModel.MaxEpochCount}"
-                                Minimum="{x:Static windows:ChartToolWindowViewModel.MinEpochCount}"
-                                PlaceholderText="输入历元数..."
-                                ValidationMode="InvalidInputOverwritten"
-                                Value="{Binding ViewModel.EpochCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            <Grid Margin="{StaticResource SmallSpacing}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:NumberBox
+                                    ClearButtonEnabled="False"
+                                    Maximum="{x:Static windows:ChartToolWindowViewModel.MaxEpochCount}"
+                                    Minimum="{x:Static windows:ChartToolWindowViewModel.MinEpochCount}"
+                                    PlaceholderText="输入历元数..."
+                                    ValidationMode="InvalidInputOverwritten"
+                                    Value="{Binding ViewModel.EpochCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <ui:Button
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    Command="{Binding ViewModel.SetEpochCountToMaxCommand, Mode=OneTime}"
+                                    Content="设为最大值"
+                                    FontSize="{StaticResource SmallFontSize}" />
+                            </Grid>
                             <TextBlock
                                 Margin="{StaticResource LargeSpacing}"
                                 Style="{StaticResource DynamicForegroundTextBlock}"

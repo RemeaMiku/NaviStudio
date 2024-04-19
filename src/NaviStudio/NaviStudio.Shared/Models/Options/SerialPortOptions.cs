@@ -1,22 +1,28 @@
-﻿using System.IO.Ports;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IO.Ports;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace NaviStudio.Shared.Models.Options;
 
-public class SerialPortOptions
+public partial class SerialPortOptions : ObservableValidator
 {
-    #region Public Properties
+    [ObservableProperty]
+    string _portName = string.Empty;
 
-    public string PortName { get; set; } = string.Empty;
+    [ObservableProperty]
+    int _baudRate = 9600;
 
-    public int BaudRate { get; set; } = 9600;
+    [ObservableProperty]
+    Parity _parity = Parity.None;
 
-    public Parity Parity { get; set; } = Parity.None;
+    [ObservableProperty]
+    [Range(5, 8, ErrorMessage = "范围为 5-8")]
+    [NotifyDataErrorInfo]
+    int _dataBits = 8;
 
-    public int DataBits { get; set; } = 8;
+    [ObservableProperty]
+    StopBits _stopBits = StopBits.One;
 
-    public StopBits StopBits { get; set; } = StopBits.One;
-
-    public bool RtsEnable { get; set; } = false;
-
-    #endregion Public Properties
+    [ObservableProperty]
+    bool _rtsEnable = false;
 }
