@@ -29,7 +29,6 @@ namespace NaviStudio.WpfApp;
 /// </summary>
 public partial class App : Application
 {
-
     public static void SetGMap()
     {
         GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
@@ -79,9 +78,11 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+#if RELEASE
         DispatcherUnhandledException += OnAppDispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
         TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
+#endif
         SetGMap();
         RegisterKeys();
         ApplyTheme();

@@ -43,8 +43,8 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
             if(e.PropertyName is not (nameof(HasChanged) or nameof(IsEditable)))
                 HasChanged = true;
         };
-        if(File.Exists(_cachedOptionsFileName))
-            Read(_cachedOptionsFileName);
+        if(File.Exists(_cachedOptionsFilePath))
+            Read(_cachedOptionsFilePath);
     }
 
     #endregion Public Constructors
@@ -127,7 +127,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
     [ObservableProperty]
     bool _isEditable = true;
 
-    const string _cachedOptionsFileName = $"cache{FileExtensions.RealTimeOptionsFileExtension}";
+    const string _cachedOptionsFilePath = $"cache{FileExtensions.RealTimeOptionsFileExtension}";
 
     #endregion Private Fields
 
@@ -240,7 +240,7 @@ public partial class RealTimeOptionsPageViewModel : ObservableValidator, IRecipi
             return;
         var options = GetOptions();
         var content = JsonSerializer.Serialize(options, _jsonSerializerOptions);
-        File.WriteAllText(_cachedOptionsFileName, content);
+        File.WriteAllText(_cachedOptionsFilePath, content);
         _messenger.Send(new ValueChangedMessage<RealTimeOptions>(GetOptions()));
         _messenger.Send(new Output(Title, SeverityType.Info, "解算配置已更新"));
         HasChanged = false;

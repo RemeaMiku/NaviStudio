@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="appsettings.json" />
 	  <None Remove="Assets\Map\car.png" />
 	  <None Remove="Assets\Map\default.png" />
 	  <None Remove="Assets\Map\ellipse.png" />
@@ -33,6 +34,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="appsettings.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="Assets\Map\ellipse.png" />
 		<Resource Include="Assets\mirainavi-logo.ico" />
 	</ItemGroup>

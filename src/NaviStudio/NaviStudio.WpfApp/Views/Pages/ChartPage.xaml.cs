@@ -23,7 +23,6 @@ public partial class ChartPage : UserControl
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = this;
-        ViewModel.AddSeriesRequested += OnViewModelAddSeriesRequested;
     }
 
     #endregion Public Constructors
@@ -68,7 +67,6 @@ public partial class ChartPage : UserControl
 
     #region Private Methods
 
-    void OnViewModelAddSeriesRequested(object? sender, string e) => AddSeries(e);
     private void OnSfChartMouseEnter(object sender, MouseEventArgs e)
     {
         ChartZoomPanBehavior.EnableZoomingToolBar = true;

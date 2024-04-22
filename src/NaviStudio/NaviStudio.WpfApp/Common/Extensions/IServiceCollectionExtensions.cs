@@ -13,6 +13,8 @@ using NaviStudio.WpfApp.Views.Pages;
 using NaviStudio.WpfApp.Views.Windows;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
+using IDialogService = NaviStudio.WpfApp.Services.Contracts.IDialogService;
+using DialogService = NaviStudio.WpfApp.Services.DialogService;
 
 namespace NaviStudio.WpfApp.Common.Extensions;
 
@@ -58,10 +60,10 @@ public static class IServiceCollectionExtensions
     {
         return services
             .AddSingleton<ISnackbarService, SnackbarService>()
+            .AddKeyedSingleton<IDialogService, DialogService>("DynamicContentDialog")
+            .AddKeyedSingleton<IDialogService, DialogService>("MessageDialog")
             .AddSingleton<IMessenger>(WeakReferenceMessenger.Default)
-#if DEBUG
             .AddSingleton<IRealTimeService, IPSTcpJsonRealTimeService>()
-#endif
             .AddSingleton<IEpochDatasService, JsonEpochDatasService>()
             .AddSingleton<IGMapRouteDisplayService, GMapRouteDisplayService>();
     }

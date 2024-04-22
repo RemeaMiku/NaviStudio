@@ -29,7 +29,10 @@
         <Style TargetType="ui:MenuItem">
             <Setter Property="Width" Value="150" />
         </Style>
-        <Style x:Key="TopUiMenuItemStyle" TargetType="ui:MenuItem">
+        <Style TargetType="MenuItem">
+            <Setter Property="Width" Value="150" />
+        </Style>
+        <Style x:Key="TopUiMenuItemStyle" TargetType="MenuItem">
             <Setter Property="Width" Value="Auto" />
         </Style>
         <Style
@@ -50,12 +53,53 @@
             <Setter Property="syncfusion:DockingManager.CanFloat" Value="True" />
             <Setter Property="syncfusion:DockingManager.AllowsTransparencyForFloatWindow" Value="True" />
         </Style>
+        <StackPanel x:Key="SaveLayoutDialogContent" Margin="3">
+            <TextBlock Text="布局名称：" />
+            <ui:TextBox
+                x:Name="LayoutNameTextBox"
+                Margin="0,5,0,0"
+                Text="{Binding ViewModel.NewLayoutName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <StackPanel x:Key="ManageLayoutsDialogContent" Margin="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ListView
+                    ItemsSource="{Binding ViewModel.LayoutNames, Mode=OneWay}"
+                    SelectedItem="{Binding ViewModel.SelectedLayoutName, Mode=TwoWay}"
+                    SelectionMode="Single" />
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <ui:Button
+                        Command="{Binding ViewModel.RemoveLayoutCommand, Mode=OneTime}"
+                        Foreground="{StaticResource MikuRedBrush}"
+                        Icon="Delete24"
+                        IsEnabled="{Binding ViewModel.HasSelectedLayout, Mode=OneWay}"
+                        Style="{StaticResource ToolUiButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </ui:UiWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <ui:Dialog
+            x:Name="MessageDialog"
+            Grid.Row="1"
+            Panel.ZIndex="101"
+            ButtonLeftAppearance="Primary"
+            ButtonLeftName="确定"
+            ButtonRightName="取消" />
+        <ui:Dialog
+            x:Name="DynamicContentDialog"
+            Grid.Row="1"
+            Panel.ZIndex="100"
+            ButtonLeftAppearance="Primary"
+            ButtonLeftName="确定"
+            ButtonRightName="取消" />
         <Grid Background="{ui:ThemeResource}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -217,6 +261,26 @@
                             </ui:MenuItem.Icon>
                         </ui:MenuItem>
                     </ui:MenuItem>
+                    <ui:MenuItem Header="窗口(_W)" Style="{StaticResource TopUiMenuItemStyle}">
+                        <ui:MenuItem
+                            Click="OnSaveLayoutMenuItemClick"
+                            Command="{Binding ViewModel.SaveLayoutCommand, Mode=OneTime}"
+                            Header="保存窗口布局(_S)" />
+                        <ui:MenuItem Header="应用窗口布局(_A)" ItemsSource="{Binding ViewModel.LayoutNames, Mode=OneWay}">
+                            <ui:MenuItem.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{Binding ., Mode=OneTime}" />
+                                    <Setter Property="Command" Value="{Binding ViewModel.ApplyLayoutCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" />
+                                    <Setter Property="CommandParameter" Value="{Binding ., Mode=OneTime}" />
+                                </Style>
+                            </ui:MenuItem.ItemContainerStyle>
+                        </ui:MenuItem>
+                        <ui:MenuItem
+                            Click="OnManageLayoutsMenuItemClicked"
+                            Command="{Binding ViewModel.ManageLayoutsCommand, Mode=OneTime}"
+                            Header="管理窗口布局(_M)" />
+                        <ui:MenuItem Command="{Binding ViewModel.ResetLayoutCommand, Mode=OneTime}" Header="重置窗口布局(_R)" />
+                    </ui:MenuItem>
                     <ui:MenuItem
                         Click="OnAppSettingsItemClicked"
                         Header="{x:Static windows:AppSettingsWindowViewModel.MenuItemHeader}"
@@ -287,7 +351,7 @@
                         <ui:Button
                             x:Name="RestartButton"
                             Command="{Binding ViewModel.RestartCommand, Mode=OneTime}"
-                            Foreground="{StaticResource MeaBlueBrush}"
+                            Foreground="{StaticResource RinOrangeBrush}"
                             Icon="ArrowCounterclockwise24"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="重新启动"
@@ -295,7 +359,7 @@
                         <ui:Button
                             x:Name="RealTimeOptionsViewButton"
                             Click="OnRealTimeOptionsViewButtonClicked"
-                            Foreground="{StaticResource MikuGreenBrush}"
+                            Foreground="{StaticResource MeaBlueBrush}"
                             Icon="PlaySettings20"
                             Style="{StaticResource ToolUiButtonStyle}"
                             ToolTip="配置" />
@@ -356,6 +420,7 @@
                     <ContentControl
                         x:Name="RealTimeOptionsView"
                         syncfusion:DockingManager.CanDock="False"
+                        syncfusion:DockingManager.CanSerialize="False"
                         syncfusion:DockingManager.Header="{x:Static pages:RealTimeOptionsPageViewModel.Title}"
                         syncfusion:DockingManager.State="Hidden"
                         Style="{StaticResource DefaultContentControlStyle}" />

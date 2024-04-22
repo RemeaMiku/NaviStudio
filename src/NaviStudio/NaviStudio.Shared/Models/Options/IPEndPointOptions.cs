@@ -16,7 +16,7 @@ public partial class IPEndPointOptions : ObservableValidator
     [NotifyDataErrorInfo]
     [RegularExpression("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", ErrorMessage = "非法地址")]
     [Required(ErrorMessage = "不能为空")]
-    string _address = IPAddress.None.ToString();
+    string _address = IPAddress.Loopback.ToString();
 
     [ObservableProperty]
     [Range(0, IPEndPoint.MaxPort)]

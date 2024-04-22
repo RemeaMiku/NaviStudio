@@ -6,11 +6,6 @@ namespace NaviStudio.WpfApp.ViewModels.Pages;
 
 public partial class ChartPageViewModel : ObservableObject
 {
-    #region Public Events
-
-    public event EventHandler<string>? AddSeriesRequested;
-
-    #endregion Public Events
 
     #region Public Properties
 
@@ -27,8 +22,8 @@ public partial class ChartPageViewModel : ObservableObject
         ArgumentOutOfRangeException.ThrowIfLessThan(count, 0);
         App.Current.Dispatcher.Invoke(() =>
         {
-            foreach ((_, var datas) in SeriesDatas)
-                for (int i = 0; i < count; i++)
+            foreach((_, var datas) in SeriesDatas)
+                for(int i = 0; i < count; i++)
                     datas.RemoveAt(0);
         });
     }
@@ -40,7 +35,7 @@ public partial class ChartPageViewModel : ObservableObject
     {
         App.Current.Dispatcher.Invoke(() =>
         {
-            foreach (var datas in SeriesDatas.Values)
+            foreach(var datas in SeriesDatas.Values)
                 datas.Clear();
         });
     }

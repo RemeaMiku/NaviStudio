@@ -152,11 +152,11 @@ public class IPSTcpJsonRealTimeService : IRealTimeService
             {
                 while(!token.IsCancellationRequested && DateTime.UtcNow - _lastReceivedTime <= TimeSpan.FromSeconds(settings.Timeout))
                 {
-                    var bytes = new byte[10240];
-                    var count = await tcpStream.ReadAsync(bytes, token);
+                    var buffer = new byte[40960];
+                    var count = await tcpStream.ReadAsync(buffer, token);
                     if(count == 0)
                         continue;
-                    var json = Encoding.UTF8.GetString(bytes[0..count]);
+                    var json = Encoding.UTF8.GetString(buffer[0..count]);
                     if(string.IsNullOrEmpty(json))
                         continue;
                     var epochData = JsonSerializer.Deserialize<EpochData>(json, jsonOptions);

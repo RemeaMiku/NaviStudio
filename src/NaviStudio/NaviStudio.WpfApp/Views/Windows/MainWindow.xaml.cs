@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,11 +10,12 @@ using NaviStudio.WpfApp.Views.Pages;
 using Syncfusion.Windows.Tools.Controls;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
-using Wpf.Ui.Mvvm.Services;
+using NaviStudio.WpfApp.Services.Contracts;
+using IDialogService = NaviStudio.WpfApp.Services.Contracts.IDialogService;
+using Windows.UI.Popups;
+using System.Linq;
 
 namespace NaviStudio.WpfApp.Views.Windows;
-
-//TODO 关闭时保存子窗口布局
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -27,10 +29,18 @@ public partial class MainWindow : UiWindow
         InitializeComponent();
         App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
         App.Current.Services.GetRequiredService<ISnackbarService>().SetSnackbarControl(Snackbar);
+        App.Current.Services.GetRequiredKeyedService<IDialogService>(nameof(DynamicContentDialog)).RegisteDialog(DynamicContentDialog);
+        App.Current.Services.GetRequiredKeyedService<IDialogService>(nameof(MessageDialog)).RegisteDialog(MessageDialog);
+        SetPages();
+        DockingManagerLayoutHelper.Register(DockingManagerControl);
+        DockingManagerLayoutHelper.SaveDefault();
+        //DockingManagerLayoutHelper.ApplyTemp();
+        DockingManagerControl.LoadDockState();
+        DockingManagerLayoutHelper.Load();
         ViewModel = viewModel;
+        ViewModel.LayoutNames = DockingManagerLayoutHelper.GetLayoutNames().ToList();
         ViewModel.IsActive = true;
         DataContext = this;
-        SetPages();
     }
 
     #endregion Public Constructors
@@ -70,6 +80,7 @@ public partial class MainWindow : UiWindow
         SatelliteTrackingView.Content = App.Current.Services.GetRequiredService<SatelliteTrackingPage>();
         PropertyView.Content = App.Current.Services.GetRequiredService<PropertyPage>();
     }
+
     void RestoreAndActiveWindow(ContentControl contentControl)
     {
         if(DockingManager.GetState(contentControl) == DockState.Hidden)
@@ -147,5 +158,17 @@ public partial class MainWindow : UiWindow
     private void OnOpenEpochDatasButtonClicked(object sender, RoutedEventArgs e)
     {
         DockingWindowHandler.RestoreDockState(MapView);
+    }
+
+    private void OnSaveLayoutMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        DynamicContentDialog.Content = Resources["SaveLayoutDialogContent"];
+        DynamicContentDialog.DialogHeight = 250;
+    }
+
+    private void OnManageLayoutsMenuItemClicked(object sender, RoutedEventArgs e)
+    {
+        DynamicContentDialog.Content = Resources["ManageLayoutsDialogContent"];
+        DynamicContentDialog.DialogHeight = 400;
     }
 }

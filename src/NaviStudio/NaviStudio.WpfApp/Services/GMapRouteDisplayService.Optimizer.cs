@@ -83,20 +83,11 @@ partial class GMapRouteDisplayService
         });
     }
 
-    //DateTime _lastClusterTime = DateTime.MinValue;
-
-    //readonly static TimeSpan _clusterInterval = TimeSpan.FromSeconds(0.5);
-
-    PointLatLng _lastCenter;
-    int _lastZoom = -1;
-
     readonly object _clusterLock = new();
 
     void Optimize()
     {
         ArgumentNullException.ThrowIfNull(_gMapControl);
-        if(_gMapControl.CenterPosition == _lastCenter && (int)_gMapControl.Zoom == _lastZoom)
-            return;
         var watch = new Stopwatch();
         watch.Start();
         _gMapControl.Markers.Remove(_positionMarker);
@@ -107,12 +98,9 @@ partial class GMapRouteDisplayService
             markers.RemoveWhere(marker => !marker.IsVisible(_gMapControl));
         //Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
         EnableMarkers(markers);
-        //Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
-        //_lastClusterTime = DateTime.Now;
+        //Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");       
         Trace.WriteLine($"Zoom:{_gMapControl.Zoom} Level:{clusterLevel} Count: {markers.Count} Time:{watch.ElapsedMilliseconds}ms");
         _gMapControl.Markers.Add(_positionMarker);
         watch.Reset();
-        _lastCenter = _gMapControl.CenterPosition;
-        _lastZoom = (int)_gMapControl.Zoom;
     }
 }

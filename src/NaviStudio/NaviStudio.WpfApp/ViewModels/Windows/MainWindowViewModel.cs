@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using NaviStudio.Shared;
 using NaviStudio.Shared.Models.Options;
@@ -16,11 +17,15 @@ using NaviStudio.WpfApp.Common.Messaging;
 using NaviStudio.WpfApp.Common.Messaging.Messages;
 using NaviStudio.WpfApp.Services.Contracts;
 using Wpf.Ui.Mvvm.Contracts;
+using IDialogService = NaviStudio.WpfApp.Services.Contracts.IDialogService;
 
 namespace NaviStudio.WpfApp.ViewModels.Windows;
 
-public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger, ISnackbarService snackbarService) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>, IRecipient<StatusNotification>
+public partial class MainWindowViewModel(IEpochDatasService epochDatasService, IRealTimeService realTimeControlService, IMessenger messenger, ISnackbarService snackbarService, [FromKeyedServices("DynamicContentDialog")] IDialogService saveLayoutDialogdialogService, [FromKeyedServices("MessageDialog")] IDialogService messageDialogService) : ObservableRecipient(messenger), IRecipient<ValueChangedMessage<RealTimeOptions>>, IRecipient<StatusNotification>
 {
+    readonly IDialogService _dynamicContentDialogService = saveLayoutDialogdialogService;
+    readonly IDialogService _messageDialogService = messageDialogService;
+
     #region Public Fields
 
     public const string Title = "NaviStudio";
