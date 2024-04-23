@@ -266,7 +266,10 @@
                             Click="OnSaveLayoutMenuItemClick"
                             Command="{Binding ViewModel.SaveLayoutCommand, Mode=OneTime}"
                             Header="保存窗口布局(_S)" />
-                        <ui:MenuItem Header="应用窗口布局(_A)" ItemsSource="{Binding ViewModel.LayoutNames, Mode=OneWay}">
+                        <ui:MenuItem
+                            Header="应用窗口布局(_Y)"
+                            IsEnabled="{Binding ViewModel.HasLayouts, Mode=OneWay}"
+                            ItemsSource="{Binding ViewModel.LayoutNames, Mode=OneWay}">
                             <ui:MenuItem.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
                                     <Setter Property="Header" Value="{Binding ., Mode=OneTime}" />

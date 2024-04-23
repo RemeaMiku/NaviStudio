@@ -16,7 +16,10 @@ namespace NaviStudio.WpfApp.ViewModels.Windows;
 partial class MainWindowViewModel
 {
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasLayouts))]
     List<string>? _layoutNames;
+
+    public bool HasLayouts => LayoutNames?.Count > 0;
 
     [RelayCommand]
     async Task SaveLayoutAsync()

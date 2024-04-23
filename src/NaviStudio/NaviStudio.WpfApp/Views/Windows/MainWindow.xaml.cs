@@ -53,7 +53,7 @@ public partial class MainWindow : UiWindow
 
     #region Public Methods
 
-    public void AddDocument(string header, object content)
+    public void AddDocument(string header, object content, bool canSerialize = false)
     {
         var contentControl = new ContentControl()
         {
@@ -63,6 +63,7 @@ public partial class MainWindow : UiWindow
         DockingManagerControl.Children.Add(contentControl);
         DockingManager.SetState(contentControl, DockState.Document);
         DockingManager.SetHeader(contentControl, header);
+        DockingManager.SetCanSerialize(contentControl, canSerialize);
     }
 
     #endregion Public Methods
@@ -100,6 +101,8 @@ public partial class MainWindow : UiWindow
         var contentControl = (ContentControl)e.TargetItem;
         DockingWindowHandler.SaveDockState(contentControl);
         DockingWindowHandler.SetViewModelIsActive(contentControl, false);
+        if(contentControl.Content is ChartGroupPage)
+            DockingManagerControl.Children.Remove(contentControl);
     }
 
     void OnDockingManagerDocumentWindowClosed(object sender, CloseButtonEventArgs e)
@@ -107,6 +110,8 @@ public partial class MainWindow : UiWindow
         var contentControl = (ContentControl)e.TargetItem;
         DockingWindowHandler.SaveDockState(contentControl);
         DockingWindowHandler.SetViewModelIsActive(contentControl, false);
+        if(contentControl.Content is ChartGroupPage)
+            DockingManagerControl.Children.Remove(contentControl);
     }
 
     void OnDockingManagerChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
