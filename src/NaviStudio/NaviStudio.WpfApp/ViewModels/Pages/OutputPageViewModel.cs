@@ -149,5 +149,15 @@ public partial class OutputPageViewModel : ObservableObject, IRecipient<Output>
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
     }
 
+    [RelayCommand]
+    void Clear()
+    {
+        Outputs.Clear();
+        Senders.Clear();
+        Senders.Add(_allSenders);
+        SelectedSender = _allSenders;
+        Refresh();
+    }
+
     #endregion Private Methods
 }

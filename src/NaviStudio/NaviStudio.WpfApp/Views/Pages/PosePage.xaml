@@ -30,7 +30,16 @@
                     d:Foreground="White"
                     d:Text="2023/08/31 11:45:14.831"
                     FontSize="{StaticResource LargeFontSize}"
-                    Text="{Binding ViewModel.TimeStamp, StringFormat='{}{0:yyyy/MM/dd HH:mm:ss.fff}', Mode=OneWay}" />
+                    Text="{Binding ViewModel.TimeStamp, Mode=OneWay}" />
+                <TextBlock
+                    d:Foreground="White"
+                    FontSize="{StaticResource SmallFontSize}"
+                    Text="GPS时 : " />
+                <TextBlock
+                    Margin="{StaticResource SmallSpacing}"
+                    d:Foreground="White"
+                    FontSize="{StaticResource LargeFontSize}"
+                    Text="{Binding ViewModel.GpsTime, Mode=OneWay}" />
                 <TextBlock
                     Margin="{StaticResource LargeSpacing}"
                     d:Foreground="White"

@@ -13,7 +13,8 @@ public partial class ChartToolWindow : UiWindow
     public ChartToolWindow(ChartToolWindowViewModel viewModel)
     {
         InitializeComponent();
-        App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.ApplyTheme();
+        App.Current.ApplyBackground();
         ViewModel = viewModel;
         DataContext = this;
     }

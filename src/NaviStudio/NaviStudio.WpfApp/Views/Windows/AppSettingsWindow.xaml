@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:NaviStudio.WpfApp.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:settings="clr-namespace:NaviStudio.WpfApp.Common.Settings"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:NaviStudio.WpfApp.ViewModels.Windows"
     Title="{x:Static windows:AppSettingsWindowViewModel.Title}"
@@ -59,18 +60,32 @@
                             Header="外观"
                             Icon="PaintBrush24">
                             <Border Padding="10">
-                                <HeaderedContentControl Header="亚克力效果">
-                                    <StackPanel>
-                                        <ui:ToggleSwitch Margin="{StaticResource SmallSpacing}" IsChecked="{Binding ViewModel.IsAcrylicEnabled, Mode=TwoWay}" />
-                                        <ui:InfoBar
-                                            Title="注意"
+                                <StackPanel>
+                                    <HeaderedContentControl Header="主题">
+                                        <ComboBox
+                                            MinWidth="150"
                                             Margin="{StaticResource SmallSpacing}"
-                                            Padding="10"
-                                            IsOpen="True"
-                                            Message="亚克力效果仅支持 Windows 10 22523 build 及更高版本"
-                                            Severity="Informational" />
-                                    </StackPanel>
-                                </HeaderedContentControl>
+                                            HorizontalAlignment="Left"
+                                            SelectedIndex="{Binding ViewModel.Theme, Mode=TwoWay}">
+                                            <ComboBoxItem Content="跟随系统" />
+                                            <ComboBoxItem Content="浅色模式" />
+                                            <ComboBoxItem Content="深色模式" />
+                                        </ComboBox>
+                                    </HeaderedContentControl>
+                                    <HeaderedContentControl Header="亚克力效果">
+                                        <StackPanel>
+                                            <ui:ToggleSwitch Margin="{StaticResource SmallSpacing}" IsChecked="{Binding ViewModel.IsAcrylicEnabled, Mode=TwoWay}" />
+                                            <ui:InfoBar
+                                                Title="注意"
+                                                Margin="{StaticResource SmallSpacing}"
+                                                Padding="10"
+                                                IsOpen="True"
+                                                Message="亚克力效果仅支持 Windows 10 22523 build 及更高版本"
+                                                Severity="Informational" />
+                                        </StackPanel>
+                                    </HeaderedContentControl>
+                                </StackPanel>
+
                             </Border>
                         </ui:CardExpander>
                     </StackPanel>
@@ -82,13 +97,14 @@
                     Orientation="Horizontal">
                     <ui:Button
                         Appearance="Primary"
-                        Click="OnButtonClicked"
+                        Click="OnConfirmButtonClicked"
                         Command="{Binding ViewModel.SaveCommand, Mode=OneTime}"
                         Content="确定"
-                        Icon="Checkmark24" />
+                        Icon="Checkmark24"
+                        IsEnabled="{Binding ViewModel.HasNoErrors, Mode=OneWay}" />
                     <ui:Button
                         Margin="10,0,0,0"
-                        Click="OnButtonClicked"
+                        Click="OnConfirmButtonClicked"
                         Content="取消"
                         Icon="Dismiss24" />
                 </StackPanel>

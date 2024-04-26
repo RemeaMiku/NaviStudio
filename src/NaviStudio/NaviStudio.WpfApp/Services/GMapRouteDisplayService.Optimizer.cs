@@ -37,7 +37,6 @@ partial class GMapRouteDisplayService
             >= 0 and < 5 => _clusterLevel4,
             _ => throw new Exception("Zoom level is out of range."),
         };
-        //return _clusterLevel0;
     }
 
     void UpdateClusteredMarkers()
@@ -45,18 +44,6 @@ partial class GMapRouteDisplayService
         foreach((var level, var markers) in _clusterLevelToMarkersMap)
             for(var i = markers.Count * level; i < _routeMarkers.Count; i += level)
                 markers.Add(_routeMarkers[i]);
-        //Trace.WriteLine($"Level {level}: Add {i}");                    
-        //Parallel.ForEach(_clusterLevelToMarkersMap, (pair) =>
-        //{
-        //    var level = pair.Key;
-        //    var markers = pair.Value;
-        //    var target = _routeMarkers.Count / level;
-        //    Parallel.For(markers.Count, target, i =>
-        //    {
-        //        markers.Add(_routeMarkers[level * i]);
-        //        Trace.WriteLine($"Level {level}: Add {level * i}");
-        //    });
-        //});
     }
 
     HashSet<GMapMarker> GetClusteredMarkers(int level)
@@ -66,7 +53,6 @@ partial class GMapRouteDisplayService
         if(!_clusterLevelToMarkersMap.ContainsKey(level))
             _clusterLevelToMarkersMap.Add(level, []);
         var markers = _clusterLevelToMarkersMap[level];
-        //UpdateClusteredMarkers(clusterLevel, clusteredMarkers);
         return [.. markers];
     }
 
@@ -93,12 +79,12 @@ partial class GMapRouteDisplayService
         _gMapControl.Markers.Remove(_positionMarker);
         var clusterLevel = GetClusterLevel();
         var markers = GetClusteredMarkers(clusterLevel);
-        //Trace.WriteLine($"GetClusteredMarkers : {watch.ElapsedMilliseconds}ms");
+        Trace.WriteLine($"GetClusteredMarkers : {watch.ElapsedMilliseconds}ms");
         if(markers.Count >= _clusterThreshold)
             markers.RemoveWhere(marker => !marker.IsVisible(_gMapControl));
-        //Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
+        Trace.WriteLine($"FilterVisibleMarkers : {watch.ElapsedMilliseconds}ms");
         EnableMarkers(markers);
-        //Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");       
+        Trace.WriteLine($"EnableMarkers : {watch.ElapsedMilliseconds}ms");
         Trace.WriteLine($"Zoom:{_gMapControl.Zoom} Level:{clusterLevel} Count: {markers.Count} Time:{watch.ElapsedMilliseconds}ms");
         _gMapControl.Markers.Add(_positionMarker);
         watch.Reset();

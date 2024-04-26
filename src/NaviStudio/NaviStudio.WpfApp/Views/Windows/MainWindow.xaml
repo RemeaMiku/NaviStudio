@@ -56,7 +56,7 @@
         <StackPanel x:Key="SaveLayoutDialogContent" Margin="3">
             <TextBlock Text="布局名称：" />
             <ui:TextBox
-                x:Name="LayoutNameTextBox"
+                x:Name="NewLayoutNameTextBox"
                 Margin="0,5,0,0"
                 Text="{Binding ViewModel.NewLayoutName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
@@ -90,6 +90,7 @@
             x:Name="MessageDialog"
             Grid.Row="1"
             Panel.ZIndex="101"
+            d:Visibility="Collapsed"
             ButtonLeftAppearance="Primary"
             ButtonLeftName="确定"
             ButtonRightName="取消" />
@@ -97,6 +98,7 @@
             x:Name="DynamicContentDialog"
             Grid.Row="1"
             Panel.ZIndex="100"
+            d:Visibility="Collapsed"
             ButtonLeftAppearance="Primary"
             ButtonLeftName="确定"
             ButtonRightName="取消" />
@@ -398,7 +400,7 @@
                     Grid.Row="1"
                     Margin="0,3,0,0"
                     d:Background="Black"
-                    syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentDark}"
+                    syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=FluentLight}"
                     Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
                     ChildrenCollectionChanged="OnDockingManagerChildrenCollectionChanged"
                     CloseButtonClick="OnDockingManagerDocumentWindowClosed"
@@ -456,14 +458,14 @@
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="PoseView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="150"
                         syncfusion:DockingManager.Header="{x:Static pages:PosePageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Bottom"
                         Style="{StaticResource DefaultContentControlStyle}" />
                     <ContentControl
                         x:Name="OutputView"
-                        syncfusion:DockingManager.DesiredHeightInDockedMode="250"
+                        syncfusion:DockingManager.DesiredHeightInDockedMode="300"
                         syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                         syncfusion:DockingManager.Header="{x:Static pages:OutputPageViewModel.Title}"
                         syncfusion:DockingManager.SideInDockedMode="Left"

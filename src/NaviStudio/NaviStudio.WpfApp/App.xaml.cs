@@ -19,6 +19,7 @@ using NaviStudio.WpfApp.Views.Windows;
 using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.FluentDark.WPF;
+using Syncfusion.Themes.FluentLight.WPF;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -37,9 +38,8 @@ public partial class App : Application
         GMapProvider.Language = LanguageType.ChineseSimplified;
     }
 
-    public static void ApplyTheme()
+    public static void RegisterThemes()
     {
-        //TODO 主题设置
         Accent.Apply((Color)ColorConverter.ConvertFromString("#FF39c5bb"));
         SfSkinManager.RegisterThemeSettings("FluentDark", new FluentDarkThemeSettings()
         {
@@ -47,23 +47,64 @@ public partial class App : Application
             FontFamily = new("Microsoft YaHei UI"),
             PrimaryForeground = Brushes.White,
         });
+        SfSkinManager.RegisterThemeSettings("FluentLight", new FluentLightThemeSettings()
+        {
+            PrimaryBackground = Accent.PrimaryAccentBrush,
+            FontFamily = new("Microsoft YaHei UI"),
+            PrimaryForeground = Brushes.Black,
+        });
     }
 
-    public bool TryApplyAcrylicToAllWindowsIfIsEnabled()
+    public void ApplyBackground()
     {
-        var flag = true;
         foreach(var window in Windows)
-            if(window is UiWindow uiWindow)
-                flag = flag && SettingsManager.TryApplyAcrylicIfIsEnabled(uiWindow);
-        return flag;
+        {
+            if(window is not UiWindow uiWindow)
+                continue;
+            if(!SettingsManager.Settings.AppearanceSettings.EnableAcrylic)
+            {
+                uiWindow.WindowBackdropType = BackgroundType.None;
+                return;
+            }
+            try
+            {
+                uiWindow.WindowBackdropType = BackgroundType.Acrylic;
+            }
+            catch(Exception)
+            {
+                uiWindow.WindowBackdropType = BackgroundType.None;
+                SettingsManager.Settings.AppearanceSettings.EnableAcrylic = false;
+            }
+        }
     }
 
     static void RegisterKeys()
     {
-        var syncKey = "Mjk5OTQ4MEAzMjM0MmUzMDJlMzBoZlRQNFJpUC8xNXNBM09RUTUxa2tWYzdweUNtYUhJMDZiVXV0NlpSR1ZvPQ==";
-        var bingKey = "AlIHhkb_-Q9xEyaWGoVmIhsVQPM1W7KCY0jGPLrio-gBFxny155gdrjwXllhuRYN";
-        SyncfusionLicenseProvider.RegisterLicense(syncKey);
-        BingSatelliteMapProvider.Instance.ClientKey = bingKey;
+        SyncfusionLicenseProvider.RegisterLicense(Keys.Syncfusion);
+        BingSatelliteMapProvider.Instance.ClientKey = Keys.BingMap;
+    }
+
+    public void ApplyTheme()
+    {
+        var settings = SettingsManager.Settings.AppearanceSettings;
+        var themeMode = settings.ThemeMode;
+        var backgroundType = settings.EnableAcrylic ? BackgroundType.Acrylic : BackgroundType.None;
+        switch(themeMode)
+        {
+            case ThemeModes.Light:
+                Wpf.Ui.Appearance.Theme.Apply(ThemeType.Light, backgroundType, false);
+                break;
+            case ThemeModes.Dark:
+                Wpf.Ui.Appearance.Theme.Apply(ThemeType.Dark, backgroundType, false);
+                break;
+            case ThemeModes.System:
+                foreach(var window in Windows)
+                    if(window is UiWindow uiWindow)
+                        Watcher.Watch(uiWindow, backgroundType, false);
+                break;
+            default:
+                break;
+        }
     }
 
     public static new App Current => (App)Application.Current;
@@ -85,7 +126,7 @@ public partial class App : Application
 #endif
         SetGMap();
         RegisterKeys();
-        ApplyTheme();
+        RegisterThemes();
         new SplashScreen("Assets/splash-screen.png").Show(true);
         SettingsManager.Load();
         SettingsManager.Save();
@@ -100,6 +141,8 @@ public partial class App : Application
             }
         }
     }
+
+    #region Global Exception Handling
 
     private void OnTaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
     {
@@ -133,4 +176,5 @@ public partial class App : Application
             Shutdown();
         }
     }
+    #endregion
 }

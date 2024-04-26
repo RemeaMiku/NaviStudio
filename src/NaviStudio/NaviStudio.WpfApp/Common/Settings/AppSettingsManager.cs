@@ -44,17 +44,17 @@ public class AppSettingsManager
         fallback ??= new();
         FilePath = filePath;
         AppSettings? settings;
-        using var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read);
-        using var reader = new StreamReader(stream);
         try
         {
-            settings = JsonSerializer.Deserialize<AppSettings>(reader.ReadToEnd(), _serializerOptions);
+            settings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(filePath), _serializerOptions);
             if(settings is not null && settings.TryValidate())
                 Settings = settings;
             return Settings;
         }
         catch(JsonException)
         {
+            Settings = fallback;
+            Save();
             return fallback;
         }
     }
@@ -70,35 +70,7 @@ public class AppSettingsManager
         filePath ??= FilePath;
         ArgumentException.ThrowIfNullOrEmpty(filePath);
         ThrowIfNotJson(filePath);
-        using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-        using var writer = new StreamWriter(stream);
-        writer.Write(JsonSerializer.Serialize(Settings, _serializerOptions));
-    }
-
-    public bool TryApplyAcrylicIfIsEnabled(UiWindow window, bool autoSave = true)
-    {
-        if(!Settings.AppearanceSettings.EnableAcrylic)
-        {
-            window.WindowBackdropType = BackgroundType.None;
-            return false;
-        }
-        try
-        {
-            window.WindowBackdropType = BackgroundType.Acrylic;
-            return true;
-        }
-        catch(Exception)
-        {
-            window.WindowBackdropType = BackgroundType.None;
-            Settings.AppearanceSettings.EnableAcrylic = false;
-            if(autoSave)
-            {
-                if(FilePath is null)
-                    throw new InvalidOperationException("Settings have not been loaded.");
-                Save();
-            }
-            return false;
-        }
+        File.WriteAllText(filePath, JsonSerializer.Serialize(Settings, _serializerOptions));
     }
 
     #endregion Public Methods

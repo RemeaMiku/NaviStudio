@@ -6,5 +6,7 @@ public class AppearanceSettings
 
     public bool EnableAcrylic { get; set; } = true;
 
+    public ThemeModes ThemeMode { get; set; } = ThemeModes.System;
+
     #endregion Public Properties
 }

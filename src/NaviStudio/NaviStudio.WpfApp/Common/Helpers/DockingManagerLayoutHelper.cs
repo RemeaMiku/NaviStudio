@@ -111,8 +111,6 @@ public static class DockingManagerLayoutHelper
         return true;
     }
 
-
-
     public static bool ApplyDefault()
     {
         ThrowIfNotRegistered();

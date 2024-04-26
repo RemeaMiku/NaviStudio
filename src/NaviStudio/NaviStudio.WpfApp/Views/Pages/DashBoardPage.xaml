@@ -52,7 +52,6 @@
                         FontSize="{StaticResource SmallFontSize}"
                         LabelOffset="0.85"
                         LabelPosition="Custom"
-                        LabelStroke="White"
                         MinorTicksPerInterval="9"
                         ShowRim="False"
                         StartAngle="135"
@@ -62,14 +61,12 @@
                             <gauge:MinorTickSetting
                                 EndOffset="1"
                                 StartOffset="0.95"
-                                Stroke="White"
                                 StrokeThickness="1" />
                         </gauge:CircularScale.MinorTickSettings>
                         <gauge:CircularScale.MajorTickSettings>
                             <gauge:MajorTickSetting
                                 EndOffset="1"
                                 StartOffset="0.9"
-                                Stroke="White"
                                 StrokeThickness="2" />
                         </gauge:CircularScale.MajorTickSettings>
                         <gauge:CircularScale.Pointers>
@@ -103,7 +100,6 @@
                         LabelCreated="OnCompassLabelCreated"
                         LabelOffset="0.8"
                         LabelPosition="Custom"
-                        LabelStroke="White"
                         MinorTicksPerInterval="1"
                         RimStroke="Gray"
                         RimStrokeThickness="3"
@@ -125,7 +121,6 @@
                             <gauge:MajorTickSetting
                                 EndOffset="0.4"
                                 StartOffset="0.25"
-                                Stroke="White"
                                 StrokeThickness="2" />
                         </gauge:CircularScale.MajorTickSettings>
                         <gauge:CircularScale.Ranges>

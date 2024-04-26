@@ -63,6 +63,7 @@
 		<PackageReference Include="Syncfusion.SfChart.WPF" />
 		<PackageReference Include="Syncfusion.SfGauge.WPF" />
 		<PackageReference Include="Syncfusion.Themes.FluentDark.WPF" />
+		<PackageReference Include="Syncfusion.Themes.FluentLight.WPF" />
 		<PackageReference Include="Syncfusion.Themes.Windows11Dark.WPF" />
 		<PackageReference Include="Syncfusion.Tools.WPF" />
 		<PackageReference Include="WPF-UI" />
@@ -88,6 +89,21 @@
 	  <Reference Include="NaviSharp">
 	    <HintPath>..\libraries\NaviSharp.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="keys.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Keys.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Keys.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>keys.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 </Project>

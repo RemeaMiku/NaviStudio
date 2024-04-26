@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using NaviSharp.Time;
 using NaviStudio.WpfApp.Services.Contracts;
 using NaviStudio.WpfApp.ViewModels.Base;
 
@@ -18,7 +19,8 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
 
     public override void Reset()
     {
-        TimeStamp = default;
+        TimeStamp = _notAvailable;
+        GpsTime = _notAvailable;
         Latitude = double.NaN;
         Longitude = double.NaN;
         Altitude = double.NaN;
@@ -33,7 +35,8 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
 
     public override void Update(EpochData data)
     {
-        TimeStamp = data.TimeStamp;
+        TimeStamp = data.DisplayTimeStamp;
+        GpsTime = $"{data.GpsTime.Week} 周 {data.GpsTime.Sow:F3} 秒";
         if(data.Result is null)
         {
             Reset();
@@ -53,10 +56,15 @@ public partial class PosePageViewModel(IMessenger messenger, IEpochDatasService 
 
     #endregion Protected Methods
 
+    const string _notAvailable = "不可用";
+
     #region Private Fields
 
     [ObservableProperty]
-    UtcTime _timeStamp;
+    string _timeStamp = _notAvailable;
+
+    [ObservableProperty]
+    string _gpsTime = _notAvailable;
 
     [ObservableProperty]
     double _latitude;

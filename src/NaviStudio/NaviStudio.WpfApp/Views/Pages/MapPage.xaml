@@ -90,7 +90,8 @@
             d:IsExpanded="True"
             Background="{StaticResource MikuGreenBrush}"
             BorderBrush="Transparent"
-            ContentPadding="0">
+            ContentPadding="0"
+            Foreground="White">
             <Border
                 Padding="10"
                 Background="{ui:ThemeResource ControlOnImageFillColorDefaultBrush}"
@@ -155,7 +156,10 @@
                     Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
                     IsChecked="{Binding ViewModel.KeepCenter}"
                     Style="{StaticResource DefaultToggleButtonStyle}">
-                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="MyLocation24" />
+                    <ui:SymbolIcon
+                        FontSize="{StaticResource MediumFontSize}"
+                        Foreground="White"
+                        Symbol="MyLocation24" />
                 </ToggleButton>
             </Border>
             <Border

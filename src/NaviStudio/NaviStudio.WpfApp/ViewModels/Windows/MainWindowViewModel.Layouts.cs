@@ -21,17 +21,27 @@ partial class MainWindowViewModel
 
     public bool HasLayouts => LayoutNames?.Count > 0;
 
+    string GetInitialNewLayoutName()
+    {
+        Debug.Assert(LayoutNames is not null);
+        var count = 1;
+        var name = $"新布局 {count}";
+        while(LayoutNames.Contains(name))
+            name = $"新布局 {++count}";
+        return name;
+    }
+
     [RelayCommand]
     async Task SaveLayoutAsync()
     {
-        NewLayoutName = "新布局";
+        NewLayoutName = GetInitialNewLayoutName();
         while(true)
         {
             if(!await _dynamicContentDialogService.ShowAsync())
                 return;
             if(string.IsNullOrWhiteSpace(NewLayoutName))
             {
-                await _messageDialogService.ShowMessageAsync("布局名称不能为空", "保存窗口布局");
+                await _messageDialogService.ShowMessageAsync("布局名称不能为空", "保存窗口布局", false);
                 continue;
             }
             var result = DockingManagerLayoutHelper.Save(NewLayoutName);
@@ -64,14 +74,15 @@ partial class MainWindowViewModel
     }
 
     [RelayCommand]
-    void ResetLayout()
+    async Task ResetLayout()
     {
+        if(!await _messageDialogService.ShowMessageAsync($"是否确定要重置布局布局，并放弃当前窗口布局？", "重置窗口布局"))
+            return;
         if(DockingManagerLayoutHelper.ApplyDefault())
             _snackbarService.ShowSuccess("重置成功", "已重置窗口布局。");
         else
-            _snackbarService.ShowError("重置失败", "未找到默认布局。请尝试重启应用。");
+            _snackbarService.ShowError("重置失败", "未找到默认布局文件。请尝试重启应用。");
     }
-
 
     [ObservableProperty]
     string _newLayoutName = string.Empty;

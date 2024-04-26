@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using NaviStudio.WpfApp.Common.Settings;
 using NaviStudio.WpfApp.ViewModels.Windows;
 using Wpf.Ui.Controls;
 
@@ -14,9 +15,27 @@ public partial class AppSettingsWindow : UiWindow
     public AppSettingsWindow(AppSettingsWindowViewModel viewModel)
     {
         InitializeComponent();
-        App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.ApplyTheme();
+        App.Current.ApplyBackground();
         ViewModel = viewModel;
         DataContext = this;
+        SetProperties();
+    }
+
+    public void SetProperties()
+    {
+        var settings = App.Current.SettingsManager.Settings;
+        var appearanceSettings = settings.AppearanceSettings;
+        ViewModel.IsAcrylicEnabled = appearanceSettings.EnableAcrylic;
+        ViewModel.Theme = (int)appearanceSettings.ThemeMode;
+    }
+
+    public void SaveToSettings()
+    {
+        var settings = App.Current.SettingsManager.Settings;
+        var appearanceSettings = settings.AppearanceSettings;
+        appearanceSettings.EnableAcrylic = ViewModel.IsAcrylicEnabled;
+        appearanceSettings.ThemeMode = (ThemeModes)ViewModel.Theme;
     }
 
     #endregion Public Constructors
@@ -29,8 +48,12 @@ public partial class AppSettingsWindow : UiWindow
 
     #region Private Methods
 
-    private void OnButtonClicked(object sender, RoutedEventArgs e)
+    private void OnConfirmButtonClicked(object sender, RoutedEventArgs e)
     {
+        SaveToSettings();
+        App.Current.SettingsManager.Save();
+        App.Current.ApplyTheme();
+        App.Current.ApplyBackground();
         Close();
     }
 

@@ -14,6 +14,10 @@ using NaviStudio.WpfApp.Services.Contracts;
 using IDialogService = NaviStudio.WpfApp.Services.Contracts.IDialogService;
 using Windows.UI.Popups;
 using System.Linq;
+using Wpf.Ui.Appearance;
+using Syncfusion.SfSkinManager;
+using Theme = Wpf.Ui.Appearance.Theme;
+using NaviStudio.WpfApp.Common.Extensions;
 
 namespace NaviStudio.WpfApp.Views.Windows;
 
@@ -27,20 +31,32 @@ public partial class MainWindow : UiWindow
     public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
-        App.Current.SettingsManager.TryApplyAcrylicIfIsEnabled(this);
+        App.Current.ApplyTheme();
+        App.Current.ApplyBackground();
         App.Current.Services.GetRequiredService<ISnackbarService>().SetSnackbarControl(Snackbar);
         App.Current.Services.GetRequiredKeyedService<IDialogService>(nameof(DynamicContentDialog)).RegisteDialog(DynamicContentDialog);
         App.Current.Services.GetRequiredKeyedService<IDialogService>(nameof(MessageDialog)).RegisteDialog(MessageDialog);
         SetPages();
         DockingManagerLayoutHelper.Register(DockingManagerControl);
         DockingManagerLayoutHelper.SaveDefault();
-        //DockingManagerLayoutHelper.ApplyTemp();
         DockingManagerControl.LoadDockState();
         DockingManagerLayoutHelper.Load();
         ViewModel = viewModel;
         ViewModel.LayoutNames = DockingManagerLayoutHelper.GetLayoutNames().ToList();
         ViewModel.IsActive = true;
         DataContext = this;
+        Theme.Changed += OnThemeChanged;
+    }
+
+    private void OnThemeChanged(ThemeType currentTheme, System.Windows.Media.Color systemAccent)
+    {
+        var sfThemeName = currentTheme switch
+        {
+            ThemeType.Light => "FluentLight",
+            ThemeType.Dark => "FluentDark",
+            _ => throw new NotImplementedException(),
+        };
+        SfSkinManager.SetTheme(DockingManagerControl, new FluentTheme() { ThemeName = sfThemeName });
     }
 
     #endregion Public Constructors

@@ -63,6 +63,7 @@
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static models:SeverityType.Error}"
                     Content="{Binding ViewModel.ErrorCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='错误 {0} ', Mode=OneWay}"
+                    Foreground="White"
                     Icon="DismissCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
                 <ui:Button
@@ -72,6 +73,7 @@
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static models:SeverityType.Warning}"
                     Content="{Binding ViewModel.WarningCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='警告 {0} ', Mode=OneWay}"
+                    Foreground="White"
                     Icon="ErrorCircle24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
                 <ui:Button
@@ -81,6 +83,7 @@
                     Command="{Binding ViewModel.SwitchVisibilityCommand, Mode=OneTime}"
                     CommandParameter="{x:Static models:SeverityType.Info}"
                     Content="{Binding ViewModel.InformationalCount, Converter={StaticResource StringFormatConverter}, ConverterParameter='消息 {0} ', Mode=OneWay}"
+                    Foreground="White"
                     Icon="Info24"
                     Style="{StaticResource OutputFilterButtonStyle}" />
                 <ui:Button
@@ -89,6 +92,14 @@
                     Command="{Binding ViewModel.ClearFilterCommand, Mode=OneTime}"
                     FontSize="{StaticResource MediumFontSize}"
                     Icon="FilterDismiss24"
+                    Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
+                <ui:Button
+                    Margin="{StaticResource LargeSpacing}"
+                    Padding="3"
+                    Command="{Binding ViewModel.ClearCommand, Mode=OneTime}"
+                    FontSize="{StaticResource MediumFontSize}"
+                    Foreground="{StaticResource MikuRedBrush}"
+                    Icon="TextBulletListDismiss20"
                     Style="{StaticResource BorderlessTransparentUiButtonStyle}" />
                 <ToggleButton
                     Margin="{StaticResource LargeSpacing}"
