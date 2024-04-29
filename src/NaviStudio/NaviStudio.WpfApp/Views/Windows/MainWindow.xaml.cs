@@ -45,10 +45,11 @@ public partial class MainWindow : UiWindow
         ViewModel.LayoutNames = DockingManagerLayoutHelper.GetLayoutNames().ToList();
         ViewModel.IsActive = true;
         DataContext = this;
+        OnThemeChanged(Theme.GetAppTheme(), default);
         Theme.Changed += OnThemeChanged;
     }
 
-    private void OnThemeChanged(ThemeType currentTheme, System.Windows.Media.Color systemAccent)
+    private void OnThemeChanged(ThemeType currentTheme, System.Windows.Media.Color _)
     {
         var sfThemeName = currentTheme switch
         {

@@ -18,7 +18,6 @@
         <cv:SatelliteSystemsToImageSourceConverter x:Key="SatelliteSystemsToImageSourceConverter" />
         <sys:Double x:Key="SymbolSize">25</sys:Double>
         <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
-            <Setter Property="Foreground" Value="White" />
             <Setter Property="IsChecked" Value="True" />
             <Setter Property="Padding" Value="1" />
             <Setter Property="BorderThickness" Value="0" />

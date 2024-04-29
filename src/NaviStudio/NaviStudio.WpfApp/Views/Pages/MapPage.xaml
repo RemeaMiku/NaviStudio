@@ -156,10 +156,7 @@
                     Command="{Binding ViewModel.ReturnToPositionCommand, Mode=OneTime}"
                     IsChecked="{Binding ViewModel.KeepCenter}"
                     Style="{StaticResource DefaultToggleButtonStyle}">
-                    <ui:SymbolIcon
-                        FontSize="{StaticResource MediumFontSize}"
-                        Foreground="White"
-                        Symbol="MyLocation24" />
+                    <ui:SymbolIcon FontSize="{StaticResource MediumFontSize}" Symbol="MyLocation24" />
                 </ToggleButton>
             </Border>
             <Border
