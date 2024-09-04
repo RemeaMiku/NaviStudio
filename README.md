@@ -1,1 +1,20 @@
-# projects
+# NaviStudio
+本科毕业设计项目，不实现导航算法，只是对接收到的导航结果和精度进行可视化，支持实时组合导航。部分窗口和页面 UI 如下图所示：
+## MainWindow
+![MainWindow](figures/main_window.png "MainWindow")
+![MainWindow(Light)](figures/main_window_light.png "MainWindow(Light)")
+![MainWindow(Docking)](figures/main_window_docking.png "MainWindow(Docking)")
+![MainWindow(Car)](figures/car_simulation_environment_ui.png "MainWindow(Car)")
+![MainWindow(Pedestrian)](figures/real_environment_ui.png "MainWindow(Pedestrian)")
+## MapPage
+![MapPage](figures/map_page.png "MapPage")
+## DashboardPage
+![DashboardPage](figures/dashboard_page.png "DashboardPage")
+## SatelliteSkyPage
+![SatelliteSkyPage](figures/satellite_sky_page.png "SatelliteSkyPage")
+## RealTimeOptionsPage
+![RealTimeOptionsPage](figures/realtime_options_page.png "RealTimeOptionsPage")
+## ChartToolWindow
+![ChartToolWindow](figures/chart_tool_window.png "ChartToolWindow")
+## ChartGroupPage
+![ChartGroupPage](figures/chart_group_page.png "ChartGroupPage")
